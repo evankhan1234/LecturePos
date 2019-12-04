@@ -11,7 +11,7 @@ public interface IBookDataSource {
 
     Flowable<List<Book>> getBookItemById(int BookItemId);
 
-
+    Book getBook(String BookItem);
     Flowable<List<Book>> getBook(int favoriteid);
 
     void emptyBook();

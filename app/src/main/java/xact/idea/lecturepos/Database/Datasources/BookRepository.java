@@ -31,6 +31,11 @@ public class BookRepository implements IBookDataSource {
     }
 
     @Override
+    public Book getBook(String BookItem) {
+        return IBookDataSource.getBook(BookItem);
+    }
+
+    @Override
     public Flowable<List<Book>> getBook(int favoriteid) {
         return IBookDataSource.getBook(favoriteid);
     }

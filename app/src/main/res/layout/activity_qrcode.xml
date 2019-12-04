@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rlt_root"
+    tools:context=".QRCodeActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <SurfaceView
+            android:id="@+id/surface_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <View
+            android:background="@drawable/rectangle"
+            android:layout_gravity="center"
+            android:layout_width="800px"
+            android:layout_height="800px"/>
+
+    </FrameLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="30px"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<TextView
+    android:gravity="center"
+    android:padding="10dp"
+
+    android:id="@+id/code_info"
+    android:text=""
+    android:textColor="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+        <ToggleButton
+            android:backgroundTint="#66FEFEFE"
+            android:visibility="gone"
+            android:id="@+id/toggle"
+            android:textColor="#66FEFEFE"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</RelativeLayout>
