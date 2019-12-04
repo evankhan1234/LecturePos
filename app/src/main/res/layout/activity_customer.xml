@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlt_root"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ScrollView
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:background="@color/white"
+
+            android:id="@+id/rlt_header"
+            android:layout_width="match_parent"
+            android:layout_height="250px"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/btn_header_back"
+                android:layout_width="86px"
+                android:layout_height="85px"
+                android:layout_marginTop="85px"
+
+                android:paddingBottom="3px"
+
+
+                android:visibility="visible"
+                app:srcCompat="@drawable/back" />
+
+            <ImageView
+                android:id="@+id/btn_header_application"
+                android:layout_width="86px"
+                android:layout_height="85px"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10px"
+                android:layout_marginTop="95px"
+
+                app:srcCompat="@drawable/graphic_design"
+
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingBottom="3px"
+
+                android:stateListAnimator="@null"
+                android:layout_marginRight="30px"
+                android:visibility="visible"
+                />
+
+
+            <TextView
+
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:gravity="center"
+                android:letterSpacing="0.1"
+
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingLeft="120px"
+                android:paddingRight="120px"
+                android:tag="46"
+                android:text="Customer"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="46px" />
+
+
+
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view_header"
+            android:layout_width="match_parent"
+            android:layout_height="10px"
+            android:layout_below="@+id/rlt_header"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/gradient_color_top" />
+        <LinearLayout
+            android:layout_below="@+id/rlt_header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:visibility="gone"
+
+                android:drawablePadding="18px"
+                android:tag="50"
+                android:textSize="50px"
+                android:layout_marginTop="30px"
+                android:textStyle="bold"
+                android:text="19-11-2019"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center"
+                android:id="@+id/text_date_current"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10px"
+
+
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/rcl_this_customer_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+
+                android:layout_marginBottom="0px"
+
+
+                >
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
+</RelativeLayout>
