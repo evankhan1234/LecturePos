@@ -3,6 +3,7 @@ package xact.idea.lecturepos;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,12 +44,16 @@ public class MainActivity extends AppCompatActivity {
     static CompositeDisposable compositeDisposable = new CompositeDisposable();
     TextView tv_store;
     LinearLayout linear_logout;
+    LinearLayout linear_customers;
+    LinearLayout linear_invoice;
     Activity mActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         linear_logout=findViewById(R.id.linear_logout);
+        linear_customers=findViewById(R.id.linear_customers);
+        linear_invoice=findViewById(R.id.linear_invoice);
         tv_store=findViewById(R.id.tv_store);
         tv_store.setSelected(true);
         mActivity=this;
@@ -58,6 +63,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Utils.showInfoDialog(mActivity);
+            }
+        });
+        linear_customers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,CustomerActivity.class));
+            }
+        });
+        linear_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,InvoiceActivity.class));
             }
         });
     }
@@ -71,10 +88,10 @@ public class MainActivity extends AppCompatActivity {
             loaBookItems();
         }else{
             CustomerModel customer = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00059","Md Abul Khair","Mohadebpur","01741242652");
-            CustomerModel customer1 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00059","Md Abul Khair","Mohadebpur","01741242652");
-            CustomerModel customer2 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00059","Md Abul Khair","Mohadebpur","01741242652");
-            CustomerModel customer3 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00059","Md Abul Khair","Mohadebpur","01741242652");
-            CustomerModel customer4 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00059","Md Abul Khair","Mohadebpur","01741242652");
+            CustomerModel customer1 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00060","Md Abdus Satter","Ghulshan","01641262652");
+            CustomerModel customer2 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00061","Md Saiful Islam","Merul badda","01941242632");
+            CustomerModel customer3 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00062","Md Hakim","Patuakhali","01541642652");
+            CustomerModel customer4 = new CustomerModel(SharedPreferenceUtil.getUserID(MainActivity.this),"00063","Md Monirul Islam","Dhaka","01781242689");
             BookModel bookModel= new BookModel("1604000887","Economics-TC","29,209",885.35);
             BookModel bookModel1= new BookModel("1604000888","Accounting-TC","29,210",385.35);
             BookModel bookModel2= new BookModel("1604000889","Bus. Introduction-TC","29,211",1285.35);
