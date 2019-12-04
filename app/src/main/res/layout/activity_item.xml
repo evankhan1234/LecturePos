@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlt_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rlt_header"
+
+            android:layout_width="match_parent"
+            android:layout_height="250px"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/btn_header_back"
+                android:layout_width="86px"
+                android:layout_height="85px"
+                android:layout_marginTop="85px"
+
+                android:paddingBottom="3px"
+
+
+                android:visibility="visible"
+                app:srcCompat="@drawable/back" />
+
+            <ImageView
+                android:id="@+id/btn_header_application"
+                android:layout_width="86px"
+                android:layout_height="85px"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10px"
+                android:layout_marginTop="95px"
+
+                android:layout_marginRight="30px"
+
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingBottom="3px"
+
+                android:stateListAnimator="@null"
+                android:visibility="gone"
+                app:srcCompat="@drawable/graphic_design" />
+
+
+            <TextView
+
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:gravity="center"
+                android:letterSpacing="0.1"
+
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingLeft="120px"
+                android:paddingRight="120px"
+                android:tag="46"
+                android:text="Item"
+                android:textColor="@color/colorPrimary"
+                android:textSize="46px"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view_header"
+            android:layout_width="match_parent"
+            android:layout_height="10px"
+            android:layout_below="@+id/rlt_header"
+            android:layout_marginTop="1px"
+            android:background="@drawable/gradient_color_top" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:paddingLeft="35px"
+            android:paddingTop="35px"
+            android:paddingRight="35px">
+
+            <TextView
+                android:id="@+id/textView49"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8px"
+                android:text="Book Name"
+                android:textColor="#666" />
+
+            <EditText
+                android:id="@+id/bookname"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="130px"
+                android:layout_marginBottom="10px"
+                android:background="@drawable/input_bg"
+                android:ems="10"
+                android:hint="Book Name"
+                android:inputType="text"
+                android:padding="15px"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textView50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8px"
+                android:text="Price"
+                android:textColor="#666" />
+
+            <EditText
+                android:id="@+id/price"
+                android:layout_width="match_parent"
+                android:layout_height="130px"
+                android:layout_marginBottom="10px"
+                android:background="@drawable/input_bg"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="Price"
+                android:inputType="numberDecimal"
+                android:padding="15px"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textView51"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8px"
+                android:text="Quantity"
+                android:textColor="#666" />
+
+            <EditText
+                android:id="@+id/quantity"
+                android:layout_width="match_parent"
+                android:layout_height="130px"
+                android:layout_marginBottom="10px"
+                android:background="@drawable/input_bg"
+                android:ems="10"
+                android:hint="Quantity"
+                android:inputType="number"
+                android:padding="15px"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/textViesw51"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8px"
+                android:text="Discount"
+                android:textColor="#666" />
+
+            <EditText
+                android:id="@+id/discount"
+                android:layout_width="match_parent"
+                android:layout_height="130px"
+                android:layout_marginBottom="10px"
+                android:background="@drawable/input_bg"
+                android:ems="10"
+                android:hint="Discount"
+                android:inputType="number"
+                android:padding="15px"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/textViesdw51"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8px"
+                android:text="Amount"
+                android:textColor="#666" />
+
+            <EditText
+                android:id="@+id/amount"
+                android:layout_width="match_parent"
+                android:layout_height="130px"
+                android:layout_marginBottom="10px"
+                android:background="@drawable/input_bg"
+                android:ems="10"
+                android:hint="Amount"
+                android:inputType="number"
+                android:padding="15px"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:layout_marginBottom="15px"
+                android:background="@drawable/input_btn_bg"
+                android:fontFamily="sans-serif"
+                android:paddingTop="15px"
+                android:paddingBottom="15px"
+                android:stateListAnimator="@null"
+                android:text="Save"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

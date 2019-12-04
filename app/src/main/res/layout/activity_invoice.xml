@@ -157,7 +157,9 @@
                 >
 
             </androidx.recyclerview.widget.RecyclerView>
-            <Button android:textSize="32px" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Items" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
+            <Button
+
+                android:textSize="32px" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Items" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
             <RelativeLayout
                 android:layout_marginTop="30px"
                 android:id="@+id/cibact_RLDetail"

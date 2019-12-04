@@ -18,6 +18,8 @@ public interface BookDao {
 
     @Query("SELECT * FROM books WHERE id=:BookItemId")
     Flowable<List<Book>> getBookItemById(int BookItemId);
+    @Query("SELECT * FROM books WHERE BookCode=:BookItem")
+    Book getBook(String BookItem);
 
     @Query("Select Count(id)  FROM books")
     int value();
