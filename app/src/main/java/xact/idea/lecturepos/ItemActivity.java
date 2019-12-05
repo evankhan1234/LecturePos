@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import xact.idea.lecturepos.Database.Model.Book;
+import xact.idea.lecturepos.Model.ItemModel;
 import xact.idea.lecturepos.Utils.Common;
+import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
 public class ItemActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class ItemActivity extends AppCompatActivity {
     EditText amount;
     Button save;
     ImageView btn_header_back;
+    String sessionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +42,8 @@ public class ItemActivity extends AppCompatActivity {
         discount=findViewById(R.id.discount);
         amount=findViewById(R.id.amount);
         save=findViewById(R.id.save);
-        String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
+        String s= Constant.code;
+         sessionId = getIntent().getStringExtra("EXTRA_SESSION");
         Book book= Common.bookRepository.getBook(sessionId);
 
         bookname.setText(book.BookName);
@@ -69,7 +73,7 @@ public class ItemActivity extends AppCompatActivity {
                 final  double quantitys= Double.parseDouble(s.toString());
                 double total=(prices*quantitys)-0;
                 amount.setText(String.valueOf(total));
-                Toast.makeText(ItemActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(ItemActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         discount.addTextChangedListener(new TextWatcher()
@@ -95,6 +99,32 @@ public class ItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                  if (!quantity.getText().toString().equals("")){
+                      double pricesfor= Double.parseDouble(price.getText().toString());
+                      int quantityfor= Integer.parseInt(quantity.getText().toString());
+                      double discountfor;
+                      if (!discount.getText().toString().equals("")){
+                          discountfor= Double.parseDouble(discount.getText().toString());
+                      }
+                      else{
+                          discountfor=0;
+                      }
+
+                      double totalfor= Double.parseDouble(amount.getText().toString());
+                      ItemModel itemModel = new ItemModel();
+                      itemModel.Amount=totalfor;
+                      itemModel.Price=pricesfor;
+                      itemModel.Quantity=quantityfor;
+                      itemModel.Discount=discountfor;
+                      itemModel.BookId=sessionId;
+                      itemModel.BookName=bookname.getText().toString();
+                      Constant.arrayList.add(itemModel);
+                      startActivity(new Intent(ItemActivity.this,InvoiceActivity.class));
+                      finish();
+                  }
+                  else {
+                      Toast.makeText(ItemActivity.this, "Quantity Field is required", Toast.LENGTH_SHORT).show();
+                  }
 
             }
         });

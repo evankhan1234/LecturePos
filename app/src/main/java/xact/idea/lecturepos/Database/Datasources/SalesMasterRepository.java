@@ -35,6 +35,11 @@ public class SalesMasterRepository implements ISalesMasterDataSource {
     }
 
     @Override
+    public int maxValue() {
+        return ISalesMasterDataSource.maxValue();
+    }
+
+    @Override
     public void emptySalesMaster() {
         ISalesMasterDataSource.emptySalesMaster();
     }

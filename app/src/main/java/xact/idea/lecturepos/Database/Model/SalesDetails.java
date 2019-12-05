@@ -11,8 +11,10 @@ public class SalesDetails {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public int id;
-    @ColumnInfo(name = "InvoiceId")
+    @ColumnInfo(name = "StoreId")
     public String StoreId;
+    @ColumnInfo(name = "InvoiceId")
+    public int InvoiceId;
     @ColumnInfo(name = "BookId")
     public String BookId;
     @ColumnInfo(name = "Quantity")

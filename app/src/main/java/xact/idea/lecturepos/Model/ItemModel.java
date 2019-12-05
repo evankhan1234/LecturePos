@@ -7,4 +7,5 @@ public class ItemModel {
     public double Amount;
     public int Quantity;
     public String BookName;
+    public String BookId;
 }

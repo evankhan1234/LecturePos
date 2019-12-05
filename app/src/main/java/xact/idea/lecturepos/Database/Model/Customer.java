@@ -21,4 +21,9 @@ public class Customer {
     public String Address;
     @ColumnInfo(name = "MobileNumber")
     public String MobileNumber;
+    @Override
+    public String toString() {
+        return Name;
+    }
+
 }

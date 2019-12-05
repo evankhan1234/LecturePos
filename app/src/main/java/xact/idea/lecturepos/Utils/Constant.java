@@ -8,4 +8,5 @@ import xact.idea.lecturepos.Model.ItemModel;
 
 public class Constant {
     public static List<ItemModel> arrayList= new ArrayList();
+    public static String code=null;
 }

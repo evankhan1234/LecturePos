@@ -13,7 +13,7 @@ public interface ISalesMasterDataSource {
 
 
     Flowable<List<SalesMaster>> getSalesMaster(int favoriteid);
-
+    int maxValue();
     void emptySalesMaster();
     int size();
 

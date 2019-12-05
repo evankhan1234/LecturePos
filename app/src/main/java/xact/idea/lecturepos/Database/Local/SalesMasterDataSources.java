@@ -39,6 +39,11 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
+    public int maxValue() {
+        return SaleMastersDao.maxValue();
+    }
+
+    @Override
     public void emptySalesMaster() {
         SaleMastersDao.emptySalesDetails();
     }

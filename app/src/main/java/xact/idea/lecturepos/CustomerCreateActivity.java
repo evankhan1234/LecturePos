@@ -46,7 +46,7 @@ public class CustomerCreateActivity extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (firstName.getText().toString()!=null &&lastName.getText().toString()!=null &&phone.getText().toString()!=null &&address.getText().toString()!=null &&retail_code.getText().toString()!=null ){
+                if (!firstName.getText().toString().equals("") &&lastName.getText().toString().equals("") &&!phone.getText().toString().equals("") &&!address.getText().toString().equals("")&&!retail_code.getText().toString().equals("") ){
                     Customer c = new Customer();
                     c.Name=firstName.getText().toString()+" "+lastName.getText().toString();
                     c.Address=address.getText().toString();
