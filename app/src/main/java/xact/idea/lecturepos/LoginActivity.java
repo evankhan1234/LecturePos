@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.logging.Logger;
 
@@ -37,8 +38,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, edit_text_email.getText().toString() + "");
-                startActivity(new Intent(LoginActivity.this,OnBoardingActivity.class));
+                if (!edit_text_email.getText().toString().equals("") &&!edit_text_password.getText().toString().equals("")  ){
+                    SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, edit_text_email.getText().toString() + "");
+                    startActivity(new Intent(LoginActivity.this,OnBoardingActivity.class));
+                    finish();
+                }
+                else {
+                    Toast.makeText(LoginActivity.this, "Please Fill All Data", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         edit_text_password.addTextChangedListener(new TextWatcher()

@@ -22,6 +22,8 @@ public interface SaleMastersDao {
 
     @Query("Select Count(id)  FROM sales_mst")
     int value();
+    @Query("Select MAX(id)  FROM sales_mst")
+    int maxValue();
 
 
     @Query("DELETE  FROM sales_mst")

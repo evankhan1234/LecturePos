@@ -16,7 +16,7 @@ public interface SaleDetailsDao {
     @Query("SELECT * FROM sales_dtl")
     Flowable<List<SalesDetails>> getSalesDetailsItems();
 
-    @Query("SELECT * FROM sales_dtl WHERE id=:SalesDetailsItemId")
+    @Query("SELECT * FROM sales_dtl WHERE InvoiceId=:SalesDetailsItemId")
     Flowable<List<SalesDetails>> getSalesDetailsItemById(int SalesDetailsItemId);
 
     @Query("Select Count(id)  FROM sales_dtl")

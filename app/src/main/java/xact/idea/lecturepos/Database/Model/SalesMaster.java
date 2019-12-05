@@ -35,4 +35,10 @@ public class SalesMaster {
     public String Device;
     @ColumnInfo(name = "update_date")
     public Date update_date;
+    @ColumnInfo(name = "CustomerName")
+    public String CustomerName;
+    @ColumnInfo(name = "Note")
+    public String Note;
+    @ColumnInfo(name = "InvoiceDates")
+    public String InvoiceDates;
 }

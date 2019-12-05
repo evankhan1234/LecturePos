@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout linear_logout;
     LinearLayout linear_customers;
     LinearLayout linear_invoice;
+    LinearLayout linear_notes;
     Activity mActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         linear_logout=findViewById(R.id.linear_logout);
         linear_customers=findViewById(R.id.linear_customers);
         linear_invoice=findViewById(R.id.linear_invoice);
+        linear_notes=findViewById(R.id.linear_notes);
         tv_store=findViewById(R.id.tv_store);
         tv_store.setSelected(true);
         mActivity=this;
@@ -75,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,InvoiceActivity.class));
+            }
+        });
+        linear_notes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,InvoiceListActivity.class));
             }
         });
     }
