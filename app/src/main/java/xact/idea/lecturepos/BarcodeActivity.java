@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,5 +70,14 @@ public class BarcodeActivity extends AppCompatActivity {
         else {
             super.onActivityResult(requestCode,resultCode,data);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.e("DSad","sf");
+        super.onBackPressed();
+        Intent intent = new Intent(BarcodeActivity.this, InvoiceActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

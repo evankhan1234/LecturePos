@@ -34,7 +34,7 @@
                 android:layout_marginRight="0px"
                 android:gravity="center"
                 android:tag="45"
-                android:text="Are You Want To Log Out?"
+                android:text="Are You Want To Scan or Input?"
                 android:textColor="@color/gray_black"
                 android:textSize="45px" />
         </RelativeLayout>
@@ -48,7 +48,8 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_cancel"
+                android:backgroundTint="@color/accept"
+                android:id="@+id/btn_scan"
                 android:layout_width="420px"
                 android:layout_height="140px"
                 android:layout_gravity="center"
@@ -61,28 +62,55 @@
                 android:paddingBottom="5px"
                 android:stateListAnimator="@null"
                 android:tag="45"
-                android:text="No"
+                android:text="SCAN"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="45px" />
 
             <Button
-                android:backgroundTint="@color/colorPrimary"
-                android:id="@+id/btn_ok"
+                android:id="@+id/btn_input"
+
                 android:layout_width="420px"
                 android:layout_height="140px"
                 android:layout_marginTop="-4px"
-                android:background="@drawable/btn_yes"
+                android:background="@drawable/btn_no"
                 android:foreground="@drawable/ripple_corner"
                 android:paddingBottom="5px"
                 android:stateListAnimator="@null"
                 android:tag="45"
-                android:text="Yes"
+                android:text="INPUT"
                 android:textColor="@color/white"
 
                 android:textSize="45px"
                 android:visibility="visible" />
         </LinearLayout>
+
+
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/edit_book_code"
+
+            android:layout_width="match_parent"
+            android:layout_height="150px"
+            android:layout_marginBottom="10px"
+            android:background="@drawable/input_bg"
+            android:ems="10"
+            android:hint="Book Code"
+            android:inputType="text"
+            android:padding="15px"
+            android:textSize="16sp" />
+        <Button
+            android:visibility="gone"
+            android:backgroundTint="#4CAF50"
+            android:textSize="42px"
+            android:textColor="#fff"
+            android:id="@+id/btn_done"
+            android:background="@drawable/capsule_button"
+            android:paddingTop="25px"
+            android:paddingBottom="25px"
+            android:layout_width="match_parent"
+            android:layout_height="130px" android:layout_marginTop="30px" android:layout_marginBottom="25px" android:text="Done" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
     </LinearLayout>
 
 
