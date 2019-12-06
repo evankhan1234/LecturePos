@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8px"
-                android:text="Bill Pay"/>
+                android:text="Customer Pay"/>
             <Spinner
                 android:background="@drawable/test"
                 android:layout_marginTop="20px"
@@ -237,7 +237,7 @@
                             android:gravity="end"
                             android:paddingLeft="1px"
                             android:paddingRight="1px"
-                          android:src="@drawable/ic_setting_vector"
+                          android:src="@drawable/ic_attach_money_black_24dp"
                             />
                     </LinearLayout>
 
@@ -406,10 +406,17 @@
 
                         android:gravity="right"
                         android:layout_gravity="right"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white"
+                        android:textColor="@color/hint_text_color_new"
+                        android:textColorHint="@color/hint_text_color_new"
 
-                        android:textSize="32px" android:id="@+id/editShippingChargesValue" android:background="@drawable/roundeds" android:padding="25px" android:layout_width="200px" android:layout_height="100px" android:layout_marginBottom="10px" android:hint="Discount" android:ems="10" android:inputType="textPersonName"/>
+
+                        android:textSize="32px" android:id="@+id/editShippingChargesValue"
+                        android:background="@drawable/input_bg"
+                        android:padding="25px"
+                        android:layout_width="200px"
+                        android:layout_height="100px"
+                        android:layout_marginBottom="10px"
+                        android:hint="Discount" android:ems="10" android:inputType="number"/>
                 </LinearLayout>
             </LinearLayout>
             <View
