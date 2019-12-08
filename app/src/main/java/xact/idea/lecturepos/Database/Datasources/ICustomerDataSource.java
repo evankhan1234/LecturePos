@@ -18,7 +18,7 @@ public interface ICustomerDataSource {
     void emptyCustomer();
     int size();
 
-
+    Customer getCustomerss(String Name);
     void insertToCustomer(Customer... Customers);
 
 

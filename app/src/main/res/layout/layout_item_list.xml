@@ -25,6 +25,7 @@
         card_view:cardUseCompatPadding="true"
         card_view:cardCornerRadius="5px">
         <View
+            android:id="@+id/view_color"
             android:background="@color/colorPrimary"
             android:layout_width="10px"
             android:layout_height="wrap_content"/>
@@ -158,6 +159,7 @@
                                 android:paddingLeft="1px"
                                 android:paddingRight="1px"
                                 android:tag="35"
+                                android:textStyle="bold"
                                 android:text="zdczxv"
                                 android:textColor="@color/hint_text_color_new"
                                 android:textSize="35px"
@@ -171,6 +173,8 @@
                                 android:paddingLeft="1px"
                                 android:paddingRight="1px"
                                 android:text="zdczxv"
+                                android:tag="35"
+                                android:textStyle="bold"
                                 android:textColor="@color/hint_text_color_new"
                                 android:textSize="35px"
                                 />
@@ -185,12 +189,11 @@
                             android:gravity="bottom|right|center_vertical|center_horizontal|center|end"
                             android:paddingLeft="1px"
                             android:paddingRight="1px"
-
                             android:tag="35"
                             android:text="zdczxv"
                             android:textColor="@color/hint_text_color_new"
                             android:textSize="35px"
-                            />
+                            android:textStyle="bold" />
                         <TextView
                             android:id="@+id/text_total"
                             android:layout_width="match_parent"

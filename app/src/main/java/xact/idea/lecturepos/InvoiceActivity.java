@@ -44,6 +44,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
+import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -75,11 +77,13 @@ public class InvoiceActivity extends AppCompatActivity {
     static EditText edit_date;
     TextView text_sub_total;
     TextView text_net_amounts;
+    TextView text_customer_spinner;
     ItemAdapter mAdapters;
     static CompositeDisposable compositeDisposable = new CompositeDisposable();
     RecyclerView rcl_this_customer_list;
     ImageView btn_header_back;
     private List<Customer> customerArrayList = new ArrayList<>();
+    private ArrayList<String> ArrayList = new ArrayList<>();
     ArrayAdapter<Customer> customerListEntityArrayAdapter;
     Spinner spinner_customer;
     String Name;
@@ -87,6 +91,7 @@ public class InvoiceActivity extends AppCompatActivity {
     RadioButton radioCredit;
     RadioGroup radioLogin;
     String sessionId;
+    SpinnerDialog spinnerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,7 @@ public class InvoiceActivity extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         radioLogin = findViewById(R.id.radioLogin);
+        text_customer_spinner = findViewById(R.id.text_customer_spinner);
         radioCash = findViewById(R.id.radioCash);
         radioCredit = findViewById(R.id.radioCredit);
         edit_date = findViewById(R.id.edit_date);
@@ -118,10 +124,17 @@ public class InvoiceActivity extends AppCompatActivity {
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         rcl_this_customer_list.setLayoutManager(lm);
 
+        text_customer_spinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spinnerDialog.showSpinerDialog();
+            }
+        });
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
+                finish();
             }
         });
 ///        Common.bookRepository.getBookItems();
@@ -139,18 +152,40 @@ public class InvoiceActivity extends AppCompatActivity {
         } else {
 
         }
-        spinner_customer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerDialog= new SpinnerDialog(InvoiceActivity.this,  ArrayList,"Select Customer");
+//        spinner_customer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Log.e("sp_units", "" + customerArrayList.get(position).Name);
+//                Name = customerArrayList.get(position).Name;
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+        spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("sp_units", "" + customerArrayList.get(position).Name);
-                Name = customerArrayList.get(position).Name;
+            public void onClick(String item, int position) {
+               // Toast.makeText(InvoiceActivity.this, item + "  " + position+"", Toast.LENGTH_SHORT).show();
 
+              //  selectedItems.setText(item + " Position: " + position);
+                text_customer_spinner.setText(item);
 
-            }
+              Customer customer=Common.customerRepository.getCustomerss(item);
+              if (customer!=null){
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                  edit_address.setText(customer.Address);
+                  edit_contact_number.setText(customer.MobileNumber);
+                  edit_retail_code.setText(customer.RetailerCode);
 
+              }
+              else {
+
+              }
             }
         });
         edit_date.setOnClickListener(new View.OnClickListener() {
@@ -167,21 +202,23 @@ public class InvoiceActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String amounts = text_sub_total.getText().toString();
+                amounts = amounts.replace(" Tk", "");
+                //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
+                if (!amounts.equals("0.0")){
 
-
-                if (!edit_retail_code.getText().toString().equals("") && !edit_contact_number.getText().toString().equals("") && !edit_address.getText().toString().equals("") && !edit_note.getText().toString().equals("")) {
                     int selectedId = radioLogin.getCheckedRadioButtonId();
                     String s = text_net_amounts.getText().toString();
-                    s = s.replace("BDT ", "");
+                    s = s.replace(" Tk", "");
                     // find the radiobutton by returned id
                     RadioButton radioSexButton = findViewById(selectedId);
 
                     String pay = String.valueOf(radioSexButton.getText());
                     double discount = 0;
-                    double amount = Double.parseDouble(s);
+                    double amount =0;
                     try {
                         discount = Double.parseDouble(editShippingChargesValue.getText().toString());
-
+                         amount = Double.parseDouble(s);
 
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -216,6 +253,7 @@ public class InvoiceActivity extends AppCompatActivity {
                         int values = Common.salesMasterRepository.maxValue();
                         SalesDetails salesDetails = new SalesDetails();
                         salesDetails.BookId = itemModel.BookId;
+                        salesDetails.BookName = itemModel.BookName;
                         salesDetails.Discount = itemModel.Discount;
                         salesDetails.MRP = itemModel.Price;
                         salesDetails.Quantity = itemModel.Quantity;
@@ -232,7 +270,7 @@ public class InvoiceActivity extends AppCompatActivity {
 
 
                 } else {
-                    Toast.makeText(InvoiceActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InvoiceActivity.this, "Please Add Items", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -249,9 +287,16 @@ public class InvoiceActivity extends AppCompatActivity {
 
                  double prices;
                   double d = 0.0;
-                if (!text_sub_total.getText().toString().equals("")){
+                String amount = text_sub_total.getText().toString();
+                amount = amount.replace(" Tk", "");
+              //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
+                if (amount.equals("0.0")){
+                    Toast.makeText(InvoiceActivity.this, "Sub Total value is 0", Toast.LENGTH_SHORT).show();
+                }
+                else {
+
                     String s1 = text_sub_total.getText().toString();
-                    s1 = s1.replace("BDT ", "");
+                    s1 = s1.replace(" Tk", "");
                     prices = Double.parseDouble(s1);
                     if (!s.toString().equals("")){
                         d = Double.parseDouble(s.toString());
@@ -260,7 +305,7 @@ public class InvoiceActivity extends AppCompatActivity {
                         d=0.0;
                     }
                     double total = prices  -d;
-                    text_net_amounts.setText("BDT "+String.valueOf(rounded(total,2)));
+                    text_net_amounts.setText(String.valueOf(rounded(total,2)+" Tk"));
                 }
 
 
@@ -318,16 +363,16 @@ public class InvoiceActivity extends AppCompatActivity {
         for (ItemModel itemModel : Constant.arrayList) {
             total += itemModel.Amount;
         }
-        text_sub_total.setText("BDT " + String.valueOf(total));
+        text_sub_total.setText(String.valueOf(total)+" Tk");
         if (!editShippingChargesValue.getText().toString().equals("")) {
             discount = Double.parseDouble(editShippingChargesValue.getText().toString());
             amount = total - discount;
-            text_net_amounts.setText("BDT " + String.valueOf(amount));
+            text_net_amounts.setText(String.valueOf(amount)+" Tk");
 
         } else {
             discount = 0;
             amount = total - discount;
-            text_net_amounts.setText("BDT " + String.valueOf(amount));
+            text_net_amounts.setText(String.valueOf(amount)+" Tk");
         }
     }
 
@@ -391,6 +436,9 @@ public class InvoiceActivity extends AppCompatActivity {
     }
 
     private void displayUnitItems(List<Customer> customers) {
+        for (Customer customer : customers){
+            ArrayList.add(customer.Name);
+        }
         customerArrayList = customers;
         customerListEntityArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, customerArrayList);
         customerListEntityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

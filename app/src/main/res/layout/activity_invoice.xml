@@ -29,18 +29,19 @@
             android:layout_height="250px"
             android:visibility="visible">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/btn_header_back"
-                android:layout_width="86px"
-                android:layout_height="85px"
-                android:layout_marginTop="85px"
-
+                android:layout_width="136px"
+                android:layout_height="145px"
+                android:layout_marginLeft="10px"
+                android:layout_marginTop="62px"
+                android:background="@color/transparent"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:paddingBottom="3px"
 
-
+                android:stateListAnimator="@null"
                 android:visibility="visible"
                 app:srcCompat="@drawable/back" />
-
             <ImageView
                 android:id="@+id/btn_header_application"
                 android:layout_width="86px"
@@ -105,7 +106,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8px"
                 android:text="Customer Pay"/>
+            <TextView
+                android:layout_marginTop="10px"
+                android:textColor="#666"
+                android:tag="40"
+                android:textSize="40px" android:id="@+id/text_customer_spinner" android:background="@drawable/test" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:text="Select" android:ems="10" android:inputType="textPostalAddress"/>
+
             <Spinner
+                android:visibility="gone"
                 android:background="@drawable/test"
                 android:layout_marginTop="20px"
 
@@ -398,10 +406,13 @@
                         android:paddingRight="20px"
 
                         android:textColor="#666"
+                        android:textStyle="bold"
+                        android:tag="35"
+                        android:textSize="35px"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8px"
-                        android:text="BDT"/>
+                        android:text="Tk"/>
                     <EditText
 
                         android:gravity="right"

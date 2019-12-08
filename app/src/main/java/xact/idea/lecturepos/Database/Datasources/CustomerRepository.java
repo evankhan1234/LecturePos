@@ -45,6 +45,11 @@ public class CustomerRepository implements ICustomerDataSource {
     }
 
     @Override
+    public Customer getCustomerss(String Name) {
+        return ICustomerDataSource.getCustomerss(Name);
+    }
+
+    @Override
     public void insertToCustomer(Customer... Customers) {
         ICustomerDataSource.insertToCustomer(Customers);
     }

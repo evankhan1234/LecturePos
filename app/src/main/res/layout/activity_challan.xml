@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/rlt_root"
+    android:layout_height="match_parent"
+    tools:context=".ChallanActivity">
+    <RelativeLayout
+        android:background="@color/white"
+
+        android:id="@+id/rlt_header"
+        android:layout_width="match_parent"
+        android:layout_height="250px"
+        android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/btn_header_back"
+            android:layout_width="136px"
+            android:layout_height="145px"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="62px"
+            android:background="@color/transparent"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingBottom="3px"
+
+            android:stateListAnimator="@null"
+            android:visibility="visible"
+            app:srcCompat="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/btn_header_application"
+            android:layout_width="86px"
+            android:layout_height="85px"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="95px"
+
+            app:srcCompat="@drawable/plus"
+
+
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingBottom="3px"
+
+            android:stateListAnimator="@null"
+            android:layout_marginRight="30px"
+            android:visibility="gone"
+            />
+
+
+        <TextView
+
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:gravity="center"
+            android:letterSpacing="0.1"
+
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingLeft="120px"
+            android:paddingRight="120px"
+            android:tag="46"
+            android:text="Challan"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="46px" />
+
+
+
+
+    </RelativeLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:layout_below="@+id/rlt_header"
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <!-- View pager to swipe views -->
+    <androidx.viewpager.widget.ViewPager
+        android:layout_below="@+id/tabLayout"
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"/>
+</RelativeLayout>

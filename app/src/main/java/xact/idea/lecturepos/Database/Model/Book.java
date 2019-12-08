@@ -13,11 +13,18 @@ public class Book {
     public int id;
     @ColumnInfo(name = "BookCode")
     public String BookCode;
+    @ColumnInfo(name = "BOOK_SELLING_CODE")
+    public String BOOK_SELLING_CODE;
+    @ColumnInfo(name = "BARCODE_NUMBER")
+    public String BARCODE_NUMBER;
+    @ColumnInfo(name = "BOOK_NET_PRICE")
+    public String BOOK_NET_PRICE;
+    @ColumnInfo(name = "BookPrice")
+    public String BookPrice;
     @ColumnInfo(name = "BookName")
     public String BookName;
     @ColumnInfo(name = "BookNo")
     public String BookNo;
-    @ColumnInfo(name = "BookPrice")
-    public double BookPrice;
+
 
 }

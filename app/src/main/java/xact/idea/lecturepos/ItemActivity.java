@@ -152,32 +152,38 @@ public class ItemActivity extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                final double prices;
-                final double quantitys;
-                final  double d ;
-                if (!price.getText().toString().equals("")){
-                    prices = Double.parseDouble(price.getText().toString());
+                if (quantity.getText().toString().equals("")){
+                    Toast.makeText(ItemActivity.this, "Please Give your Quantity Value", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    prices=0.0;
-                }
-                if (!quantity.getText().toString().equals("")){
-                    quantitys = Double.parseDouble(quantity.getText().toString());
-                }
-                else {
-                    quantitys=0.0;
-                }
-                if (!s.toString().equals("")){
-                     d = Double.parseDouble(s.toString());
-                }
-                else {
-                    d=0.0;
-                }
+                    final double prices;
+                    final double quantitys;
+                    final  double d ;
+                    if (!price.getText().toString().equals("")){
+                        prices = Double.parseDouble(price.getText().toString());
+                    }
+                    else {
+                        prices=0.0;
+                    }
+                    if (!quantity.getText().toString().equals("")){
+                        quantitys = Double.parseDouble(quantity.getText().toString());
+                    }
+                    else {
+                        quantitys=0.0;
+                    }
+                    if (!s.toString().equals("")){
+                        d = Double.parseDouble(s.toString());
+                    }
+                    else {
+                        d=0.0;
+                    }
 
 
-                double total = (prices * quantitys) - d;
-                amount.setText(String.valueOf(rounded(total,2)));
-                Toast.makeText(ItemActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
+                    double total = (prices * quantitys) - d;
+                    amount.setText(String.valueOf(rounded(total,2)));
+                    Toast.makeText(ItemActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         btn_update.setOnClickListener(new View.OnClickListener() {

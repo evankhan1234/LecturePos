@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import xact.idea.lecturepos.Model.BookResponseEntity;
+import xact.idea.lecturepos.Model.ChallanPostEntity;
+import xact.idea.lecturepos.Model.ChallanResponseEntity;
+import xact.idea.lecturepos.Model.LoginEntity;
+import xact.idea.lecturepos.Model.LoginPostEntity;
 
 
 public interface IRetrofitApi {
@@ -25,17 +30,20 @@ public interface IRetrofitApi {
 //
 //    @POST("department/department_list.php")
 //    io.reactivex.Observable<DepartmentListEntity> getDepartmentList();
-//    @GET("1h2jdb")
-//    io.reactivex.Observable<UserDetailsEntity> getProfileDetails();
+    @GET("books/get_data.php")
+    io.reactivex.Observable<BookResponseEntity> getBook();
 //
 //
-//    @POST("auth/auth.php")
-//    io.reactivex.Observable<LoginEntity> Login(@Body LoginPostEntity loginPostEntity);
+    @POST("auth/")
+    io.reactivex.Observable<LoginEntity> Login(@Body LoginPostEntity loginPostEntity);
+
+    @POST("challan/get_data.php")
+    io.reactivex.Observable<ChallanResponseEntity> getChalan(@Body ChallanPostEntity challanPostEntity);
 //    @POST("user/user_list.php")
 //    io.reactivex.Observable<AllUserListEntity> getUserList();
 //    @POST("user/user_activity.php")
-//    io.reactivex.Observable<UserActivityListEntity> getUserActivityList(@Body UserActivityPostEntity userActivityPostEntity);
-//    @POST("user_activity/actions.php")
+  //  io.reactivex.Observable<UserActivityListEntity> getUserActivityList(@Body UserActivityPostEntity userActivityPostEntity);
+  //   @GET("books/get_data.php")
 //    io.reactivex.Observable<PunchInOutResponseEntity> postPunch(@Body PunchInOutPostEntity punchInOutPostEntity);
 
 //    @FormUrlEncoded

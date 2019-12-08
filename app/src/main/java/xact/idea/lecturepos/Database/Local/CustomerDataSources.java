@@ -49,6 +49,11 @@ public class CustomerDataSources implements ICustomerDataSource {
     }
 
     @Override
+    public Customer getCustomerss(String Name) {
+        return CustomerDao.getCustomerss(Name);
+    }
+
+    @Override
     public void insertToCustomer(Customer... carts) {
 
         CustomerDao.insertToCustomer(carts);

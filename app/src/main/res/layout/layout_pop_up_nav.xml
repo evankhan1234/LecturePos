@@ -67,7 +67,7 @@
                 android:textSize="45px" />
 
             <Button
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/accept"
                 android:id="@+id/btn_ok"
                 android:layout_width="420px"
                 android:layout_height="140px"

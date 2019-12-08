@@ -23,15 +23,17 @@
                 android:layout_height="250px"
                 android:visibility="visible">
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/btn_header_back"
-                    android:layout_width="86px"
-                    android:layout_height="85px"
-                    android:layout_marginTop="85px"
-
+                    android:layout_width="136px"
+                    android:layout_height="145px"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginTop="62px"
+                    android:background="@color/transparent"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="3px"
 
-
+                    android:stateListAnimator="@null"
                     android:visibility="visible"
                     app:srcCompat="@drawable/back" />
 
@@ -43,7 +45,7 @@
                     android:layout_marginLeft="10px"
                     android:layout_marginTop="95px"
 
-                    app:srcCompat="@drawable/graphic_design"
+                    app:srcCompat="@drawable/plus"
 
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="3px"

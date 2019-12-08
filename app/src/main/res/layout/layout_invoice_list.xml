@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
 
         card_view:cardElevation="5px"
-        card_view:cardBackgroundColor="#FFFFFF"
+        card_view:cardBackgroundColor="#F8F8F8"
 
         card_view:cardUseCompatPadding="true"
         card_view:cardCornerRadius="5px">
@@ -122,6 +122,7 @@
                                 />
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/text_code"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -156,6 +157,7 @@
                                 />
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/text_discount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

@@ -2,7 +2,9 @@ package xact.idea.lecturepos.Utils;
 
 
 import xact.idea.lecturepos.Database.Datasources.BookRepository;
+import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
+import xact.idea.lecturepos.Database.Datasources.LoginRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesMasterRepository;
 import xact.idea.lecturepos.Database.Local.CustomerDataSources;
@@ -16,6 +18,8 @@ public abstract class Common {
     public static BookRepository bookRepository;
     public static SalesDetailsRepository salesDetailsRepository;
     public static SalesMasterRepository salesMasterRepository;
+    public static LoginRepository loginRepository;
+    public static ChallanRepositoy challanRepositoy;
 //    public static UserListRepository userListRepository;
 //    public static UserActivityRepository userActivityRepository;
 //    public static UnitRepository unitRepository;
@@ -24,7 +28,7 @@ public abstract class Common {
 //    public static EntityLeaveRepository entityLeaveRepository;
 //    public static RemainingLeaveRepository remainingLeaveRepository;
     public static final String BASE_URL="https://api.myjson.com/bins/";
-    public static final String BASE_URL_XACT="http://emp.xactidea.com/mobile-app/api/";
+    public static final String BASE_URL_XACT="http://210.1.248.27:8282/lecturepos/api/";
 
     public static IRetrofitApi getApi(){
         return RetrofitClient.getClient(BASE_URL).create(IRetrofitApi.class);
