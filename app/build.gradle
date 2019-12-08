@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.github.nisrulz:qreader:2.1.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
     implementation 'com.karumi:dexter:5.0.0'
+    implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'android.arch.persistence.room:runtime:1.1.1'

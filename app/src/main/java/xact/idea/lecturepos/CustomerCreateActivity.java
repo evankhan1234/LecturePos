@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,12 +42,18 @@ public class CustomerCreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CustomerCreateActivity.this,CustomerActivity.class));
+                finish();
             }
         });
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!firstName.getText().toString().equals("") &&lastName.getText().toString().equals("") &&!phone.getText().toString().equals("") &&!address.getText().toString().equals("")&&!retail_code.getText().toString().equals("") ){
+                Log.e("Fsdfs","SFs"+firstName.getText().toString());
+                Log.e("Fsdfs","SFs"+lastName.getText().toString());
+                Log.e("Fsdfs","SFs"+phone.getText().toString());
+                Log.e("Fsdfs","SFs"+retail_code.getText().toString());
+                Log.e("Fsdfs","SFs"+address.getText().toString());
+                if (!firstName.getText().toString().equals("") &&!phone.getText().toString().equals("") &&!address.getText().toString().equals("")&&!retail_code.getText().toString().equals("") ){
                     Customer c = new Customer();
                     c.Name=firstName.getText().toString()+" "+lastName.getText().toString();
                     c.Address=address.getText().toString();

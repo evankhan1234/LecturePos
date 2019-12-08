@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFC107</color>
     <color name="colorPrimaryDark">#FFC107</color>
-    <color name="colorAccent">#FFC107</color>
+    <color name="colorAccent">#E46328</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="gray_black">#444444</color>
@@ -11,4 +11,5 @@
     <color name="gradient_strong">#80AAAAAA</color>
     <color name="gradient_weak">#00555555</color>
     <color name="accept">#85C34E</color>
+    <color name="transparent">#00000000</color>
 </resources>

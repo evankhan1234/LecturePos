@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -18,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 import xact.idea.lecturepos.Adapter.CustomerAdapter;
 import xact.idea.lecturepos.Adapter.InvoiceAdapter;
 import xact.idea.lecturepos.Database.Model.Customer;
+import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
@@ -45,12 +49,14 @@ public class InvoiceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(InvoiceListActivity.this,InvoiceActivity.class));
+                finish();
             }
         });
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(InvoiceListActivity.this,MainActivity.class));
+                finish();
             }
         });
     }
@@ -67,6 +73,7 @@ public class InvoiceListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadCustomer();
+        load();
     }
 
     private  void loadCustomer() {
@@ -75,6 +82,18 @@ public class InvoiceListActivity extends AppCompatActivity {
             @Override
             public void accept(List<SalesMaster> customers) throws Exception {
                 displayCustomerItems(customers);
+                Log.e("dsd","vxcv"+new Gson().toJson(customers));
+            }
+        }));
+
+    }
+
+    private  void load() {
+
+        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+            @Override
+            public void accept(List<SalesDetails> customers) throws Exception {
+
             }
         }));
 

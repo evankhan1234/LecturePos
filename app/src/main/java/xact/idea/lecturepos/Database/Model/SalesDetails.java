@@ -17,6 +17,8 @@ public class SalesDetails {
     public int InvoiceId;
     @ColumnInfo(name = "BookId")
     public String BookId;
+    @ColumnInfo(name = "BookName")
+    public String BookName;
     @ColumnInfo(name = "Quantity")
     public int Quantity;
     @ColumnInfo(name = "MRP")

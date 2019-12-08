@@ -21,7 +21,7 @@ public class SpalashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spalash);
         CorrectSizeUtil.getInstance(this).correctSize();
-        CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.root_rlt_dashboard));
+        CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

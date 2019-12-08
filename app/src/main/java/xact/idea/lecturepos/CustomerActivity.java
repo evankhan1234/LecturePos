@@ -27,7 +27,7 @@ public class CustomerActivity extends AppCompatActivity {
 
     RecyclerView rcl_this_customer_list;
     CustomerAdapter mAdapters;
-    static CompositeDisposable compositeDisposable = new CompositeDisposable();
+     CompositeDisposable compositeDisposable = new CompositeDisposable();
     ImageView btn_header_application;
     ImageView btn_header_back;
     @Override
@@ -47,12 +47,14 @@ public class CustomerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CustomerActivity.this,CustomerCreateActivity.class));
+                finish();
             }
         });
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CustomerActivity.this,MainActivity.class));
+                finish();
             }
         });
 
