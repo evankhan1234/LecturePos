@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -20,7 +21,8 @@ public interface ChallanDao {
     Flowable<List<Challan>> getChallanItemById(int ChallanItemId);
     @Query("SELECT * FROM challan WHERE CHALLAN_DATE=:ChallanItem")
     Challan getChallan(String ChallanItem);
-
+    @Query("SELECT * FROM challan WHERE Date BETWEEN :from AND :to")
+    Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to);
     @Query("Select Count(id)  FROM challan")
     int value();
 
@@ -28,8 +30,8 @@ public interface ChallanDao {
     Flowable<List<Challan>> getList(String ChallanItemId);
     @Query("DELETE  FROM challan")
     void emptyChallan();
-    @Query("UPDATE  challan SET IS_RECEIVE=:value where CHALLAN_NO=:ChallanNo")
-    void updateReciver(String value,String ChallanNo);
+    @Query("UPDATE  challan SET IS_RECEIVE=:value , receive_date=:date where CHALLAN_NO=:ChallanNo")
+    void updateReciver(String value,String ChallanNo,String date);
 
     @Insert
     void insertToChallan(Challan...challan);

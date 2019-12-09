@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -165,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             loadChalanItemsFor();
         }else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-                loadChalanItems();
+              loadChalanItems();
             } else {
                 Snackbar snackbar = Snackbar
                         .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
@@ -248,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     private  void loadChalanItems() {
         showLoadingProgress(MainActivity.this);
         ChallanPostEntity challanPostEntity = new ChallanPostEntity();
-        challanPostEntity.customer_no="0381";
+        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
         compositeDisposable.add(mService.getChalan(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ChallanResponseEntity>() {
             @Override
             public void accept(ChallanResponseEntity challanResponseEntity) throws Exception {
@@ -256,8 +258,12 @@ public class MainActivity extends AppCompatActivity {
 
                 for (ChallanResponseEntity.Data books : challanResponseEntity.data) {
                     Challan challan = new Challan();
+                    Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(books.CHALLAN_DATE);
                     challan.CHALLAN_CODE=books.CHALLAN_CODE;
+                    challan.Date=date1;
+                    challan.receive_date=date1;
                     challan.IS_RECEIVE="N";
+
                     challan.CHALLAN_DATE=books.CHALLAN_DATE;
                     challan.CHALLAN_NO=books.CHALLAN_NO;
                     challan.CHALLAN_QTY=books.CHALLAN_QTY;
@@ -298,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
+
                 dismissLoadingProgress();
             }
         }));

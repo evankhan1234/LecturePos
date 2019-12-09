@@ -41,4 +41,6 @@ public class SalesMaster {
     public String Note;
     @ColumnInfo(name = "InvoiceDates")
     public String InvoiceDates;
+    @ColumnInfo(name = "Date")
+    public Date  Date;
 }

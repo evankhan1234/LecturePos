@@ -6,9 +6,11 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import xact.idea.lecturepos.Database.Model.Challan;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 
@@ -25,7 +27,8 @@ public interface SaleMastersDao {
     @Query("Select MAX(id)  FROM sales_mst")
     int maxValue();
 
-
+    @Query("SELECT * FROM sales_mst WHERE InvoiceDate BETWEEN :from AND :to")
+    Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to);
     @Query("DELETE  FROM sales_mst")
     void emptySalesDetails();
 

@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -54,6 +57,7 @@ public class ChallanListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadChallan();
+        load();
     }
 
     private void displayChallanItems(List<Challan> challans) {
@@ -70,6 +74,16 @@ public class ChallanListFragment extends Fragment {
             @Override
             public void accept(List<Challan> customers) throws Exception {
                 displayChallanItems(customers);
+            }
+        }));
+
+    }
+    private  void load() {
+
+        compositeDisposable.add(Common.challanRepositoy.getChallanItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
+            @Override
+            public void accept(List<Challan> customers) throws Exception {
+                Log.e("fdsf","Dfgd"+new Gson().toJson(customers));
             }
         }));
 

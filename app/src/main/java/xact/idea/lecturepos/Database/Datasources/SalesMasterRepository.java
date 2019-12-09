@@ -1,5 +1,6 @@
 package xact.idea.lecturepos.Database.Datasources;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -47,6 +48,11 @@ public class SalesMasterRepository implements ISalesMasterDataSource {
     @Override
     public int size() {
         return ISalesMasterDataSource.size();
+    }
+
+    @Override
+    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to) {
+        return ISalesMasterDataSource.getInvoiceActivityItemByDate(from, to);
     }
 
     @Override

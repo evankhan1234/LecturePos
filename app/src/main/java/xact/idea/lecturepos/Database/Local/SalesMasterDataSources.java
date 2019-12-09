@@ -1,5 +1,6 @@
 package xact.idea.lecturepos.Database.Local;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -51,6 +52,11 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     @Override
     public int size() {
         return SaleMastersDao.value();
+    }
+
+    @Override
+    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to) {
+        return SaleMastersDao.getInvoiceActivityItemByDate(from, to);
     }
 
     @Override
