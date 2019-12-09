@@ -1,5 +1,6 @@
 package xact.idea.lecturepos.Database.Local;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -51,8 +52,8 @@ public class ChallanDataSources implements IChallanDataSource {
     }
 
     @Override
-    public void updateReciver(String value, String ChallanNo) {
-        ChallanDao.updateReciver(value, ChallanNo);
+    public void updateReciver(String value, String ChallanNo,String date) {
+        ChallanDao.updateReciver(value, ChallanNo,date);
     }
 
     @Override
@@ -63,6 +64,11 @@ public class ChallanDataSources implements IChallanDataSource {
     @Override
     public void insertToChallan(Challan... Challans) {
         ChallanDao.insertToChallan(Challans);
+    }
+
+    @Override
+    public Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to) {
+        return ChallanDao.getChallanActivityItemByDate(from, to);
     }
 
     @Override

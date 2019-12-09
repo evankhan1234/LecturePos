@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import xact.idea.lecturepos.Database.Model.Challan;
@@ -100,7 +102,13 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Common.challanRepositoy.updateReciver("Y",messageEntities.get(position).CHALLAN_NO);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = new Date(System.currentTimeMillis());
+                String currentDate = formatter.format(date);
+                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm a");
+                Date dates = new Date(System.currentTimeMillis());
+                String currentTime = formatters.format(dates);
+                Common.challanRepositoy.updateReciver("Y",messageEntities.get(position).CHALLAN_NO,currentDate+" "+currentTime);
                 notifyDataSetChanged();
                 infoDialog.dismiss();
             }

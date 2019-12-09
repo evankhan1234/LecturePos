@@ -16,7 +16,7 @@
 
 
         android:layout_width="match_parent"
-        android:layout_height="350px"
+        android:layout_height="400px"
 
         card_view:cardElevation="5px"
 
@@ -78,7 +78,7 @@
                         <TextView
                             android:id="@+id/text_challan_no"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="80px"
                             android:layout_marginBottom="1px"
                             android:layout_weight="1"
                             android:gravity="left|center_vertical|center_horizontal|center|start"
@@ -91,7 +91,7 @@
                         <TextView
                             android:id="@+id/text_challan_quantity"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="80px"
                             android:layout_marginBottom="1px"
                             android:layout_weight="1"
                             android:gravity="left|center_vertical|center_horizontal|center|start"
@@ -106,7 +106,7 @@
 
                             android:id="@+id/text_challan_date"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="80px"
                             android:layout_marginBottom="1px"
                             android:layout_weight="1"
                             android:gravity="left|center_vertical|center_horizontal|center|start"
@@ -139,7 +139,7 @@
                             <TextView
                                 android:id="@+id/text_challan_packet"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="80px"
                                 android:gravity="end"
                                 android:paddingLeft="1px"
                                 android:paddingRight="1px"
@@ -154,9 +154,9 @@
                         <TextView
                             android:id="@+id/text_total_value"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="80px"
                             android:layout_marginTop="23px"
-                            android:layout_weight="1"
+
                             android:gravity="bottom|right|center_vertical|center_horizontal|center|end"
                             android:paddingLeft="1px"
                             android:paddingRight="1px"
@@ -170,7 +170,7 @@
                             android:layout_width="350px"
                             android:layout_height="140px"
                             android:layout_gravity="center"
-                            android:layout_marginTop="30px"
+                            android:layout_marginTop="20px"
 
                             android:layout_marginLeft="0px"
 

@@ -174,6 +174,7 @@ public class InvoiceActivity extends AppCompatActivity {
 
               //  selectedItems.setText(item + " Position: " + position);
                 text_customer_spinner.setText(item);
+                Name=item;
 
               Customer customer=Common.customerRepository.getCustomerss(item);
               if (customer!=null){
@@ -195,8 +196,8 @@ public class InvoiceActivity extends AppCompatActivity {
                 dFragment.show(getSupportFragmentManager(), "Date Picker");
             }
         });
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = new Date(System.currentTimeMillis());
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        final Date date = new Date(System.currentTimeMillis());
         edit_date.setText(formatter.format(date));
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -216,9 +217,10 @@ public class InvoiceActivity extends AppCompatActivity {
                     String pay = String.valueOf(radioSexButton.getText());
                     double discount = 0;
                     double amount =0;
+                    amount = Double.parseDouble(s);
                     try {
                         discount = Double.parseDouble(editShippingChargesValue.getText().toString());
-                         amount = Double.parseDouble(s);
+
 
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -226,17 +228,37 @@ public class InvoiceActivity extends AppCompatActivity {
 
                     SalesMaster salesMaster = new SalesMaster();
                     int value = Common.salesMasterRepository.maxValue();
+                    String totalValue;
+                    value=value+1;
+                    if (value<9){
+                        totalValue="00"+value;
+
+                    }
+                    else if(value>9){
+                        totalValue="0"+value;
+                    }
+                    else {
+                        totalValue= String.valueOf(value);
+                    }
+
                     Date date1 = null;
+                    Date date2 = null;
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+                    Date date = new Date(System.currentTimeMillis());
                     try {
                         date1 = new SimpleDateFormat("dd-MM-yyyy").parse(edit_date.getText().toString());
+                       // date2= new SimpleDateFormat("yy-MM-dd").parse(edit_date.getText().toString());
+
+
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+
                     salesMaster.CustomerName = Name;
                     salesMaster.Discount = discount;
                     salesMaster.InvoiceId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
                     salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
-                    salesMaster.InvoiceNumber = value + "##" + SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+                    salesMaster.InvoiceNumber = "10"+SharedPreferenceUtil.getUserID(InvoiceActivity.this)+formatter.format(date)+totalValue;
                     salesMaster.InvoiceDates = edit_date.getText().toString();
                     salesMaster.InvoiceDate = date1;
                     salesMaster.Discount = discount;
@@ -245,6 +267,8 @@ public class InvoiceActivity extends AppCompatActivity {
                     salesMaster.Device = "Mobile";
                     salesMaster.update_date = date1;
                     salesMaster.PayMode = pay;
+                    Date dates = new Date(System.currentTimeMillis());
+                    salesMaster.Date = dates;
                     salesMaster.Note = edit_note.getText().toString();
                     salesMaster.RetailCode = edit_retail_code.getText().toString();
                     Common.salesMasterRepository.insertToSalesMaster(salesMaster);
@@ -264,6 +288,7 @@ public class InvoiceActivity extends AppCompatActivity {
                     }
 
 
+                    Constant.arrayList.clear();
                     startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
                     finish();
                     Toast.makeText(InvoiceActivity.this, "Successfully Created a Invoice ", Toast.LENGTH_SHORT).show();

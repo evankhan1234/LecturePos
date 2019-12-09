@@ -1,5 +1,6 @@
 package xact.idea.lecturepos.Database.Datasources;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -16,11 +17,11 @@ public interface IChallanDataSource {
 
     void emptyChallan();
     int size();
-    void updateReciver(String value,String ChallanNo);
+    void updateReciver(String value,String ChallanNo,String date);
     Flowable<List<Challan>> getList(String ChallanItemId);
     void insertToChallan(Challan... Challans);
 
-
+    Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to);
     void updateChallan(Challan... Challans);
 
 

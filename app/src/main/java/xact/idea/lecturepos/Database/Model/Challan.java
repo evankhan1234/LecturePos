@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
+import java.util.Date;
 
 @Entity(tableName = "challan")
 public class Challan {
@@ -78,6 +78,10 @@ public class Challan {
     public String  COMPLETED_BOOKING_PKT_QTY;
     @ColumnInfo(name = "IS_RECEIVE")
     public String  IS_RECEIVE;
+    @ColumnInfo(name = "receive_date")
+    public Date  receive_date;
+    @ColumnInfo(name = "Date")
+    public Date  Date;
 
 
 

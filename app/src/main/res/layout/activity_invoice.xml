@@ -101,6 +101,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:tag="35"
+                android:textSize="35px"
                 android:textColor="#666"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,6 +133,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
                     <TextView
+                        android:tag="35"
+                        android:textSize="35px"
                         android:textColor="#666"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -138,20 +142,47 @@
                         android:text="Invoice Date"/>
                     <EditText
                         android:focusable="false"
+                        android:tag="35"
 
-                        android:drawableRight="@drawable/ic_date_vector_dark" android:textSize="32px" android:id="@+id/edit_date" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Invoice Date" android:ems="10" android:inputType="textPersonName"/>
+                        android:drawableRight="@drawable/ic_date_vector_dark"
+                        android:textSize="35px" android:id="@+id/edit_date" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Invoice Date" android:ems="10" android:inputType="textPersonName"/>
                 </LinearLayout>
                 <LinearLayout android:orientation="vertical" android:paddingLeft="10px" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1">
-                    <TextView android:textColor="#666" android:id="@+id/textView47" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8px" android:text="Retail Code"/>
-                    <EditText android:textSize="32px" android:id="@+id/edit_retail_code" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Retail Code" android:ems="10" android:inputType="textPersonName"/>
+
+                    <TextView
+                        android:tag="35"
+                        android:textSize="35px"
+                        android:id="@+id/textView47"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8px"
+                        android:text="Retail Code"
+                        android:textColor="#666" />
+
+                    <EditText
+
+                        android:focusable="false"
+                        android:tag="35"
+                        android:textSize="35px" android:id="@+id/edit_retail_code" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Retail Code" android:ems="10" android:inputType="textPersonName"/>
                 </LinearLayout>
             </LinearLayout>
-            <TextView android:textColor="#666" android:id="@+id/textView49" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8px" android:text="Contact Number"/>
-            <EditText android:textSize="32px" android:id="@+id/edit_contact_number" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Contact number" android:ems="10" android:inputType="phone"/>
-
-            <TextView android:textColor="#666" android:id="@+id/textView51" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8px" android:text="Address"/>
-            <EditText android:textSize="32px" android:id="@+id/edit_address" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Address" android:ems="10" android:inputType="textPostalAddress"/>
             <TextView
+                android:textSize="35px"
+                android:tag="35"
+                android:textColor="#666" android:id="@+id/textView49" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8px" android:text="Contact Number"/>
+            <EditText
+                android:textSize="35px"
+                android:tag="35"
+            android:id="@+id/edit_contact_number" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Contact number" android:ems="10" android:inputType="phone"/>
+
+            <TextView
+                android:textSize="35px"
+                android:tag="35"
+                android:textColor="#666" android:id="@+id/textView51" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8px" android:text="Address"/>
+            <EditText android:textSize="35px" android:id="@+id/edit_address" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Address" android:ems="10" android:inputType="textPostalAddress"/>
+            <TextView
+                android:textSize="35px"
+                android:tag="35"
                 android:textColor="#666"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -170,7 +201,7 @@
             </androidx.recyclerview.widget.RecyclerView>
             <Button
 
-                android:textSize="32px" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Items" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
+                android:textSize="32px" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Books" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
 
 
             <RelativeLayout
@@ -191,7 +222,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="10px"
                     android:layout_marginRight="10px"
-                    android:layout_toLeftOf="@+id/linLayoutAmount"
+
                     android:layout_toRightOf="@+id/adp_cib_TvNameCircle"
                     android:orientation="vertical">
 
@@ -347,6 +378,7 @@
                             android:paddingLeft="1px"
                             android:paddingRight="1px"
                             android:text="BDT 235"
+                            android:tag="35"
                             android:textColor="@color/black"
                             android:textSize="35px"
                             />
@@ -385,6 +417,8 @@
                     android:layout_height="match_parent"
                   >
                     <TextView
+                        android:textSize="35px"
+                        android:tag="35"
                         android:layout_marginLeft="20px"
                         android:layout_marginTop="30px"
                         android:textColor="#666"
@@ -421,10 +455,13 @@
                         android:textColorHint="@color/hint_text_color_new"
 
 
-                        android:textSize="32px" android:id="@+id/editShippingChargesValue"
+                        android:textSize="35px"
+                        android:tag="35"
+
+                        android:id="@+id/editShippingChargesValue"
                         android:background="@drawable/input_bg"
                         android:padding="25px"
-                        android:layout_width="200px"
+                        android:layout_width="250px"
                         android:layout_height="100px"
                         android:layout_marginBottom="10px"
                         android:hint="Discount" android:ems="10" android:inputType="number"/>
@@ -508,6 +545,7 @@
                             android:gravity="end"
                             android:paddingLeft="1px"
                             android:paddingRight="1px"
+                            android:tag="35"
                             android:text="BDT 235"
                             android:textColor="@color/black"
                             android:textSize="35px"
@@ -575,13 +613,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="2px"/>
             <TextView
+                android:textSize="35px"
+                android:tag="35"
                 android:layout_marginLeft="10px"
                 android:layout_marginTop="50px"
                 android:textColor="#666"  android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8px" android:text="Note"/>
             <EditText
                 android:gravity="top"
                 android:layout_marginTop="20px"
-                android:textSize="32px" android:id="@+id/edit_note" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent"
+                android:textSize="35px"
+                android:tag="35" android:id="@+id/edit_note" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent"
                 android:minHeight="300px"
                 android:layout_height="wrap_content" android:layout_marginBottom="10px" android:hint="Please Take a Note" android:ems="10" android:inputType="textMultiLine"/>
 
