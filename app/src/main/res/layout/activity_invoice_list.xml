@@ -106,7 +106,7 @@
                     android:layout_marginLeft="30px"
                     android:background="@drawable/border"
 
-                    android:layout_width="390px"
+                    android:layout_width="400px"
                     android:layout_height="100px"/>
                 <EditText
                     android:id="@+id/edit_end_date"
@@ -117,7 +117,7 @@
                     android:layout_marginLeft="40px"
                     android:background="@drawable/border"
                     android:focusable="false"
-                    android:layout_width="390px"
+                    android:layout_width="400px"
                     android:layout_height="100px"/>
                 <Button
                     android:layout_marginLeft="20px"

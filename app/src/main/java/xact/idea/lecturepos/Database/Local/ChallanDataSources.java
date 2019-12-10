@@ -67,8 +67,8 @@ public class ChallanDataSources implements IChallanDataSource {
     }
 
     @Override
-    public Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to) {
-        return ChallanDao.getChallanActivityItemByDate(from, to);
+    public Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to,String ChallanItemId) {
+        return ChallanDao.getChallanActivityItemByDate(from, to,ChallanItemId);
     }
 
     @Override

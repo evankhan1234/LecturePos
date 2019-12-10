@@ -16,7 +16,7 @@
 
 
         android:layout_width="match_parent"
-        android:layout_height="230px"
+        android:layout_height="280px"
 
         card_view:cardElevation="5px"
 
@@ -78,7 +78,7 @@
                         <TextView
                             android:id="@+id/text_book"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="80px"
                             android:layout_marginBottom="1px"
                             android:layout_weight="1"
                             android:gravity="left|center_vertical|center_horizontal|center|start"
