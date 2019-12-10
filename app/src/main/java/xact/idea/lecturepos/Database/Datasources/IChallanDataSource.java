@@ -21,7 +21,7 @@ public interface IChallanDataSource {
     Flowable<List<Challan>> getList(String ChallanItemId);
     void insertToChallan(Challan... Challans);
 
-    Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to);
+    Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to,String ChallanItemId);
     void updateChallan(Challan... Challans);
 
 

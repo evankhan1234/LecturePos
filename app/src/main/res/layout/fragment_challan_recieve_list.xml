@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.ChallanListFragment">
+   >
+    <LinearLayout
+        android:layout_marginTop="20px"
+        android:layout_below="@+id/rlt_header"
+        android:id="@+id/filter"
 
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edit_start_date"
+            android:focusable="false"
+            android:drawableLeft="@drawable/ic_date_vector_dark"
+            android:drawablePadding="15px"
+            android:paddingLeft="20px"
+            android:hint="Start Date"
+            android:layout_marginLeft="30px"
+            android:background="@drawable/border"
+
+            android:layout_width="400px"
+            android:layout_height="100px"/>
+        <EditText
+            android:id="@+id/edit_end_date"
+            android:drawableLeft="@drawable/ic_date_vector_dark"
+            android:drawablePadding="15px"
+            android:paddingLeft="20px"
+            android:hint="End Date"
+            android:layout_marginLeft="40px"
+            android:background="@drawable/border"
+            android:focusable="false"
+            android:layout_width="400px"
+            android:layout_height="100px"/>
+        <Button
+            android:layout_marginLeft="20px"
+            android:tag="45"
+            android:textSize="45px"
+
+            android:id="@+id/btn_yes"
+            android:background="@drawable/capsule_button"
+            android:layout_marginRight="40px"
+            android:hint="Show"
+            android:textColorHint="#fff"
+            android:layout_width="200px"
+            android:layout_height="100px" />
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/filter"
         android:layout_marginTop="10px"
 
 
@@ -21,5 +66,12 @@
         >
 
     </androidx.recyclerview.widget.RecyclerView>
+    <ProgressBar
 
-</FrameLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:background="@android:color/transparent" />
+</RelativeLayout>

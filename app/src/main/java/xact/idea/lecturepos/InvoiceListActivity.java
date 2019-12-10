@@ -163,12 +163,15 @@ public class InvoiceListActivity extends AppCompatActivity {
     }
 
     private  void loadCustomer() {
-        final Date date = new Date(System.currentTimeMillis());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date(System.currentTimeMillis());
+        String currentDate = formatter.format(date);
         progress_bar.setVisibility(View.VISIBLE);
         Date date1 = null;
         Date date2 = null;
         try {
-            date1=new SimpleDateFormat("dd-MM-yyyy").parse("09-12-2019");
+            date1=new SimpleDateFormat("dd-MM-yyyy").parse(currentDate);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -178,7 +181,7 @@ public class InvoiceListActivity extends AppCompatActivity {
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 displayCustomerItems(userActivities);
                 Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
-                Log.e("fsd","dfsdf"+date);
+               // Log.e("fsd","dfsdf"+date);
                 progress_bar.setVisibility(View.GONE);
 
             }
@@ -247,7 +250,7 @@ public class InvoiceListActivity extends AppCompatActivity {
                 final Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
                 try {
-                    calendar.setTime(sdf.parse(edit_start_date.getText().toString()));
+                    calendar.setTime(sdf.parse(edit_end_date.getText().toString()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
