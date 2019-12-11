@@ -179,7 +179,18 @@
                 android:textSize="35px"
                 android:tag="35"
                 android:textColor="#666" android:id="@+id/textView51" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8px" android:text="Address"/>
-            <EditText android:textSize="35px" android:id="@+id/edit_address" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent" android:layout_height="120px" android:layout_marginBottom="10px" android:hint="Address" android:ems="10" android:inputType="textPostalAddress"/>
+            <EditText
+                android:tag="35"
+                android:textSize="35px"
+                android:id="@+id/edit_address"
+                android:background="@drawable/input_bg"
+                android:padding="25px"
+                android:layout_width="match_parent"
+                android:layout_height="120px"
+                android:layout_marginBottom="10px"
+                android:hint="Address"
+                android:ems="10"
+                android:inputType="textPostalAddress"/>
             <TextView
                 android:textSize="35px"
                 android:tag="35"
@@ -201,7 +212,8 @@
             </androidx.recyclerview.widget.RecyclerView>
             <Button
 
-                android:textSize="32px" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Books" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
+                android:tag="35"
+                android:textSize="35px" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Books" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
 
 
             <RelativeLayout
@@ -627,8 +639,8 @@
                 android:layout_height="wrap_content" android:layout_marginBottom="10px" android:hint="Please Take a Note" android:ems="10" android:inputType="textMultiLine"/>
 
             <Button
-
-                android:textSize="32px" android:textColor="#fff" android:id="@+id/save" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Create Invoice" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
+                android:tag="35"
+                android:textSize="35px" android:textColor="#fff" android:id="@+id/save" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Create Invoice" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
 
             <View
                 android:layout_below="@+id/cibact_RLDetail"

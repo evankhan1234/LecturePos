@@ -52,8 +52,8 @@ public class ChallanDataSources implements IChallanDataSource {
     }
 
     @Override
-    public void updateReciver(String value, String ChallanNo,String date) {
-        ChallanDao.updateReciver(value, ChallanNo,date);
+    public void updateReciver(String value, String ChallanNo,String datetime,String date) {
+        ChallanDao.updateReciver(value, ChallanNo,datetime,date);
     }
 
     @Override

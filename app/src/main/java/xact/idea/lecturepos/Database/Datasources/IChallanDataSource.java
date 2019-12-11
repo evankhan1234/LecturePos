@@ -17,7 +17,7 @@ public interface IChallanDataSource {
 
     void emptyChallan();
     int size();
-    void updateReciver(String value,String ChallanNo,String date);
+    void updateReciver(String value,String ChallanNo,String datetime,String date);
     Flowable<List<Challan>> getList(String ChallanItemId);
     void insertToChallan(Challan... Challans);
 

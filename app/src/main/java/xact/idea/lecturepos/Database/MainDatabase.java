@@ -16,14 +16,16 @@ import xact.idea.lecturepos.Database.Local.CustomerDao;
 import xact.idea.lecturepos.Database.Local.LoginDao;
 import xact.idea.lecturepos.Database.Local.SaleDetailsDao;
 import xact.idea.lecturepos.Database.Local.SaleMastersDao;
+import xact.idea.lecturepos.Database.Local.SyncDao;
 import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Database.Model.Challan;
 import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Database.Model.Login;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
+import xact.idea.lecturepos.Database.Model.Sync;
 
-@Database(entities = {Customer.class, Book.class, SalesDetails.class, SalesMaster.class, Login.class, Challan.class}, version =3,exportSchema = false)
+@Database(entities = {Customer.class, Book.class, SalesDetails.class, SalesMaster.class, Login.class, Challan.class, Sync.class}, version =3,exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class MainDatabase extends RoomDatabase {
 
@@ -36,6 +38,7 @@ public abstract class MainDatabase extends RoomDatabase {
     public abstract SaleMastersDao saleMastersDao();
     public abstract LoginDao loginDao();
     public abstract ChallanDao challanDao();
+    public abstract SyncDao syncDao();
 
     //
     private static MainDatabase instance;

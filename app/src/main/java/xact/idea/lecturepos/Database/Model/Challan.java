@@ -79,9 +79,21 @@ public class Challan {
     @ColumnInfo(name = "IS_RECEIVE")
     public String  IS_RECEIVE;
     @ColumnInfo(name = "receive_date")
-    public Date  receive_date;
+    public String  receive_date;
+    @ColumnInfo(name = "RECEIVE_DAT")
+    public Date  RECEIVE_DAT;
     @ColumnInfo(name = "Date")
     public Date  Date;
+    @ColumnInfo(name = "IS_BUSY")
+    public String  IS_BUSY;
+    @ColumnInfo(name = "BUSY_USER_NO")
+    public String  BUSY_USER_NO;
+    @ColumnInfo(name = "BUSY_TIME")
+    public String  BUSY_TIME;
+    @ColumnInfo(name = "TOTAL_COMMISION")
+    public String  TOTAL_COMMISION;
+    @ColumnInfo(name = "OVERALL_DISCOUNT")
+    public String  OVERALL_DISCOUNT;
 
 
 

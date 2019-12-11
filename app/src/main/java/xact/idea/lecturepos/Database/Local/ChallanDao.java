@@ -30,8 +30,8 @@ public interface ChallanDao {
     Flowable<List<Challan>> getList(String ChallanItemId);
     @Query("DELETE  FROM challan")
     void emptyChallan();
-    @Query("UPDATE  challan SET IS_RECEIVE=:value , receive_date=:date where CHALLAN_NO=:ChallanNo")
-    void updateReciver(String value,String ChallanNo,String date);
+    @Query("UPDATE  challan SET IS_RECEIVE=:value,receive_date=:date,LAST_ACTION_TIME=:datetime where CHALLAN_NO=:ChallanNo")
+    void updateReciver(String value,String ChallanNo,String datetime,String date);
 
     @Insert
     void insertToChallan(Challan...challan);
