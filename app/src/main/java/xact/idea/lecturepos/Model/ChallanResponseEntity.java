@@ -1,7 +1,10 @@
 package xact.idea.lecturepos.Model;
 
+import androidx.room.ColumnInfo;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
 public class ChallanResponseEntity {
@@ -79,8 +82,19 @@ public class ChallanResponseEntity {
         public String  CHALLAN_QTY;
         @SerializedName("COMPLETED_BOOKING_PKT_QTY")
         public String  COMPLETED_BOOKING_PKT_QTY;
+        @SerializedName("RECEIVE_DAT")
+        public String RECEIVE_DAT;
 
-
+       @SerializedName("IS_BUSY")
+        public String  IS_BUSY;
+       @SerializedName("BUSY_USER_NO")
+        public String  BUSY_USER_NO;
+       @SerializedName("BUSY_TIME")
+        public String  BUSY_TIME;
+       @SerializedName("TOTAL_COMMISION")
+        public String  TOTAL_COMMISION;
+       @SerializedName("OVERALL_DISCOUNT")
+        public String  OVERALL_DISCOUNT;
 
 
     }

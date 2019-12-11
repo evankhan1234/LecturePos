@@ -31,12 +31,14 @@ import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesMasterRepository;
+import xact.idea.lecturepos.Database.Datasources.SyncRepository;
 import xact.idea.lecturepos.Database.Local.BookDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDataSources;
 import xact.idea.lecturepos.Database.Local.CustomerDataSources;
 import xact.idea.lecturepos.Database.Local.LoginDataSource;
 import xact.idea.lecturepos.Database.Local.SalesDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.SalesMasterDataSources;
+import xact.idea.lecturepos.Database.Local.SyncDataSources;
 import xact.idea.lecturepos.Database.MainDatabase;
 import xact.idea.lecturepos.Database.Model.Login;
 import xact.idea.lecturepos.Model.LoginEntity;
@@ -197,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
         Common.salesMasterRepository = SalesMasterRepository.getInstance(SalesMasterDataSources.getInstance(Common.mainDatabase.saleMastersDao()));
         Common.challanRepositoy = ChallanRepositoy.getInstance(ChallanDataSources.getInstance(Common.mainDatabase.challanDao()));
         Common.loginRepository = LoginRepository.getInstance(LoginDataSource.getInstance(Common.mainDatabase.loginDao()));
+        Common.syncRepository = SyncRepository.getInstance(SyncDataSources.getInstance(Common.mainDatabase.syncDao()));
 
     }
 

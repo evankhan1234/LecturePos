@@ -14,36 +14,46 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import xact.idea.lecturepos.Adapter.SalesDetailsAdapter;
 import xact.idea.lecturepos.Database.Datasources.BookRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesMasterRepository;
+import xact.idea.lecturepos.Database.Datasources.SyncRepository;
 import xact.idea.lecturepos.Database.Local.BookDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDataSources;
 import xact.idea.lecturepos.Database.Local.CustomerDataSources;
 import xact.idea.lecturepos.Database.Local.LoginDataSource;
 import xact.idea.lecturepos.Database.Local.SalesDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.SalesMasterDataSources;
+import xact.idea.lecturepos.Database.Local.SyncDataSources;
 import xact.idea.lecturepos.Database.MainDatabase;
 import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Database.Model.Challan;
 import xact.idea.lecturepos.Database.Model.Customer;
+import xact.idea.lecturepos.Database.Model.SalesDetails;
+import xact.idea.lecturepos.Database.Model.SalesMaster;
+import xact.idea.lecturepos.Database.Model.Sync;
 import xact.idea.lecturepos.Model.BookModel;
 import xact.idea.lecturepos.Model.BookResponseEntity;
 import xact.idea.lecturepos.Model.ChallanPostEntity;
 import xact.idea.lecturepos.Model.ChallanResponseEntity;
 import xact.idea.lecturepos.Model.CustomerModel;
+import xact.idea.lecturepos.Model.SalesModel;
+import xact.idea.lecturepos.Model.SyncChallanModel;
 import xact.idea.lecturepos.Retrofit.IRetrofitApi;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
@@ -64,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout linear_invoice;
     LinearLayout linear_notes;
     LinearLayout linear_challan;
+    LinearLayout linear_sync;
     Activity mActivity;
     IRetrofitApi mService;
     RelativeLayout root_rlt_dashboard;
@@ -77,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         linear_customers=findViewById(R.id.linear_customers);
         linear_invoice=findViewById(R.id.linear_invoice);
         linear_notes=findViewById(R.id.linear_notes);
+        linear_sync=findViewById(R.id.linear_sync);
         tv_store=findViewById(R.id.tv_store);
         root_rlt_dashboard=findViewById(R.id.root_rlt_dashboard);
         tv_store.setSelected(true);
@@ -114,6 +126,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,ChallanActivity.class));
+
+            }
+        });
+        linear_sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadChallan();
+                loadCustomer();
 
             }
         });
@@ -184,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         Common.salesMasterRepository = SalesMasterRepository.getInstance(SalesMasterDataSources.getInstance(Common.mainDatabase.saleMastersDao()));
         Common.challanRepositoy = ChallanRepositoy.getInstance(ChallanDataSources.getInstance(Common.mainDatabase.challanDao()));
         Common.loginRepository = LoginRepository.getInstance(LoginDataSource.getInstance(Common.mainDatabase.loginDao()));
+        Common.syncRepository = SyncRepository.getInstance(SyncDataSources.getInstance(Common.mainDatabase.syncDao()));
 
     }
     private  void loadDepartmentItems() {
@@ -261,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
                     Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(books.CHALLAN_DATE);
                     challan.CHALLAN_CODE=books.CHALLAN_CODE;
                     challan.Date=date1;
-                    challan.receive_date=date1;
+                    challan.receive_date=books.RECEIVE_DAT;
                     challan.IS_RECEIVE="N";
 
                     challan.CHALLAN_DATE=books.CHALLAN_DATE;
@@ -296,6 +317,12 @@ public class MainActivity extends AppCompatActivity {
                     challan.F_CUSTOMER_NO=books.F_CUSTOMER_NO;
                     challan.F_GODOWN_NO=books.F_GODOWN_NO;
                     challan.IS_BOOKED=books.IS_BOOKED;
+                    challan.IS_BUSY=books.IS_BUSY;
+                    challan.BUSY_USER_NO=books.BUSY_USER_NO;
+                    challan.BUSY_TIME=books.BUSY_TIME;
+                    challan.TOTAL_COMMISION=books.TOTAL_COMMISION;
+                    challan.OVERALL_DISCOUNT=books.OVERALL_DISCOUNT;
+                    challan.IS_BOOKED=books.IS_BOOKED;
                     Common.challanRepositoy.insertToChallan(challan);
                 }
                 dismissLoadingProgress();
@@ -321,4 +348,219 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         compositeDisposable.clear();
     }
+
+
+    private  void loadChallan() {
+
+        compositeDisposable.add(Common.challanRepositoy.getList("Y").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
+            @Override
+            public void accept(List<Challan> customers) throws Exception {
+                Log.e("SDfd","Dgd"+customers);
+
+
+                List<SyncChallanModel.Sync> syncs = new ArrayList<>();
+                for (Challan challan :customers){
+                    SyncChallanModel.Sync syncChallanModel = new SyncChallanModel.Sync();
+                    syncChallanModel.CHALLAN_CODE=challan.CHALLAN_CODE;
+                    syncChallanModel.RECEIVE_DAT=challan.receive_date;
+                    syncChallanModel.IS_RECEIVE=challan.IS_RECEIVE;
+
+                    syncChallanModel.CHALLAN_DATE=challan.CHALLAN_DATE;
+                    syncChallanModel.CHALLAN_NO=challan.CHALLAN_NO;
+                    syncChallanModel.CHALLAN_QTY=challan.CHALLAN_QTY;
+                    syncChallanModel.CHALLAN_SL_NO=challan.CHALLAN_SL_NO;
+                    syncChallanModel.F_EMPLOYEE_NO_CHALLAN_BY=challan.F_EMPLOYEE_NO_CHALLAN_BY;
+                    syncChallanModel.NO_OF_PACKATE=challan.NO_OF_PACKATE;
+                    syncChallanModel.TOTAL_BOOK_COST=challan.TOTAL_BOOK_COST;
+                    syncChallanModel.PER_HANDLING_COST=challan.PER_HANDLING_COST;
+                    syncChallanModel.PER_PACKAGING_COST=challan.PER_PACKAGING_COST;
+                    syncChallanModel.IS_PACKAGING_DUE=challan.IS_PACKAGING_DUE;
+                    syncChallanModel.NO_OF_PACKATE=challan.NO_OF_PACKATE;
+                    syncChallanModel.TOTAL_PACKAGING_COST=challan.TOTAL_PACKAGING_COST;
+                    syncChallanModel.COMPLETED_BOOKING_PKT_QTY=challan.COMPLETED_BOOKING_PKT_QTY;
+                    syncChallanModel.F_COMPANY_NO=challan.F_COMPANY_NO;
+                    syncChallanModel.F_TRANSPORT_BR_NO=challan.F_TRANSPORT_BR_NO;
+                    syncChallanModel.TOTAL_HANDLING_COST=challan.TOTAL_HANDLING_COST;
+                    syncChallanModel.IS_HANDLING_DUE=challan.TOTAL_HANDLING_COST;
+                    syncChallanModel.TOTAL_VALUE=challan.TOTAL_VALUE;
+                    syncChallanModel.COMMENTS=challan.COMMENTS;
+                    syncChallanModel.F_BOOK_ORDER_NO=challan.F_BOOK_ORDER_NO;
+                    syncChallanModel.F_ORDER_INVOICE_NO=challan.F_ORDER_INVOICE_NO;
+                    syncChallanModel.SL_NUM=challan.SL_NUM;
+                    syncChallanModel.LAST_ACTION="update";
+                    syncChallanModel.LAST_ACTION_TIME=challan.LAST_ACTION_TIME;
+                    syncChallanModel.LAST_ACTION_LOGON_NO=challan.LAST_ACTION_LOGON_NO;
+                    syncChallanModel.INSERT_TIME=challan.INSERT_TIME;
+                    syncChallanModel.INSERT_USER_NO=challan.INSERT_USER_NO;
+                    syncChallanModel.INSERT_LOGON_NO=challan.INSERT_LOGON_NO;
+                    syncChallanModel.F_FISCAL_YEAR_NO=challan.F_FISCAL_YEAR_NO;
+                    syncChallanModel.F_CUSTOMER_NO=challan.F_CUSTOMER_NO;
+                    syncChallanModel.F_GODOWN_NO=challan.F_GODOWN_NO;
+                    syncChallanModel.IS_BOOKED=challan.IS_BOOKED;
+                    syncChallanModel.IS_BUSY=challan.IS_BUSY;
+                    syncChallanModel.BUSY_USER_NO=challan.BUSY_USER_NO;
+                    syncChallanModel.BUSY_TIME=challan.BUSY_TIME;
+                    syncChallanModel.TOTAL_COMMISION=challan.TOTAL_COMMISION;
+                    syncChallanModel.OVERALL_DISCOUNT=challan.OVERALL_DISCOUNT;
+                    syncChallanModel.IS_BOOKED=challan.IS_BOOKED;
+                    syncs.add(syncChallanModel);
+                }
+                SyncChallanModel s = new SyncChallanModel();
+                s.data=syncs;
+                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm a");
+                Date dates = new Date(System.currentTimeMillis());
+                String currentTime = formatters.format(dates);
+
+                Sync name=Common.syncRepository.valueFor("challan");
+                if (name==null){
+                    Sync sync = new Sync();
+                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("challan");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="challan";
+                    Common.syncRepository.insertToSync(sync);
+                }
+                else{
+                    Sync sync = new Sync();
+                    sync.id=name.id;
+                    sync.CUSTOMER_CODE=name.CUSTOMER_CODE;
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("challan");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="challan";
+                    Common.syncRepository.updateSync(sync);
+                }
+
+                Log.e("currentTime","currentTime"+currentTime);
+            }
+        }));
+
+    }
+    private  void loadCustomer() {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date(System.currentTimeMillis());
+        String currentDate = formatter.format(date);
+
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1=new SimpleDateFormat("dd-MM-yyyy").parse(currentDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        compositeDisposable.add(Common.salesMasterRepository.getSalesMasterItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+            @Override
+            public void accept(List<SalesMaster> userActivities) throws Exception
+            {
+
+
+                 List<SalesModel.SalesMaster> syncs = new ArrayList<>();
+              //
+
+                // Log.e("fsd","dfsdf"+date);
+
+                for (SalesMaster sales :userActivities ){
+                 final  SalesModel.SalesMaster salesMaster = new SalesModel.SalesMaster();
+
+                    salesMaster.CustomerName=sales.CustomerName;
+                    salesMaster.Device=sales.Device;
+                    salesMaster.PayMode=sales.PayMode;
+                    salesMaster.NetValue=sales.NetValue;
+                    salesMaster.RetailCode=sales.RetailCode;
+                    salesMaster.InvoiceAmount=sales.InvoiceAmount;
+                    salesMaster.InvoiceDate=sales.InvoiceDates;
+                    salesMaster.InvoiceId=sales.InvoiceId;
+                    salesMaster.InvoiceNumber=sales.InvoiceNumber;
+                    salesMaster.Note=sales.Note;
+                    List<SalesModel.SalesMaster.SalesDetails> getList= getList(sales.id);
+
+                    salesMaster.salesDetails=getList;
+                    syncs.add(salesMaster);
+
+
+
+
+                }
+                Date dates = new Date(System.currentTimeMillis());
+                SalesModel salesModel = new SalesModel();
+                salesModel.data=syncs;
+                Sync name=Common.syncRepository.valueFor("sales_mst");
+                if (name==null){
+                    Sync sync = new Sync();
+                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("sales_mst");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="sales_mst";
+                    Common.syncRepository.insertToSync(sync);
+                }
+                else{
+                    Sync sync = new Sync();
+                    sync.id=name.id;
+                    sync.CUSTOMER_CODE=name.CUSTOMER_CODE;
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("sales_mst");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="sales_mst";
+                    Common.syncRepository.updateSync(sync);
+                }
+                Sync names=Common.syncRepository.valueFor("sales_dtl");
+                if (names==null){
+                    Sync sync = new Sync();
+                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("sales_dtl");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="sales_dtl";
+                    Common.syncRepository.insertToSync(sync);
+                }
+                else{
+                    Sync sync = new Sync();
+                    sync.id=names.id;
+                    sync.CUSTOMER_CODE=names.CUSTOMER_CODE;
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("sales_dtl");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="sales_dtl";
+                    Common.syncRepository.updateSync(sync);
+                }
+                Log.e("1","dsd"+new Gson().toJson(salesModel));
+            }
+        }));
+
+    }
+
+    private List<SalesModel.SalesMaster.SalesDetails> getList(int id) {
+        List<SalesModel.SalesMaster.SalesDetails> salesDetails = new ArrayList<>();
+
+        Flowable<List<SalesDetails>> units=  Common.salesDetailsRepository.getSalesDetailsItemById(id);
+        for (SalesDetails salesDetails1 : units.blockingFirst()){
+            SalesModel.SalesMaster.SalesDetails details = new SalesModel.SalesMaster.SalesDetails();
+            details.BookId=salesDetails1.BookId;
+            details.StoreId=salesDetails1.StoreId;
+            details.InvoiceId=salesDetails1.InvoiceId;
+            details.MRP=salesDetails1.MRP;
+            details.Discount=salesDetails1.Discount;
+            details.TotalAmount=salesDetails1.TotalAmount;
+            details.Quantity=salesDetails1.Quantity;
+            salesDetails.add(details);
+        }
+        return salesDetails;
+
+    }
+//    List<SalesModel.SalesMaster.SalesDetails> salesDetails = new ArrayList<>();
+//    private List<SalesModel.SalesMaster.SalesDetails> display(List<SalesDetails> units) {
+//
+//        return salesDetails;
+//
+//    }
 }

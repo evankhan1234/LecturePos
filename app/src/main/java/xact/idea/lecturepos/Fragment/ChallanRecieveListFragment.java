@@ -91,8 +91,8 @@ public class ChallanRecieveListFragment extends Fragment {
         });
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date date = new Date(System.currentTimeMillis());
-        edit_start_date.setText(formatter.format(date));
-        edit_end_date.setText(formatter.format(date));
+//        edit_start_date.setText(formatter.format(date));
+//        edit_end_date.setText(formatter.format(date));
         edit_start_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

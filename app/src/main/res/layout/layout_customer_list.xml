@@ -93,6 +93,7 @@
                     android:paddingLeft="1dp"
                     android:paddingRight="1dp"
                     android:text="zdczxv"
+                    android:tag="35"
                     android:textColor="@color/hint_text_color_new"
                     android:textSize="35px"
                     />

@@ -68,7 +68,7 @@
                         android:layout_gravity="center_horizontal"
 
                         android:layout_marginRight="1px"
-                        android:src="@drawable/img_background" />
+                        android:src="@drawable/main" />
                 </LinearLayout>
 
             </RelativeLayout>

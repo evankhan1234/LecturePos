@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="500px"
                 android:layout_marginTop="100px"
-                app:srcCompat="@drawable/img_background" />
+                app:srcCompat="@drawable/main" />
         </LinearLayout>
 
         <LinearLayout
