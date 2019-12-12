@@ -19,7 +19,7 @@ public interface CustomerDao {
     @Query("SELECT * FROM RETAIL_CUSTOMERS WHERE id=:CustomerItemId")
     Flowable<List<Customer>> getCustomerItemById(int CustomerItemId);
 
-    @Query("SELECT * FROM RETAIL_CUSTOMERS WHERE Name=:Name")
+    @Query("SELECT * FROM RETAIL_CUSTOMERS WHERE ShopName=:Name")
     Customer getCustomerss(String Name);
 
     @Query("Select Count(id)  FROM RETAIL_CUSTOMERS")

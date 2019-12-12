@@ -206,7 +206,10 @@ public class ItemActivity extends AppCompatActivity {
                     itemModel.Price = pricesfor;
                     itemModel.Quantity = quantityfor;
                     itemModel.Discount = discountfor;
-                    itemModel.BookId = sessionId;
+                    Book book = Common.bookRepository.getBook(sessionId);
+
+                    Log.e("xc","Vdx"+book.BookNo);
+                    itemModel.BookId = book.BookNo;
                     itemModel.BookName = bookname.getText().toString();
                     Constant.arrayList.set(position, itemModel);
                     startActivity(new Intent(ItemActivity.this, InvoiceActivity.class));
@@ -238,7 +241,8 @@ public class ItemActivity extends AppCompatActivity {
                     itemModel.Price = pricesfor;
                     itemModel.Quantity = quantityfor;
                     itemModel.Discount = discountfor;
-                    itemModel.BookId = sessionId;
+                    Book book = Common.bookRepository.getBook(sessionId);
+                    itemModel.BookId = book.BookNo;
                     itemModel.BookName = bookname.getText().toString();
                     Constant.arrayList.add(itemModel);
                     startActivity(new Intent(ItemActivity.this, InvoiceActivity.class));

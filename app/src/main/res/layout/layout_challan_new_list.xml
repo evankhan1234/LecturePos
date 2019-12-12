@@ -16,7 +16,7 @@
 
 
         android:layout_width="match_parent"
-        android:layout_height="400px"
+        android:layout_height="430px"
 
         card_view:cardElevation="5px"
 
@@ -168,7 +168,7 @@
                             android:backgroundTint="@color/accept"
                             android:id="@+id/btn_receive"
                             android:layout_width="350px"
-                            android:layout_height="140px"
+                            android:layout_height="130px"
                             android:layout_gravity="center"
                             android:layout_marginTop="20px"
 

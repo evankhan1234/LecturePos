@@ -12,4 +12,5 @@
     <color name="gradient_weak">#00555555</color>
     <color name="accept">#85C34E</color>
     <color name="transparent">#00000000</color>
+    <color name="light_gray">#dbdbdb</color>
 </resources>

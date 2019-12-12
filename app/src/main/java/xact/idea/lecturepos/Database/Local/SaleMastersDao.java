@@ -26,6 +26,8 @@ public interface SaleMastersDao {
     int value();
     @Query("Select MAX(id)  FROM sales_mst")
     int maxValue();
+    @Query("Select *  FROM sales_mst WHERE id=:id")
+    SalesMaster invoice(int id);
 
     @Query("SELECT * FROM sales_mst WHERE InvoiceDate BETWEEN :from AND :to")
     Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to);

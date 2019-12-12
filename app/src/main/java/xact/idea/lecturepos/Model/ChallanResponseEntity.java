@@ -95,6 +95,8 @@ public class ChallanResponseEntity {
         public String  TOTAL_COMMISION;
        @SerializedName("OVERALL_DISCOUNT")
         public String  OVERALL_DISCOUNT;
+        @SerializedName("IS_RECEIVE")
+        public String  IS_RECEIVE;
 
 
     }

@@ -44,7 +44,7 @@ public class SalesModel {
             @SerializedName("StoreId")
             public String StoreId;
             @SerializedName("InvoiceId")
-            public int InvoiceId;
+            public String InvoiceId;
             @SerializedName("BookId")
             public String BookId;
             @SerializedName("BookName")

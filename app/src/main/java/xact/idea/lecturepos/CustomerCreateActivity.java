@@ -23,6 +23,7 @@ public class CustomerCreateActivity extends AppCompatActivity {
     EditText phone;
     EditText retail_code;
     EditText address;
+    EditText edit_shop_name;
     Button create;
     ImageView btn_header_back;
     @Override
@@ -33,6 +34,7 @@ public class CustomerCreateActivity extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         firstName=findViewById(R.id.firstName);
         lastName=findViewById(R.id.lastName);
+        edit_shop_name=findViewById(R.id.edit_shop_name);
         phone=findViewById(R.id.phone);
         retail_code=findViewById(R.id.retail_code);
         address=findViewById(R.id.address);
@@ -60,6 +62,7 @@ public class CustomerCreateActivity extends AppCompatActivity {
                     c.MobileNumber=phone.getText().toString();
                     c.StoreId= SharedPreferenceUtil.getUserID(CustomerCreateActivity.this);
                     c.RetailerCode=retail_code.getText().toString();
+                    c.ShopName=edit_shop_name.getText().toString();
                     Common.customerRepository.insertToCustomer(c);
 
                     startActivity(new Intent(CustomerCreateActivity.this,CustomerActivity.class));
