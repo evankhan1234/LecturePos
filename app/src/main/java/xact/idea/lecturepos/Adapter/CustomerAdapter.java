@@ -48,6 +48,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.text_customer.setText(messageEntities.get(position).Name);
         holder.text_mobile.setText(messageEntities.get(position).MobileNumber);
         holder.text_store_id.setText(messageEntities.get(position).StoreId);
+        holder.text_name.setText(messageEntities.get(position).ShopName);
 
 
 
@@ -64,6 +65,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         private TextView text_store_id;
         private TextView text_mobile;
         private TextView text_code;
+        private TextView text_name;
 
 
 
@@ -75,6 +77,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             text_store_id = itemView.findViewById(R.id.text_store_id);
             text_mobile = itemView.findViewById(R.id.text_mobile);
             text_code = itemView.findViewById(R.id.text_code);
+            text_name = itemView.findViewById(R.id.text_name);
 
 
 

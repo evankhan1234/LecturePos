@@ -19,7 +19,7 @@ public interface ChallanDao {
 
     @Query("SELECT * FROM challan WHERE id=:ChallanItemId")
     Flowable<List<Challan>> getChallanItemById(int ChallanItemId);
-    @Query("SELECT * FROM challan WHERE CHALLAN_DATE=:ChallanItem")
+    @Query("SELECT * FROM challan WHERE CHALLAN_NO=:ChallanItem")
     Challan getChallan(String ChallanItem);
     @Query("SELECT * FROM challan WHERE IS_RECEIVE=:ChallanItemId and Date BETWEEN :from AND :to")
     Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to,String ChallanItemId);

@@ -376,10 +376,169 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="500px"
+                            android:layout_weight="1"
+                            android:layout_marginTop="0px"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+                            <LinearLayout
+                                android:backgroundTint="#FFC107"
+                                android:id="@+id/linear_order"
+                                android:layout_width="0px"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="1px"
+                                android:layout_marginRight="5px"
+                                android:layout_weight="1"
+                                android:background="@drawable/white_bx"
+
+                                android:orientation="vertical"
+
+                                >
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginLeft="1px"
+                                    android:layout_marginTop="100px"
+                                    android:src="@drawable/choice" />
+
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="28px"
+                                    android:gravity="center_horizontal"
+                                    android:tag="52"
+                                    android:text="Order Requisition"
+                                    android:textColor="@color/white"
+                                    android:textSize="52px" />
 
 
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/linear_stock"
+                                android:layout_width="0px"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="1px"
+                                android:layout_marginRight="5px"
+                                android:layout_weight="1"
+                                android:background="@drawable/white_bx"
+                                android:backgroundTint="#FFC107"
+
+                                android:orientation="vertical"
+
+                                >
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginLeft="1px"
+                                    android:layout_marginTop="100px"
+                                    android:src="@drawable/inventory" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="28px"
+                                    android:gravity="center_horizontal"
+                                    android:tag="52"
+                                    android:text="Inventory"
+
+                                    android:textColor="@color/white"
+                                    android:textSize="52px"
+                                    android:textStyle="bold" />
 
 
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="500px"
+                            android:layout_weight="1"
+                            android:layout_marginTop="0px"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+                            <LinearLayout
+                                android:backgroundTint="#FFC107"
+                                android:id="@+id/linear_sales_return"
+                                android:layout_width="0px"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="1px"
+                                android:layout_marginRight="5px"
+                                android:layout_weight="1"
+                                android:background="@drawable/white_bx"
+
+                                android:orientation="vertical"
+
+                                >
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginLeft="1px"
+                                    android:layout_marginTop="100px"
+                                    android:src="@drawable/sales_return" />
+
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="28px"
+                                    android:gravity="center_horizontal"
+                                    android:tag="52"
+                                    android:text="Sales Return"
+                                    android:textColor="@color/white"
+                                    android:textSize="52px" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/linear_Publisher_return"
+                                android:layout_width="0px"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="1px"
+                                android:layout_marginRight="5px"
+                                android:layout_weight="1"
+                                android:background="@drawable/white_bx"
+                                android:backgroundTint="#FFC107"
+
+                                android:orientation="vertical"
+
+                                >
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginLeft="1px"
+                                    android:layout_marginTop="100px"
+                                    android:src="@drawable/publisher_return" />
+                                <TextView
+                                    android:textStyle="bold"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="28px"
+                                    android:gravity="center_horizontal"
+                                    android:tag="52"
+
+                                    android:text="Publisher Return"
+                                    android:textColor="@color/white"
+                                    android:textSize="52px" />
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
 
 
                     </LinearLayout>

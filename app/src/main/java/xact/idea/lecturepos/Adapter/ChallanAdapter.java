@@ -105,7 +105,7 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                 Date date = new Date(System.currentTimeMillis());
                 String currentDate = formatter.format(date);
-                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm a");
+                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
                 Date dates = new Date(System.currentTimeMillis());
                 String currentTime = formatters.format(dates);
                 Common.challanRepositoy.updateReciver("Y",messageEntities.get(position).CHALLAN_NO,currentDate+" "+currentTime,currentDate);

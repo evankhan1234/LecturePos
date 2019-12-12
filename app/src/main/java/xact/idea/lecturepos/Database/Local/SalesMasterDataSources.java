@@ -55,6 +55,11 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
+    public SalesMaster invoice(int id) {
+        return SaleMastersDao.invoice(id);
+    }
+
+    @Override
     public Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to) {
         return SaleMastersDao.getInvoiceActivityItemByDate(from, to);
     }

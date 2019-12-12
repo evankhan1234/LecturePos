@@ -26,7 +26,7 @@ public interface SyncDao {
     @Query("Select *  FROM sync where TABLE_NAME=:name")
     Sync valueFor(String name);
 
-    @Query("Select MAX(id)  FROM sync where TABLE_NAME=:name")
+    @Query("Select MAX(SYNC_NUMBER)  FROM sync where TABLE_NAME=:name")
     int maxValue(String name);
     @Query("DELETE  FROM sync")
     void emptySync();

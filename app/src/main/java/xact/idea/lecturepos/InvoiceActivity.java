@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -84,6 +85,7 @@ public class InvoiceActivity extends AppCompatActivity {
     ImageView btn_header_back;
     private List<Customer> customerArrayList = new ArrayList<>();
     private ArrayList<String> ArrayList = new ArrayList<>();
+    private ArrayList<String> ArrayList1 = new ArrayList<>();
     ArrayAdapter<Customer> customerListEntityArrayAdapter;
     Spinner spinner_customer;
     String Name;
@@ -173,6 +175,35 @@ public class InvoiceActivity extends AppCompatActivity {
                // Toast.makeText(InvoiceActivity.this, item + "  " + position+"", Toast.LENGTH_SHORT).show();
 
               //  selectedItems.setText(item + " Position: " + position);
+//                char[] ch = new char[item.length()];
+//
+//                // Copy character by character into array
+//                for (int i = 0; i < item.length(); i++) {
+//                    ch[i] = item.charAt(i);
+//                }
+//
+//                String a="";
+//                // Printing content of array
+//                for (char c : ch) {
+//
+//                    if (c=='('){
+//
+//                    }
+//                    else {
+//                        a.charAt(c);
+//                        if (a.contains("(")){
+//
+//                        }
+//                        else {
+//
+//                        }
+//
+//                    }
+//
+//
+//                }
+
+              //  Log.e("Sdsf","Sdfds"+a);
                 text_customer_spinner.setText(item);
                 Name=item;
 
@@ -256,15 +287,20 @@ public class InvoiceActivity extends AppCompatActivity {
 
                     salesMaster.CustomerName = Name;
                     salesMaster.Discount = discount;
-                    salesMaster.InvoiceId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+                    salesMaster.InvoiceId = "10"+SharedPreferenceUtil.getUserID(InvoiceActivity.this)+formatter.format(date)+totalValue;
                     salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
                     salesMaster.InvoiceNumber = "10"+SharedPreferenceUtil.getUserID(InvoiceActivity.this)+formatter.format(date)+totalValue;
-                    salesMaster.InvoiceDates = edit_date.getText().toString();
+                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
+                    Date dates1 = new Date(System.currentTimeMillis());
+                    String currentTime = formatters.format(dates1);
+                    salesMaster.InvoiceDates = edit_date.getText().toString()+" "+currentTime;
                     salesMaster.InvoiceDate = date1;
                     salesMaster.Discount = discount;
                     salesMaster.InvoiceAmount = amount;
                     salesMaster.NetValue = amount;
-                    salesMaster.Device = "Mobile";
+                    String str = android.os.Build.MODEL;
+                    String str1 = Build.DEVICE;
+                    salesMaster.Device =str1+" "+ str;
                     salesMaster.update_date = date1;
                     salesMaster.PayMode = pay;
                     Date dates = new Date(System.currentTimeMillis());
@@ -282,7 +318,9 @@ public class InvoiceActivity extends AppCompatActivity {
                         salesDetails.MRP = itemModel.Price;
                         salesDetails.Quantity = itemModel.Quantity;
                         salesDetails.TotalAmount = itemModel.Amount;
+                        SalesMaster salesMasters=  Common.salesMasterRepository.invoice(values);
                         salesDetails.InvoiceId = values;
+                        salesDetails.InvoiceIdNew = salesMasters.InvoiceNumber;
                         salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
                         Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
                     }
@@ -462,7 +500,9 @@ public class InvoiceActivity extends AppCompatActivity {
 
     private void displayUnitItems(List<Customer> customers) {
         for (Customer customer : customers){
-            ArrayList.add(customer.Name);
+            ArrayList.add(customer.ShopName);
+            //ArrayList.add(customer.ShopName);
+          ArrayList1.add(customer.ShopName+"("+customer.Name+")");
         }
         customerArrayList = customers;
         customerListEntityArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, customerArrayList);
