@@ -6,11 +6,13 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import xact.idea.lecturepos.Model.BookResponseEntity;
+import xact.idea.lecturepos.Model.ChallanDetailsModel;
 import xact.idea.lecturepos.Model.ChallanPostEntity;
 import xact.idea.lecturepos.Model.ChallanResponseEntity;
 import xact.idea.lecturepos.Model.LoginEntity;
 import xact.idea.lecturepos.Model.LoginPostEntity;
 import xact.idea.lecturepos.Model.Response;
+import xact.idea.lecturepos.Model.SalesModel;
 import xact.idea.lecturepos.Model.SyncChallanModel;
 
 
@@ -41,9 +43,13 @@ public interface IRetrofitApi {
 
     @POST("challan/get_data.php")
     io.reactivex.Observable<ChallanResponseEntity> getChalan(@Body ChallanPostEntity challanPostEntity);
+    @POST("challan-detail/get_data.php")
+    io.reactivex.Observable<ChallanDetailsModel> getChalanDetails(@Body ChallanPostEntity challanPostEntity);
 
     @POST("sync_challans/action.php")
     io.reactivex.Observable<Response> syncChalan(@Body SyncChallanModel challanPostEntity);
+    @POST("sync_sales/action.php")
+    io.reactivex.Observable<Response> syncSales(@Body SalesModel salesModel);
 //    @POST("user/user_list.php")
 //    io.reactivex.Observable<AllUserListEntity> getUserList();
 //    @POST("user/user_activity.php")

@@ -2,6 +2,8 @@ package xact.idea.lecturepos.Utils;
 
 
 import xact.idea.lecturepos.Database.Datasources.BookRepository;
+import xact.idea.lecturepos.Database.Datasources.BookStockRepository;
+import xact.idea.lecturepos.Database.Datasources.ChallanDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
@@ -22,6 +24,8 @@ public abstract class Common {
     public static LoginRepository loginRepository;
     public static ChallanRepositoy challanRepositoy;
     public static SyncRepository syncRepository;
+    public static BookStockRepository bookStockRepository;
+    public static ChallanDetailsRepository challanDetailsRepository;
 //    public static UserListRepository userListRepository;
 //    public static UserActivityRepository userActivityRepository;
 //    public static UnitRepository unitRepository;
