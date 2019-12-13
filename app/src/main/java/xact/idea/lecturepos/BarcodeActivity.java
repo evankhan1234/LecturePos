@@ -14,6 +14,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import xact.idea.lecturepos.Database.Model.Book;
+import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.Constant;
 
@@ -49,12 +50,23 @@ public class BarcodeActivity extends AppCompatActivity {
 
                 Book book= Common.bookRepository.getBook( intentResult.getContents());
                 if (book!=null){
-                    Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
-                    intent.putExtra("EXTRA_SESSION", intentResult.getContents());
-                    startActivity(intent);
-                    finish();
+                    BookStock bookStocks =Common.bookStockRepository.getBookStock(book.BookNo);
+                    if (bookStocks.QTY_NUMBER>0){
+                        Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
+                        intent.putExtra("EXTRA_SESSION", intentResult.getContents());
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(this, "Not Enough Quantity For this books", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BarcodeActivity.this, InvoiceActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
                 }
                 else {
+
                     Toast.makeText(this, "Not Books Found", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(BarcodeActivity.this, InvoiceActivity.class);
                     startActivity(intent);

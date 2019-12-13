@@ -20,13 +20,13 @@ public class SalesModel {
         @SerializedName("StoreId")
         public String StoreId;
         @SerializedName("Discount")
-        public double Discount;
+        public String Discount;
         @SerializedName("InvoiceAmount")
-        public double InvoiceAmount;
+        public String InvoiceAmount;
         @SerializedName("RetailCode")
         public String RetailCode;
         @SerializedName("NetValue")
-        public double NetValue;
+        public String NetValue;
         @SerializedName("PayMode")
         public String PayMode;
         @SerializedName("Device")
@@ -37,6 +37,12 @@ public class SalesModel {
         public String Note;
         @SerializedName("InvoiceDate")
         public String InvoiceDate;
+        @SerializedName("Phone")
+        public String Phone;
+        @SerializedName("UpdNo")
+        public String UpdNo;
+        @SerializedName("UpdDate")
+        public String UpdDate;
 
         public List<SalesDetails> salesDetails;
 
@@ -50,13 +56,19 @@ public class SalesModel {
             @SerializedName("BookName")
             public String BookName;
             @SerializedName("Quantity")
-            public int Quantity;
+            public String Quantity;
             @SerializedName("MRP")
-            public double MRP;
+            public String MRP;
             @SerializedName("Discount")
-            public double Discount;
+            public String Discount;
+            @SerializedName("DiscountPc")
+            public String DiscountPc;
             @SerializedName("TotalAmount")
-            public double TotalAmount;
+            public String TotalAmount;
+            @SerializedName("UpdNo")
+            public String UpdNo;
+            @SerializedName("UpdDate")
+            public String UpdDate;
         }
     }
 

@@ -54,6 +54,7 @@ import io.reactivex.schedulers.Schedulers;
 import xact.idea.lecturepos.Adapter.CustomerAdapter;
 import xact.idea.lecturepos.Adapter.ItemAdapter;
 import xact.idea.lecturepos.Database.Model.Book;
+import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
@@ -295,7 +296,7 @@ public class InvoiceActivity extends AppCompatActivity {
                     String currentTime = formatters.format(dates1);
                     salesMaster.InvoiceDates = edit_date.getText().toString()+" "+currentTime;
                     salesMaster.InvoiceDate = date1;
-                    salesMaster.Discount = discount;
+                    //salesMaster.Discount = discount;
                     salesMaster.InvoiceAmount = amount;
                     salesMaster.NetValue = amount;
                     String str = android.os.Build.MODEL;
@@ -307,7 +308,9 @@ public class InvoiceActivity extends AppCompatActivity {
                     salesMaster.Date = dates;
                     salesMaster.Note = edit_note.getText().toString();
                     salesMaster.RetailCode = edit_retail_code.getText().toString();
+                    salesMaster.PhoneNumber = edit_contact_number.getText().toString();
                     Common.salesMasterRepository.insertToSalesMaster(salesMaster);
+
 
                     for (ItemModel itemModel : Constant.arrayList) {
                         int values = Common.salesMasterRepository.maxValue();
@@ -323,6 +326,15 @@ public class InvoiceActivity extends AppCompatActivity {
                         salesDetails.InvoiceIdNew = salesMasters.InvoiceNumber;
                         salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
                         Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
+
+
+
+                        BookStock bookStocks =Common.bookStockRepository.getBookStock(itemModel.BookId);
+                        BookStock bookStock = new BookStock();
+                        bookStock.id=bookStocks.id;
+                        bookStock.QTY_NUMBER=bookStocks.QTY_NUMBER-itemModel.Quantity;
+                        Common.bookStockRepository.updateBookStock(bookStock);
+
                     }
 
 
