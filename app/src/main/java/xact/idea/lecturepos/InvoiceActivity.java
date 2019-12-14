@@ -47,6 +47,7 @@ import java.util.Locale;
 
 import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
 import in.galaxyofandroid.spinerdialog.SpinnerDialog;
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -56,6 +57,7 @@ import xact.idea.lecturepos.Adapter.ItemAdapter;
 import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Customer;
+import xact.idea.lecturepos.Database.Model.Items;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Model.ItemModel;
@@ -148,6 +150,7 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
         sessionId = getIntent().getStringExtra("value");
+        customerListData();
         if (sessionId == null) {
             //   showInfoDialog();
         } else if (sessionId.equals("value")) {
@@ -310,9 +313,9 @@ public class InvoiceActivity extends AppCompatActivity {
                     salesMaster.RetailCode = edit_retail_code.getText().toString();
                     salesMaster.PhoneNumber = edit_contact_number.getText().toString();
                     Common.salesMasterRepository.insertToSalesMaster(salesMaster);
+                    Flowable<List<Items>> units=  Common.itemRepository.getItemItems();
 
-
-                    for (ItemModel itemModel : Constant.arrayList) {
+                    for (Items itemModel : units.blockingFirst()) {
                         int values = Common.salesMasterRepository.maxValue();
                         SalesDetails salesDetails = new SalesDetails();
                         salesDetails.BookId = itemModel.BookId;
@@ -330,15 +333,17 @@ public class InvoiceActivity extends AppCompatActivity {
 
 
                         BookStock bookStocks =Common.bookStockRepository.getBookStock(itemModel.BookId);
-                        BookStock bookStock = new BookStock();
-                        bookStock.id=bookStocks.id;
-                        bookStock.QTY_NUMBER=bookStocks.QTY_NUMBER-itemModel.Quantity;
-                        Common.bookStockRepository.updateBookStock(bookStock);
+//                        BookStock bookStock = new BookStock();
+//                        bookStock.id=bookStocks.id;
+//                        bookStock.QTY_NUMBER=bookStocks.QTY_NUMBER-itemModel.Quantity;
+//                        Common.bookStockRepository.updateBookStock(bookStock);
+                        Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER-itemModel.Quantity,bookStocks.BOOK_ID);
 
                     }
 
 
                     Constant.arrayList.clear();
+                    Common.itemRepository.emptyItem();
                     startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
                     finish();
                     Toast.makeText(InvoiceActivity.this, "Successfully Created a Invoice ", Toast.LENGTH_SHORT).show();
@@ -349,7 +354,7 @@ public class InvoiceActivity extends AppCompatActivity {
                 }
             }
         });
-        customerListData();
+
         editShippingChargesValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable mEdit) {
@@ -427,7 +432,7 @@ public class InvoiceActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadCustomer();
+        loadBookItemsFor();
         masterListData();
         detailsListData();
 
@@ -435,9 +440,18 @@ public class InvoiceActivity extends AppCompatActivity {
         double total = 0;
         double discount = 0;
         double amount = 0;
-        for (ItemModel itemModel : Constant.arrayList) {
-            total += itemModel.Amount;
-        }
+//        for (ItemModel itemModel : Constant.arrayList) {
+//            total += itemModel.Amount;
+//        }
+//        compositeDisposable.add(Common.itemRepository.getItemItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Items>>() {
+//            @Override
+//            public void accept(List<Items> departments) throws Exception {
+//                for (Items itemModel : departments) {
+//                    total += itemModel.Amount;
+//                }
+//            }
+//        }));
+        total=Common.itemRepository.valueSum();
         text_sub_total.setText(String.valueOf(total)+" Tk");
         if (!editShippingChargesValue.getText().toString().equals("")) {
             discount = Double.parseDouble(editShippingChargesValue.getText().toString());
@@ -450,10 +464,22 @@ public class InvoiceActivity extends AppCompatActivity {
             text_net_amounts.setText(String.valueOf(amount)+" Tk");
         }
     }
+    private  void loadBookItemsFor() {
 
-    private void loadCustomer() {
+        compositeDisposable.add(Common.itemRepository.getItemItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Items>>() {
+            @Override
+            public void accept(List<Items> items) throws Exception {
+                Log.e("Book","Book"+new Gson().toJson(items));
+                loadCustomer(items);
+            }
+        }));
 
-        mAdapters = new ItemAdapter(this, Constant.arrayList);
+    }
+    private void loadCustomer(List<Items> items) {
+
+         // List<ItemModel> arrayList= new ArrayList(Constant.map.values());
+
+        mAdapters = new ItemAdapter(this, items);
 
         rcl_this_customer_list.setAdapter(mAdapters);
 

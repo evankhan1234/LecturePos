@@ -1,9 +1,3 @@
-/**
- * Desciption:Class use for correct size of view to mobile screen<br>
- *
- * @author L.Hien
- * @date Dec 11, 2014
- */
 package xact.idea.lecturepos.Utils;
 
 import android.app.Activity;

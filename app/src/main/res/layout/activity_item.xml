@@ -71,7 +71,7 @@
                 android:paddingLeft="120px"
                 android:paddingRight="120px"
                 android:tag="46"
-                android:text="Item"
+                android:text="Book"
                 android:textColor="@color/colorPrimary"
                 android:textSize="46px"
                 android:textStyle="bold" />
@@ -116,7 +116,26 @@
                 android:inputType="text"
                 android:padding="15px"
                 android:textSize="16sp" />
+            <TextView
 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8px"
+                android:text="Book Stock"
+                android:textColor="#666" />
+
+            <EditText
+                android:id="@+id/bookQuantity"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="130px"
+                android:layout_marginBottom="10px"
+                android:background="@drawable/input_bg"
+                android:ems="10"
+                android:hint="0"
+                android:inputType="text"
+                android:padding="15px"
+                android:textSize="16sp" />
             <TextView
                 android:id="@+id/textView50"
                 android:layout_width="match_parent"

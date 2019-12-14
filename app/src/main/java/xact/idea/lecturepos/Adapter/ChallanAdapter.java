@@ -14,13 +14,21 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Challan;
 import xact.idea.lecturepos.Database.Model.ChallanDetails;
+import xact.idea.lecturepos.Database.Model.Customer;
+import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.LoginActivity;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Common;
@@ -55,7 +63,7 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
 
     @Override
     public void onBindViewHolder(final ChallanAdapter.ChallanListiewHolder holder, final int position) {
-        String challan_no = "<b><font color=#000 >Challan No :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_NO+"</font>";
+        String challan_no = "<b><font color=#000 >Challan No :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_CODE+"</font>";
         String challan_packet = "<b><font color=#000 >Total Packet :  </font></b> <font color=#358ED3>"+messageEntities.get(position).NO_OF_PACKATE+"</font>";
         String challan_date = "<b><font color=#000 >Challan Date :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_DATE+"</font>";
         String challan_quantity = "<b><font color=#000 >Challan Quantity :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_QTY+"</font>";
@@ -111,37 +119,44 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
                 Date dates = new Date(System.currentTimeMillis());
                 String currentTime = formatters.format(dates);
                 Common.challanRepositoy.updateReciver("Y",messageEntities.get(position).CHALLAN_NO,currentDate+" "+currentTime,currentDate);
-                ChallanDetails challanDetails =Common.challanDetailsRepository.getChallanDetails(messageEntities.get(position).CHALLAN_NO);
+              //  ChallanDetails challanDetails =Common.challanDetailsRepository.getChallanDetails(messageEntities.get(position).CHALLAN_NO);
 
-                BookStock bookStocks =Common.bookStockRepository.getBookStock(challanDetails.F_BOOK_NO);
-                int qty =Common.bookStockRepository.maxValue(challanDetails.F_BOOK_NO);
-                if (challanDetails!=null){
-                    BookStock bookStock = new BookStock();
-                    bookStock.BOOK_ID=challanDetails.F_BOOK_NO;
-                    bookStock.LAST_UPDATE_DATE_APP=date;
-                    bookStock.LAST_UPDATE_DATE=currentDate+" "+currentTime;
-                    bookStock.STORE_ID=bookStocks.STORE_ID;
-                    bookStock.id=bookStocks.id;
-                    bookStock.QTY_NUMBER= Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY)+qty;
+                Flowable<List<ChallanDetails>> units=  Common.challanDetailsRepository.getChallanDetailsItemById(Integer.parseInt(messageEntities.get(position).CHALLAN_NO));
+                for (ChallanDetails challanDetails : units.blockingFirst()) {
+                    BookStock bookStocks =Common.bookStockRepository.getBookStock(challanDetails.F_BOOK_NO);
+                    int qty =Common.bookStockRepository.maxValue(challanDetails.F_BOOK_NO);
+                    if (bookStocks!=null){
+                        BookStock bookStock = new BookStock();
+                        bookStock.BOOK_ID=challanDetails.F_BOOK_NO;
+                        bookStock.LAST_UPDATE_DATE_APP=date;
+                        bookStock.LAST_UPDATE_DATE=currentDate+" "+currentTime;
+                        bookStock.STORE_ID=SharedPreferenceUtil.getUserID(mContext);
+                        bookStock.id=bookStocks.id;
+                        bookStock.BOOK_NET_MRP=Double.parseDouble(challanDetails.BOOK_NET_PRICE);
+                        bookStock.QTY_NUMBER= Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY)+qty;
 
-                    int total=Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY)+qty;
-                    bookStock.BOOK_NET_PRICE= Double.parseDouble(challanDetails.BOOK_NET_PRICE)*total;
+                        int total=Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY)+qty;
+                        bookStock.BOOK_NET_PRICES= Double.parseDouble(challanDetails.BOOK_NET_PRICE)*total;
 
-                    Common.bookStockRepository.updateBookStock(bookStock);
+                        Common.bookStockRepository.updateBookStock(bookStock);
+                    }
+                    else {
+                        BookStock bookStock = new BookStock();
+                        bookStock.BOOK_ID=challanDetails.F_BOOK_NO;
+                        bookStock.LAST_UPDATE_DATE_APP=date;
+                        bookStock.BOOK_NET_MRP=Double.parseDouble(challanDetails.BOOK_NET_PRICE);
+                        bookStock.LAST_UPDATE_DATE=currentDate+" "+currentTime;
+                        bookStock.STORE_ID=SharedPreferenceUtil.getUserID(mContext);
+                        bookStock.QTY_NUMBER= Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY);
+                        bookStock.BOOK_NET_PRICES= Double.parseDouble(challanDetails.BOOK_NET_PRICE)*Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY);
+
+                        Common.bookStockRepository.insertToBookStock(bookStock);
+                    }
+                    notifyDataSetChanged();
+                    infoDialog.dismiss();
                 }
-                else {
-                    BookStock bookStock = new BookStock();
-                    bookStock.BOOK_ID=challanDetails.F_BOOK_NO;
-                    bookStock.LAST_UPDATE_DATE_APP=date;
-                    bookStock.LAST_UPDATE_DATE=currentDate+" "+currentTime;
-                    bookStock.STORE_ID=SharedPreferenceUtil.getUserID(mContext);
-                    bookStock.QTY_NUMBER= Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY);
-                    bookStock.BOOK_NET_PRICE= Double.parseDouble(challanDetails.BOOK_NET_PRICE);
 
-                    Common.bookStockRepository.insertToBookStock(bookStock);
-                }
-                notifyDataSetChanged();
-                infoDialog.dismiss();
+
             }
         });
         btn_no.setOnClickListener(new View.OnClickListener() {

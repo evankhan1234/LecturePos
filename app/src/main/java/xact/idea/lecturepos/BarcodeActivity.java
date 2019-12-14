@@ -51,19 +51,22 @@ public class BarcodeActivity extends AppCompatActivity {
                 Book book= Common.bookRepository.getBook( intentResult.getContents());
                 if (book!=null){
                     BookStock bookStocks =Common.bookStockRepository.getBookStock(book.BookNo);
-                    if (bookStocks.QTY_NUMBER>0){
-                        Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
-                        intent.putExtra("EXTRA_SESSION", intentResult.getContents());
-                        startActivity(intent);
-                        finish();
-                    }
-                    else{
-                        Toast.makeText(this, "Not Enough Quantity For this books", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(BarcodeActivity.this, InvoiceActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
+//                    if (bookStocks!=null){
+//                        Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
+//                        intent.putExtra("EXTRA_SESSION", intentResult.getContents());
+//                        startActivity(intent);
+//                        finish();
+//                    }
+//                    else{
+//                        Toast.makeText(this, "Not Enough Quantity For this books", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(BarcodeActivity.this, InvoiceActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    }
+                    Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
+                    intent.putExtra("EXTRA_SESSION", intentResult.getContents());
+                    startActivity(intent);
+                    finish();
                 }
                 else {
 

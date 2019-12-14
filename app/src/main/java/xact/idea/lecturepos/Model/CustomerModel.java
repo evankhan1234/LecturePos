@@ -1,7 +1,7 @@
 package xact.idea.lecturepos.Model;
 
 public class CustomerModel {
-  
+
     public String StoreId;
 
     public String RetailerCode;

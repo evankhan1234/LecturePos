@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
@@ -63,6 +66,14 @@ public class CustomerCreateActivity extends AppCompatActivity {
                     c.StoreId= SharedPreferenceUtil.getUserID(CustomerCreateActivity.this);
                     c.RetailerCode=retail_code.getText().toString();
                     c.ShopName=edit_shop_name.getText().toString();
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date = new Date(System.currentTimeMillis());
+                    String currentDate = formatter.format(date);
+                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                    Date dates = new Date(System.currentTimeMillis());
+                    String currentTime = formatters.format(dates);
+                    c.UpdateDate=currentDate+" "+currentTime;
+                    c.UpdateNo="0";
                     Common.customerRepository.insertToCustomer(c);
 
                     startActivity(new Intent(CustomerCreateActivity.this,CustomerActivity.class));

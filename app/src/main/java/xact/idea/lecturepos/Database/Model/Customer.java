@@ -23,6 +23,10 @@ public class Customer {
     public String MobileNumber;
     @ColumnInfo(name = "ShopName")
     public String ShopName;
+    @ColumnInfo(name = "UpdateNo")
+    public String UpdateNo;
+    @ColumnInfo(name = "UpdateDate")
+    public String UpdateDate;
     @Override
     public String toString() {
         return Name;

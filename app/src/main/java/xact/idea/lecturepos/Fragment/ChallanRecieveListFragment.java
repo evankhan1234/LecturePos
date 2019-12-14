@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -152,7 +154,7 @@ public class ChallanRecieveListFragment extends Fragment {
         compositeDisposable.add(Common.challanRepositoy.getList("Y").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
             @Override
             public void accept(List<Challan> customers) throws Exception {
-                Log.e("SDfd","Dgd"+customers);
+                Log.e("SDfd","Dgd"+new Gson().toJson(customers));
                 displayChallanItems(customers);
             }
         }));

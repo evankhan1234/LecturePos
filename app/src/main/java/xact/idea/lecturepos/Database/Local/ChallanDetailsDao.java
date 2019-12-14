@@ -16,7 +16,7 @@ public interface ChallanDetailsDao {
     @Query("SELECT * FROM challan_details")
     Flowable<List<ChallanDetails>> getChallanDetailsItems();
 
-    @Query("SELECT * FROM challan_details WHERE id=:ChallanDetailsItemId")
+    @Query("SELECT * FROM challan_details WHERE F_CHALLAN_NO=:ChallanDetailsItemId")
     Flowable<List<ChallanDetails>> getChallanDetailsItemById(int ChallanDetailsItemId);
     @Query("SELECT * FROM challan_details WHERE F_CHALLAN_NO=:ChallanDetailsItem")
     ChallanDetails getChallanDetails(String ChallanDetailsItem);

@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import xact.idea.lecturepos.BarcodeActivity;
+import xact.idea.lecturepos.Database.Model.Items;
 import xact.idea.lecturepos.Interface.ClickInterface;
 import xact.idea.lecturepos.ItemActivity;
 import xact.idea.lecturepos.Model.ItemModel;
 import xact.idea.lecturepos.R;
+import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
@@ -28,10 +30,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
 
     private Activity mActivity = null;
     private ClickInterface mClickInterface= null;
-    private List<ItemModel> messageEntities;
+    private List<Items> messageEntities;
     boolean row_index=true;
     //    ItemModelClickInterface ItemModelClickInterface;
-    public ItemAdapter(Activity activity, List<ItemModel> messageEntitie) {
+    public ItemAdapter(Activity activity, List<Items> messageEntitie) {
         mActivity = activity;
         messageEntities = messageEntitie;
      //   mClickInterface=ClickInterface;
@@ -70,7 +72,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
             public void onClick(View view) {
                 Intent intent = new Intent(mActivity, ItemActivity.class);
                 intent.putExtra("EXTRA_SESSION", "update");
-                intent.putExtra("id", position);
+                Log.e("BookId","BookId"+messageEntities.get(position).BookId);
+                intent.putExtra("id", messageEntities.get(position).BookName);
                 mActivity.startActivity(intent);
 
             }
@@ -79,7 +82,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
             @Override
             public void onClick(View view) {
 
-                Constant.arrayList.remove(position);
+                Common.itemRepository.emptyItemsById( messageEntities.get(position).id);
                 notifyDataSetChanged();
             }
         });

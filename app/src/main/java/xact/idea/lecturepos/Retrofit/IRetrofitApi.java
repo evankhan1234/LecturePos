@@ -12,6 +12,7 @@ import xact.idea.lecturepos.Model.ChallanResponseEntity;
 import xact.idea.lecturepos.Model.LoginEntity;
 import xact.idea.lecturepos.Model.LoginPostEntity;
 import xact.idea.lecturepos.Model.Response;
+import xact.idea.lecturepos.Model.RetailsSyncModel;
 import xact.idea.lecturepos.Model.SalesModel;
 import xact.idea.lecturepos.Model.SyncChallanModel;
 
@@ -50,6 +51,8 @@ public interface IRetrofitApi {
     io.reactivex.Observable<Response> syncChalan(@Body SyncChallanModel challanPostEntity);
     @POST("sync_sales/action.php")
     io.reactivex.Observable<Response> syncSales(@Body SalesModel salesModel);
+    @POST("sync_retail_customers/action.php")
+    io.reactivex.Observable<Response> syncCustomer(@Body RetailsSyncModel retailsSyncModel);
 //    @POST("user/user_list.php")
 //    io.reactivex.Observable<AllUserListEntity> getUserList();
 //    @POST("user/user_activity.php")
