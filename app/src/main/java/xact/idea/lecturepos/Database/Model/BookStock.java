@@ -21,8 +21,10 @@ public class BookStock {
     public int  QTY_NUMBER;
     @ColumnInfo(name = "LAST_UPDATE_DATE")
     public String  LAST_UPDATE_DATE;
-    @ColumnInfo(name = "BOOK_NET_PRICE")
-    public double  BOOK_NET_PRICE;
+    @ColumnInfo(name = "BOOK_NET_PRICES")
+    public double  BOOK_NET_PRICES;
+    @ColumnInfo(name = "BOOK_NET_MRP")
+    public double  BOOK_NET_MRP;
     @ColumnInfo(name = "LAST_UPDATE_DATE_APP")
     public Date LAST_UPDATE_DATE_APP;
 }

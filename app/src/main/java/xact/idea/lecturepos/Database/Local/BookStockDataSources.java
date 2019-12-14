@@ -5,6 +5,7 @@ import java.util.List;
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Datasources.IBookStockDataSources;
 import xact.idea.lecturepos.Database.Model.BookStock;
+import xact.idea.lecturepos.Model.StockModel;
 
 public class BookStockDataSources implements IBookStockDataSources {
     private BookStockDao BookStockDao;
@@ -51,8 +52,28 @@ public class BookStockDataSources implements IBookStockDataSources {
     }
 
     @Override
+    public Flowable<List<StockModel>> getBookStockModel() {
+        return BookStockDao.getBookStockModel();
+    }
+
+    @Override
     public void insertToBookStock(BookStock... BookStocks) {
         BookStockDao.insertToBookStock(BookStocks);
+    }
+
+    @Override
+    public void updateReciver(int value,String book) {
+        BookStockDao.updateReciver(value,book);
+    }
+
+    @Override
+    public int TotalQuantity() {
+        return BookStockDao.TotalQuantity();
+    }
+
+    @Override
+    public double TotalPrice() {
+        return BookStockDao.TotalPrice();
     }
 
     @Override

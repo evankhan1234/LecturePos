@@ -1,9 +1,12 @@
 package xact.idea.lecturepos.Database.Datasources;
 
+import androidx.room.Query;
+
 import java.util.List;
 
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.BookStock;
+import xact.idea.lecturepos.Model.StockModel;
 
 public interface IBookStockDataSources {
     Flowable<List<BookStock>> getBookStockItems();
@@ -17,9 +20,13 @@ public interface IBookStockDataSources {
     void emptyBookStock();
     int size();
 
-
+    Flowable<List<StockModel>> getBookStockModel();
     void insertToBookStock(BookStock... BookStocks);
 
+    void updateReciver(int value,String book);
+    int TotalQuantity();
+
+    double TotalPrice();
 
     void updateBookStock(BookStock... BookStocks);
 

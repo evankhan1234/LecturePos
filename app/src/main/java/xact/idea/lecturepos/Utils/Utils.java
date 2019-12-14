@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.RequiresApi;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import xact.idea.lecturepos.LoginActivity;
@@ -33,12 +35,13 @@ public  class Utils {
 
         CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
         btn_yes.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View view) {
                 SharedPreferenceUtil.removeShared(mContext,SharedPreferenceUtil.TYPE_USER_ID);
                 infoDialog.dismiss();
                 mContext.startActivity(new Intent(mContext, LoginActivity.class));
-                ((Activity) mContext).finish();
+                ((Activity) mContext).finishAffinity();
             }
         });
         btn_no.setOnClickListener(new View.OnClickListener() {

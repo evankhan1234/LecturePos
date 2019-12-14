@@ -31,6 +31,7 @@ import xact.idea.lecturepos.Database.Datasources.BookStockRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
+import xact.idea.lecturepos.Database.Datasources.ItemRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesMasterRepository;
@@ -40,6 +41,7 @@ import xact.idea.lecturepos.Database.Local.BookStockDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.CustomerDataSources;
+import xact.idea.lecturepos.Database.Local.ItemDataSources;
 import xact.idea.lecturepos.Database.Local.LoginDataSource;
 import xact.idea.lecturepos.Database.Local.SalesDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.SalesMasterDataSources;
@@ -60,6 +62,7 @@ import xact.idea.lecturepos.Model.ChallanResponseEntity;
 import xact.idea.lecturepos.Model.CustomerModel;
 import xact.idea.lecturepos.Model.LoginEntity;
 import xact.idea.lecturepos.Model.Response;
+import xact.idea.lecturepos.Model.RetailsSyncModel;
 import xact.idea.lecturepos.Model.SalesModel;
 import xact.idea.lecturepos.Model.SyncChallanModel;
 import xact.idea.lecturepos.Retrofit.IRetrofitApi;
@@ -151,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 loadChallan();
                 loadCustomer();
+                loadCustomerSync();
 
             }
         });
@@ -236,18 +240,103 @@ public class MainActivity extends AppCompatActivity {
         Common.syncRepository = SyncRepository.getInstance(SyncDataSources.getInstance(Common.mainDatabase.syncDao()));
         Common.bookStockRepository = BookStockRepository.getInstance(BookStockDataSources.getInstance(Common.mainDatabase.bookStockDao()));
         Common.challanDetailsRepository = ChallanDetailsRepository.getInstance(ChallanDetailsDataSources.getInstance(Common.mainDatabase.challanDetailsDao()));
+        Common.itemRepository = ItemRepository.getInstance(ItemDataSources.getInstance(Common.mainDatabase.itemDao()));
 
     }
-    private  void loadDepartmentItems() {
+    private  void loadCustomerSync() {
 
         compositeDisposable.add(Common.customerRepository.getCustomerItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Customer>>() {
             @Override
             public void accept(List<Customer> departments) throws Exception {
+                List<RetailsSyncModel.Data> syncs = new ArrayList<>();
+                for (Customer customer: departments){
+
+                    RetailsSyncModel.Data retailsSyncModel = new RetailsSyncModel.Data();
+                    retailsSyncModel.upd_no= customer.UpdateNo;
+                    retailsSyncModel.upd_date= customer.UpdateDate;
+                    retailsSyncModel.address= customer.Address;
+                    retailsSyncModel.name= customer.Name;
+                    retailsSyncModel.store_id= customer.StoreId;
+                    retailsSyncModel.retailer_code= customer.RetailerCode;
+                    retailsSyncModel.phone= customer.MobileNumber;
+                    retailsSyncModel.library_name= customer.ShopName;
+                    syncs.add(retailsSyncModel);
+
+                }
+
+                RetailsSyncModel s = new RetailsSyncModel();
+                s.data=syncs;
+                compositeDisposable.add(mService.syncCustomer(s).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Response>() {
+                    @Override
+                    public void accept(Response loginEntity) throws Exception {
+                        Log.e("customer","sync"+loginEntity.status_code);
+                        loadCustomers();
+                    }
+                }));
+
+                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm a");
+                Date dates = new Date(System.currentTimeMillis());
+                String currentTime = formatters.format(dates);
+
+                Sync name=Common.syncRepository.valueFor("customer");
+                if (name==null){
+                    Sync sync = new Sync();
+                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("customer");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="customer";
+                    Common.syncRepository.insertToSync(sync);
+                }
+                else{
+                    Sync sync = new Sync();
+                    sync.id=name.id;
+                    sync.CUSTOMER_CODE=name.CUSTOMER_CODE;
+                    sync.DEVICE="Mobile";
+                    sync.SYNC_DATETIME=dates;
+                    int value=Common.syncRepository.maxValue("customer");
+                    sync.SYNC_NUMBER=value+1;
+                    sync.TABLE_NAME="customer";
+                    Common.syncRepository.updateSync(sync);
+                }
+
                 Log.e("size","size"+new Gson().toJson(departments));
             }
         }));
 
     }
+
+    private void loadCustomers() {
+//        showLoadingProgress(MainActivity.this);
+//        compositeDisposable.add(mService.getBook().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<BookResponseEntity>() {
+//            @Override
+//            public void accept(BookResponseEntity bookResponseEntity) throws Exception {
+//                Log.e("size", "size" + new Gson().toJson(bookResponseEntity));
+//
+//                for (BookResponseEntity.Data books : bookResponseEntity.data) {
+//                    Book book = new Book();
+//                    book.BookPrice = books.BOOK_NET_PRICE;
+//                    book.BookName = books.BOOK_NAME;
+//                    book.BookCode = books.BOOK_CODE;
+//                    book.BookNo = books.BOOK_NO;
+//                    book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
+//                    book.BARCODE_NUMBER = books.BARCODE_NUMBER;
+//                    book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
+//                    Common.bookRepository.insertToBook(book);
+//
+//                }
+//
+//                dismissLoadingProgress();
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//                dismissLoadingProgress();
+//            }
+//        }));
+    }
+
     private  void loadBookItemsFor() {
 
         compositeDisposable.add(Common.bookRepository.getBookItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Book>>() {

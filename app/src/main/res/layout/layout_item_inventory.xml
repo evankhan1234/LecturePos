@@ -28,13 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="150px"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="4"
 
             >
 
             <TextView
                 android:textColor="@color/black"
-                android:id="@+id/text_date"
+                android:id="@+id/text_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -44,12 +44,12 @@
                 android:paddingTop="10px"
                 android:paddingBottom="10px"
                 android:tag="30"
-                android:text="Buisness Communication"
+                android:text=""
                 android:textSize="30px" />
 
             <TextView
                 android:textColor="@color/black"
-                android:id="@+id/text_punchIn_location"
+                android:id="@+id/text_quantity"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -58,13 +58,12 @@
                 android:paddingTop="10px"
                 android:paddingBottom="10px"
                 android:tag="30"
-                android:text="25"
+                android:text=""
                 android:textSize="30px"
                 android:visibility="visible" />
-
             <TextView
                 android:textColor="@color/black"
-                android:id="@+id/text_incomplete"
+                android:id="@+id/text_mrp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -74,7 +73,21 @@
                 android:paddingBottom="10px"
                 android:tag="30"
 
-                android:text="15000 Tk"
+                android:text=""
+                android:textSize="30px" />
+            <TextView
+                android:textColor="@color/black"
+                android:id="@+id/text_net_price"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/cell_shape"
+                android:gravity="center|center_vertical"
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:tag="30"
+
+                android:text=""
                 android:textSize="30px" />
 
         </LinearLayout>
