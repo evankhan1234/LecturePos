@@ -464,6 +464,24 @@ public class InvoiceActivity extends AppCompatActivity {
             text_net_amounts.setText(String.valueOf(amount)+" Tk");
         }
     }
+
+    public  void fixed(){
+        double total = 0;
+        double discount = 0;
+        double amount = 0;
+        total=Common.itemRepository.valueSum();
+        text_sub_total.setText(String.valueOf(total)+" Tk");
+        if (!editShippingChargesValue.getText().toString().equals("")) {
+            discount = Double.parseDouble(editShippingChargesValue.getText().toString());
+            amount = total - discount;
+            text_net_amounts.setText(String.valueOf(amount)+" Tk");
+
+        } else {
+            discount = 0;
+            amount = total - discount;
+            text_net_amounts.setText(String.valueOf(amount)+" Tk");
+        }
+    }
     private  void loadBookItemsFor() {
 
         compositeDisposable.add(Common.itemRepository.getItemItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Items>>() {

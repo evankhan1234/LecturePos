@@ -16,6 +16,7 @@ import java.util.List;
 import xact.idea.lecturepos.BarcodeActivity;
 import xact.idea.lecturepos.Database.Model.Items;
 import xact.idea.lecturepos.Interface.ClickInterface;
+import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.ItemActivity;
 import xact.idea.lecturepos.Model.ItemModel;
 import xact.idea.lecturepos.R;
@@ -83,7 +84,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
             public void onClick(View view) {
 
                 Common.itemRepository.emptyItemsById( messageEntities.get(position).id);
+
+
+
+
                 notifyDataSetChanged();
+                ((InvoiceActivity)mActivity).fixed();
             }
         });
         if (row_index){

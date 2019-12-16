@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void accept(LoginEntity loginEntity) throws Exception {
                                     Log.e("ff","dgg"+new Gson().toJson(loginEntity));
-                                    if (loginEntity.user_id.equals("")){
+                                    if (loginEntity.data.USER_ID==null){
                                         Toast.makeText(LoginActivity.this, "Username and Password Incorrect", Toast.LENGTH_SHORT).show();
                                         dismissLoadingProgress();
                                     }else{
@@ -145,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(LoginActivity.this, "Please Fill All Data", Toast.LENGTH_SHORT).show();
+                        dismissLoadingProgress();
                     }
 
                 } else {
