@@ -229,12 +229,12 @@
                 <Button
                     android:id="@+id/save"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="140px"
-
-
                     android:layout_marginLeft="0px"
+
+
                     android:layout_marginRight="15px"
+                    android:layout_weight="1"
                     android:background="@drawable/btn_no"
                     android:foreground="@drawable/ripple_corner"
                     android:gravity="center"
