@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout linear_challan;
     LinearLayout linear_sync;
     LinearLayout linear_stock;
+    LinearLayout linear_order;
     Activity mActivity;
     IRetrofitApi mService;
     RelativeLayout root_rlt_dashboard;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         linear_notes=findViewById(R.id.linear_notes);
         linear_sync=findViewById(R.id.linear_sync);
         linear_stock=findViewById(R.id.linear_stock);
+        linear_order=findViewById(R.id.linear_order);
         tv_store=findViewById(R.id.tv_store);
         root_rlt_dashboard=findViewById(R.id.root_rlt_dashboard);
         tv_store.setSelected(true);
@@ -149,12 +151,19 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        linear_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              //  startActivity(new Intent(MainActivity.this,InvoicePrintActivity.class));
+
+            }
+        });
         linear_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadChallan();
                 loadCustomer();
-                loadCustomerSync();
+                 loadCustomerSync();
 
             }
         });
@@ -691,6 +700,8 @@ public class MainActivity extends AppCompatActivity {
                     salesMaster.RetailCode=sales.RetailCode;
                     salesMaster.InvoiceAmount=String.valueOf(sales.InvoiceAmount);
                     salesMaster.InvoiceDate=sales.InvoiceDates;
+                    salesMaster.TrnType="S";
+                    salesMaster.Status="I";
                     salesMaster.InvoiceId=sales.InvoiceId;
                     salesMaster.InvoiceNumber=sales.InvoiceNumber;
                     salesMaster.Note=sales.Note;

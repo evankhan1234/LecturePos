@@ -15,6 +15,10 @@ public class SalesModel {
     public static  class SalesMaster {
         @SerializedName("InvoiceId")
         public String InvoiceId;
+        @SerializedName("TrnType")
+        public String TrnType;
+        @SerializedName("Status")
+        public String Status;
         @SerializedName("InvoiceNumber")
         public String InvoiceNumber;
         @SerializedName("StoreId")

@@ -36,7 +36,7 @@ public abstract class Common {
 //    public static EntityLeaveRepository entityLeaveRepository;
 //    public static RemainingLeaveRepository remainingLeaveRepository;
     public static final String BASE_URL="https://api.myjson.com/bins/";
-    public static final String BASE_URL_XACT="http://210.1.248.27:8282/lecturepos/api/";
+    public static final String BASE_URL_XACT="http://103.197.206.70:9205/lpos/api/";
 
     public static IRetrofitApi getApi(){
         return RetrofitClient.getClient(BASE_URL).create(IRetrofitApi.class);

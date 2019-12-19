@@ -14,7 +14,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <activity android:name=".InventoryActivity"></activity>
+        <activity android:name=".InvoicePrintActivity"></activity>
+        <activity android:name=".InventoryActivity" />
         <activity android:name=".ChallanActivity" />
         <activity android:name=".InvoiceListActivity" />
         <activity android:name=".BarcodeActivity" />
