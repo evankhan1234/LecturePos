@@ -9,11 +9,17 @@ import xact.idea.lecturepos.Model.BookResponseEntity;
 import xact.idea.lecturepos.Model.ChallanDetailsModel;
 import xact.idea.lecturepos.Model.ChallanPostEntity;
 import xact.idea.lecturepos.Model.ChallanResponseEntity;
+import xact.idea.lecturepos.Model.CustomerListResponse;
 import xact.idea.lecturepos.Model.LoginEntity;
 import xact.idea.lecturepos.Model.LoginPostEntity;
 import xact.idea.lecturepos.Model.Response;
 import xact.idea.lecturepos.Model.RetailsSyncModel;
+import xact.idea.lecturepos.Model.SaleesMasterForModel;
+import xact.idea.lecturepos.Model.SalesDetailsForModel;
+import xact.idea.lecturepos.Model.SalesDetailsPostEntity;
 import xact.idea.lecturepos.Model.SalesModel;
+import xact.idea.lecturepos.Model.SalesPostEntity;
+import xact.idea.lecturepos.Model.StockResponse;
 import xact.idea.lecturepos.Model.SyncChallanModel;
 
 
@@ -47,12 +53,21 @@ public interface IRetrofitApi {
     @POST("challan-detail/get_data.php")
     io.reactivex.Observable<ChallanDetailsModel> getChalanDetails(@Body ChallanPostEntity challanPostEntity);
 
-    @POST("sync_challans/action.php")
+    @POST("challan/post_data.php")
     io.reactivex.Observable<Response> syncChalan(@Body SyncChallanModel challanPostEntity);
-    @POST("sync_sales/action.php")
+    @POST("sales/post_data.php")
     io.reactivex.Observable<Response> syncSales(@Body SalesModel salesModel);
-    @POST("sync_retail_customers/action.php")
+    @POST("retail-customers/post_data.php")
     io.reactivex.Observable<Response> syncCustomer(@Body RetailsSyncModel retailsSyncModel);
+    @POST("retail-customers/get_data.php")
+    io.reactivex.Observable<CustomerListResponse> downCustomer(@Body ChallanPostEntity challanPostEntity);
+    @POST("book-stock/get_data.php")
+    io.reactivex.Observable<StockResponse> downBookStock(@Body ChallanPostEntity challanPostEntity);
+    @POST("sales-detail/get_data.php")
+    io.reactivex.Observable<SalesDetailsForModel> downSalesDetails(@Body SalesDetailsPostEntity challanPostEntity);
+
+    @POST("sales/get_data.php")
+    io.reactivex.Observable<SaleesMasterForModel> downSalesMaster(@Body SalesPostEntity challanPostEntity);
 //    @POST("user/user_list.php")
 //    io.reactivex.Observable<AllUserListEntity> getUserList();
 //    @POST("user/user_activity.php")

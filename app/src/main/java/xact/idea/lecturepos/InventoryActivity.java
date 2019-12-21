@@ -50,7 +50,7 @@ public class InventoryActivity extends AppCompatActivity {
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         rcl_approval_in_list.setLayoutManager(lm);
-        loadStockItems();
+
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +81,13 @@ public class InventoryActivity extends AppCompatActivity {
         }));
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadStockItems();
+    }
+
     private  void display(List<StockModel> stockModels) {
 
 

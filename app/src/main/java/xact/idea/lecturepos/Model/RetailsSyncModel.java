@@ -28,6 +28,8 @@ public class RetailsSyncModel {
         public String upd_no;
         @SerializedName("upd_date")
         public String upd_date;
+        @SerializedName("status")
+        public String status;
 
 
     }

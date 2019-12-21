@@ -11,7 +11,7 @@ public interface ISalesMasterDataSource {
 
 
     Flowable<List<SalesMaster>> getSalesMasterItemById(int SalesMasterItemId);
-
+    SalesMaster getSalesMaster(String SalesDetailsItemId);
 
     Flowable<List<SalesMaster>> getSalesMaster(int favoriteid);
     int maxValue();

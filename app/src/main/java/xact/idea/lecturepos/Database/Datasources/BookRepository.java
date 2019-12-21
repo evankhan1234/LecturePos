@@ -51,6 +51,11 @@ public class BookRepository implements IBookDataSource {
     }
 
     @Override
+    public Book getBookNo(String BookItem) {
+        return IBookDataSource.getBookNo(BookItem);
+    }
+
+    @Override
     public void insertToBook(Book... Books) {
         IBookDataSource.insertToBook(Books);
     }

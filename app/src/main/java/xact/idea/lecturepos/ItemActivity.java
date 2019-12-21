@@ -164,9 +164,13 @@ public class ItemActivity extends AppCompatActivity {
                 Log.e("prices",""+prices);
                 Log.e("quantitys",""+quantitys);
                 Log.e("dis",""+d);
-                double total = (prices * d) - quantitys;
+                double total = (prices * d);
+                double totals = (prices * d) * quantitys/100;
+                double t = total-totals;
 
-                amount.setText(String.valueOf(rounded(total, 2)));
+                amount.setText(String.valueOf(rounded(t, 2)));
+
+
             }
         });
         discount.addTextChangedListener(new TextWatcher() {
@@ -201,8 +205,10 @@ public class ItemActivity extends AppCompatActivity {
                     }
 
 
-                    double total = (prices * quantitys) - d;
-                    amount.setText(String.valueOf(rounded(total, 2)));
+                    double total = (prices * quantitys);
+                    double totals = (prices * quantitys) * d/100;
+                    double t = total-totals;
+                    amount.setText(String.valueOf(rounded(t, 2)));
                    // Toast.makeText(ItemActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
                 }
 

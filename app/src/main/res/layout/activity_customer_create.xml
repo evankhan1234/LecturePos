@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<RelativeLayout
     android:id="@+id/rlt_root"
     xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#fff" android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:orientation="vertical"
@@ -90,6 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:visibility="gone"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -110,16 +116,20 @@
                 <TextView android:textColor="#666" android:id="@+id/textView47" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Last Name"/>
                 <EditText android:textSize="16sp" android:id="@+id/lastName" android:background="@drawable/input_bg" android:padding="15dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:hint="Last Name" android:ems="10" android:inputType="textPersonName"/>
             </LinearLayout>
+
         </LinearLayout>
-        <TextView android:textColor="#666" android:id="@+id/textView4" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Organization"/>
+        <TextView android:textColor="#666" android:id="@+id/b" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Name *"/>
+        <EditText android:textSize="16sp" android:id="@+id/edit_name" android:background="@drawable/input_bg" android:padding="15dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:hint="Name" android:ems="10" android:inputType="text"/>
+        <TextView android:textColor="#666" android:id="@+id/textView4" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Organization *"/>
         <EditText android:textSize="16sp" android:id="@+id/edit_shop_name" android:background="@drawable/input_bg" android:padding="15dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:hint="Organization" android:ems="10" android:inputType="text"/>
-        <TextView android:textColor="#666" android:id="@+id/textView49" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Contact Number"/>
+        <TextView android:textColor="#666" android:id="@+id/textView49" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Contact Number *"/>
         <EditText android:textSize="16sp" android:id="@+id/phone" android:background="@drawable/input_bg" android:padding="15dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:hint="Contact number" android:ems="10" android:inputType="phone"/>
-        <TextView android:textColor="#666" android:id="@+id/textView50" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Retail Code"/>
+        <TextView android:textColor="#666" android:id="@+id/textView50" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Retail Code *"/>
         <EditText android:textSize="16sp" android:id="@+id/retail_code" android:background="@drawable/input_bg" android:padding="15dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:hint="Retail Code" android:ems="10" android:inputType="text"/>
         <TextView android:textColor="#666" android:id="@+id/textView51" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Address"/>
         <EditText android:textSize="16sp" android:id="@+id/address" android:background="@drawable/input_bg" android:padding="15dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:hint="Address" android:ems="10" android:inputType="textPostalAddress"/>
         <Button android:textSize="16sp" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/input_btn_bg" android:paddingTop="15dp" android:paddingBottom="15dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:layout_marginBottom="15dp" android:text="Create Customer" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
     </LinearLayout>
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </ScrollView>
+</RelativeLayout>

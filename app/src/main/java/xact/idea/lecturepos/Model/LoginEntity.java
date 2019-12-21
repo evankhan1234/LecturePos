@@ -21,6 +21,8 @@ public class LoginEntity {
         public String  ACTIVE;
         @SerializedName("DEVICE")
         public String  DEVICE;
+        @SerializedName("CUSTOMER_NAME")
+        public String  CUSTOMER_NAME;
 
 
 

@@ -10,15 +10,17 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
+import xact.idea.lecturepos.Database.Model.SalesMaster;
 
 @Dao
 public interface SaleDetailsDao {
     @Query("SELECT * FROM sales_dtl")
     Flowable<List<SalesDetails>> getSalesDetailsItems();
 
-    @Query("SELECT * FROM sales_dtl WHERE InvoiceId=:SalesDetailsItemId")
-    Flowable<List<SalesDetails>> getSalesDetailsItemById(int SalesDetailsItemId);
-
+    @Query("SELECT * FROM sales_dtl WHERE InvoiceIdNew=:SalesDetailsItemId")
+    Flowable<List<SalesDetails>> getSalesDetailsItemById(String SalesDetailsItemId);
+    @Query("SELECT * FROM sales_dtl WHERE InvoiceIdNew=:SalesDetailsItemId")
+    SalesDetails getSalesMaster(String SalesDetailsItemId);
     @Query("Select Count(id)  FROM sales_dtl")
     int value();
 

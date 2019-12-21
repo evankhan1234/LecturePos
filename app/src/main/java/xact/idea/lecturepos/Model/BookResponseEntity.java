@@ -31,6 +31,8 @@ public class BookResponseEntity {
         public String BOOK_NAME;
         @SerializedName("BOOK_NO")
         public String BOOK_NO;
+        @SerializedName("BOOK_SPECIMEN_CODE")
+        public String BOOK_SPECIMEN_CODE;
 
 
 

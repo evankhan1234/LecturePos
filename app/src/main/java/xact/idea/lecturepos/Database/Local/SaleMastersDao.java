@@ -21,7 +21,8 @@ public interface SaleMastersDao {
 
     @Query("SELECT * FROM sales_mst WHERE id=:SalesDetailsItemId")
     Flowable<List<SalesMaster>> getSalesDetailsItemById(int SalesDetailsItemId);
-
+    @Query("SELECT * FROM sales_mst WHERE InvoiceId=:SalesDetailsItemId")
+    SalesMaster getSalesMaster(String SalesDetailsItemId);
     @Query("Select Count(id)  FROM sales_mst")
     int value();
     @Query("Select MAX(id)  FROM sales_mst")

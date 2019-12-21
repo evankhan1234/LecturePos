@@ -54,6 +54,11 @@ public class BookDataSources implements IBookDataSource {
     }
 
     @Override
+    public Book getBookNo(String BookItem) {
+        return BookDao.getBookNo(BookItem);
+    }
+
+    @Override
     public void insertToBook(Book... carts) {
 
         BookDao.insertToBook(carts);

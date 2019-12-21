@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                                         dismissLoadingProgress();
                                     }else{
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, loginEntity.user_id + "");
+                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, loginEntity.data.CUSTOMER_NAME + "");
                                         Login login = new Login();
                                         login.ACTIVE=loginEntity.data.ACTIVE;
                                         login.USER_ID=loginEntity.data.USER_ID;

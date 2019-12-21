@@ -27,6 +27,8 @@ public class Customer {
     public String UpdateNo;
     @ColumnInfo(name = "UpdateDate")
     public String UpdateDate;
+    @ColumnInfo(name = "Status")
+    public String Status;
     @Override
     public String toString() {
         return Name;

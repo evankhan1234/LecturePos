@@ -25,8 +25,13 @@ public class SalesDetailsRepository implements ISalesDetailsDataSource {
     }
 
     @Override
-    public Flowable<List<SalesDetails>> getSalesDetailsItemById(int SalesDetailsItemId) {
+    public Flowable<List<SalesDetails>> getSalesDetailsItemById(String SalesDetailsItemId) {
         return ISalesDetailsDataSource.getSalesDetailsItemById(SalesDetailsItemId);
+    }
+
+    @Override
+    public SalesDetails getSalesMaster(String SalesDetailsItemId) {
+        return ISalesDetailsDataSource.getSalesMaster(SalesDetailsItemId);
     }
 
     @Override
