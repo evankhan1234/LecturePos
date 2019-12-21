@@ -107,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8px"
-                android:text="Customer Pay"/>
+                android:text="Customer"/>
             <TextView
                 android:layout_marginTop="10px"
                 android:textColor="#666"
@@ -211,12 +211,59 @@
 
             </androidx.recyclerview.widget.RecyclerView>
             <Button
+                android:visibility="gone"
 
                 android:tag="35"
                 android:textSize="35px" android:textColor="#fff" android:id="@+id/create" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Books" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
 
+            <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:paddingBottom="13px"
+                android:orientation="horizontal">
 
+                <Button
+                    android:backgroundTint="@color/accept"
+                    android:id="@+id/btn_scan"
+                    android:layout_width="420px"
+                    android:layout_height="140px"
+                    android:layout_gravity="center"
+
+                    android:layout_marginLeft="0px"
+                    android:layout_marginRight="15px"
+                    android:background="@drawable/btn_no"
+                    android:foreground="@drawable/ripple_corner"
+                    android:gravity="center"
+                    android:paddingBottom="5px"
+                    android:stateListAnimator="@null"
+                    android:tag="45"
+                    android:text="SCAN"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="45px" />
+
+                <Button
+                    android:id="@+id/btn_input"
+
+                    android:layout_width="420px"
+                    android:layout_height="140px"
+                    android:layout_marginTop="-4px"
+                    android:background="@drawable/btn_no"
+                    android:foreground="@drawable/ripple_corner"
+                    android:paddingBottom="5px"
+                    android:stateListAnimator="@null"
+                    android:tag="45"
+                    android:text="INPUT"
+                    android:textColor="@color/white"
+
+                    android:textSize="45px"
+                    android:visibility="visible" />
+            </LinearLayout>
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_marginTop="30px"
                 android:id="@+id/cibact_RLDetail"
                 android:layout_width="match_parent"
@@ -310,6 +357,7 @@
             </RelativeLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_marginTop="20px"
                 android:layout_below="@+id/cibact_RLDetail"
                 android:background="#CCC"
@@ -635,7 +683,7 @@
                 android:layout_marginTop="20px"
                 android:textSize="35px"
                 android:tag="35" android:id="@+id/edit_note" android:background="@drawable/input_bg" android:padding="25px" android:layout_width="match_parent"
-                android:minHeight="300px"
+                android:minHeight="150px"
                 android:layout_height="wrap_content" android:layout_marginBottom="10px" android:hint="Please Take a Note" android:ems="10" android:inputType="textMultiLine"/>
 
             <Button

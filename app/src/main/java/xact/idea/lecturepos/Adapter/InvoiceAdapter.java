@@ -80,12 +80,20 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.rcl_this_customer_list.setLayoutManager(lm);
-        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).id).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
             @Override
             public void accept(List<SalesDetails> units) throws Exception {
                 Log.e("data","data"+new Gson().toJson(units));
                 mAdapters = new SalesDetailsAdapter(mActivity, units);
                 holder.rcl_this_customer_list.setAdapter(mAdapters);
+
+            }
+        }));
+        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+            @Override
+            public void accept(List<SalesDetails> units) throws Exception {
+                Log.e("hgh","data"+new Gson().toJson(units));
+
 
             }
         }));

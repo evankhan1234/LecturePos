@@ -9,9 +9,9 @@ public interface ISalesDetailsDataSource {
   Flowable<List<SalesDetails>> getSalesDetailsItems();
 
 
-  Flowable<List<SalesDetails>> getSalesDetailsItemById(int SalesDetailsItemId);
+  Flowable<List<SalesDetails>> getSalesDetailsItemById(String SalesDetailsItemId);
 
-
+  SalesDetails getSalesMaster(String SalesDetailsItemId);
   Flowable<List<SalesDetails>> getSalesDetails(int favoriteid);
 
   void emptySalesDetails();

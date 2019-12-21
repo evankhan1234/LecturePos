@@ -43,6 +43,7 @@ import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.InvoiceListActivity;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Common;
+import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
 
@@ -155,6 +156,7 @@ public class ChallanRecieveListFragment extends Fragment {
             @Override
             public void accept(List<Challan> customers) throws Exception {
                 Log.e("SDfd","Dgd"+new Gson().toJson(customers));
+                Constant.size=customers.size();
                 displayChallanItems(customers);
             }
         }));

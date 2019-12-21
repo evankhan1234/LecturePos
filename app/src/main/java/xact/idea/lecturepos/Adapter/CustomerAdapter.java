@@ -1,6 +1,7 @@
 package xact.idea.lecturepos.Adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import xact.idea.lecturepos.Database.Model.Customer;
+import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.R;
+import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerListiewHolder> {
@@ -49,6 +52,16 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.text_mobile.setText(messageEntities.get(position).MobileNumber);
         holder.text_store_id.setText(messageEntities.get(position).StoreId);
         holder.text_name.setText(messageEntities.get(position).ShopName);
+        holder.text_create_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(new Intent(mActivity, InvoiceActivity.class));
+                intent.putExtra("data",messageEntities.get(position).ShopName);
+                mActivity.startActivity(intent);
+                mActivity.finish();
+                Constant.name=messageEntities.get(position).ShopName;
+            }
+        });
 
 
 
@@ -66,6 +79,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         private TextView text_mobile;
         private TextView text_code;
         private TextView text_name;
+        private TextView text_create_invoice;
 
 
 
@@ -78,6 +92,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             text_mobile = itemView.findViewById(R.id.text_mobile);
             text_code = itemView.findViewById(R.id.text_code);
             text_name = itemView.findViewById(R.id.text_name);
+            text_create_invoice = itemView.findViewById(R.id.text_create_invoice);
 
 
 

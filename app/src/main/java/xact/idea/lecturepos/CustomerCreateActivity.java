@@ -27,6 +27,7 @@ public class CustomerCreateActivity extends AppCompatActivity {
     EditText retail_code;
     EditText address;
     EditText edit_shop_name;
+    EditText edit_name;
     Button create;
     ImageView btn_header_back;
     @Override
@@ -37,6 +38,7 @@ public class CustomerCreateActivity extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         firstName=findViewById(R.id.firstName);
         lastName=findViewById(R.id.lastName);
+        edit_name=findViewById(R.id.edit_name);
         edit_shop_name=findViewById(R.id.edit_shop_name);
         phone=findViewById(R.id.phone);
         retail_code=findViewById(R.id.retail_code);
@@ -58,9 +60,10 @@ public class CustomerCreateActivity extends AppCompatActivity {
                 Log.e("Fsdfs","SFs"+phone.getText().toString());
                 Log.e("Fsdfs","SFs"+retail_code.getText().toString());
                 Log.e("Fsdfs","SFs"+address.getText().toString());
-                if (!firstName.getText().toString().equals("") &&!phone.getText().toString().equals("") &&!address.getText().toString().equals("")&&!retail_code.getText().toString().equals("") ){
+                if (!edit_name.getText().toString().equals("") &&!phone.getText().toString().equals("") &&!retail_code.getText().toString().equals("") ){
                     Customer c = new Customer();
-                    c.Name=firstName.getText().toString()+" "+lastName.getText().toString();
+                    c.Status="I";
+                    c.Name=edit_name.getText().toString();
                     c.Address=address.getText().toString();
                     c.MobileNumber=phone.getText().toString();
                     c.StoreId= SharedPreferenceUtil.getUserID(CustomerCreateActivity.this);

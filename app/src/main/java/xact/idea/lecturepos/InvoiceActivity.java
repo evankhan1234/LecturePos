@@ -61,17 +61,21 @@ import xact.idea.lecturepos.Database.Model.Items;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Model.ItemModel;
+import xact.idea.lecturepos.Model.StockModel;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.Utils.CustomDialog;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
+import xact.idea.lecturepos.Utils.SpinnerDialogFor;
 
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
 public class InvoiceActivity extends AppCompatActivity {
 
     Button create;
+    Button btn_scan;
+    Button btn_input;
     Button save;
     EditText editShippingChargesValue;
     EditText edit_retail_code;
@@ -89,13 +93,16 @@ public class InvoiceActivity extends AppCompatActivity {
     private List<Customer> customerArrayList = new ArrayList<>();
     private ArrayList<String> ArrayList = new ArrayList<>();
     private ArrayList<String> ArrayList1 = new ArrayList<>();
+    private ArrayList<String> bookArrayList = new ArrayList<>();
     ArrayAdapter<Customer> customerListEntityArrayAdapter;
+    ArrayAdapter<String> bookListEntityArrayAdapter;
     Spinner spinner_customer;
     String Name;
     RadioButton radioCash;
     RadioButton radioCredit;
     RadioGroup radioLogin;
     String sessionId;
+    String dataId;
     SpinnerDialog spinnerDialog;
 
     @Override
@@ -107,9 +114,11 @@ public class InvoiceActivity extends AppCompatActivity {
         radioLogin = findViewById(R.id.radioLogin);
         text_customer_spinner = findViewById(R.id.text_customer_spinner);
         radioCash = findViewById(R.id.radioCash);
+        btn_input = findViewById(R.id.btn_input);
         radioCredit = findViewById(R.id.radioCredit);
         edit_date = findViewById(R.id.edit_date);
         save = findViewById(R.id.save);
+        btn_scan = findViewById(R.id.btn_scan);
         edit_retail_code = findViewById(R.id.edit_retail_code);
         spinner_customer = findViewById(R.id.spinner_customer);
         edit_contact_number = findViewById(R.id.edit_contact_number);
@@ -135,6 +144,36 @@ public class InvoiceActivity extends AppCompatActivity {
                 spinnerDialog.showSpinerDialog();
             }
         });
+        btn_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InvoiceActivity.this, BarcodeActivity.class));
+                finish();
+            }
+        });
+        compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+            @Override
+            public void accept(List<StockModel> books) throws Exception {
+                for (StockModel book : books){
+                    bookArrayList.add("("+book.BOOK_SPECIMEN_CODE+") "+book.BookName+" "+book.BARCODE_NUMBER);
+                    //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
+                    //ArrayList.add(customer.ShopName);
+                }
+
+                //  dismissLoadingProgress();
+            }
+        }));
+        btn_input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//
+               SpinnerDialogFor spinnerDialogs;
+
+                spinnerDialogs= new SpinnerDialogFor(InvoiceActivity.this,  bookArrayList,"Select Book");
+                spinnerDialogs.showSpinerDialog();
+                //showInfoDialog();
+            }
+        });
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,66 +189,63 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
         sessionId = getIntent().getStringExtra("value");
+        dataId = getIntent().getStringExtra("data");
         customerListData();
         if (sessionId == null) {
             //   showInfoDialog();
         } else if (sessionId.equals("value")) {
-            showInfoDialog();
+           // showInfoDialog();
+
         } else {
 
         }
+        if (dataId == null) {
+            //   showInfoDialog();
+        }
+        else  {
+            // showInfoDialog();
+            text_customer_spinner.setText(dataId);
+            Name=Constant.name;
+            Customer customer=Common.customerRepository.getCustomerss(dataId);
+            if (customer!=null){
+
+                edit_address.setText(customer.Address);
+                edit_contact_number.setText(customer.MobileNumber);
+                edit_retail_code.setText(customer.RetailerCode);
+
+            }
+            else {
+
+            }
+        }
         spinnerDialog= new SpinnerDialog(InvoiceActivity.this,  ArrayList,"Select Customer");
-//        spinner_customer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.e("sp_units", "" + customerArrayList.get(position).Name);
-//                Name = customerArrayList.get(position).Name;
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+
+        if (Constant.name.equals("")){
+
+        }
+        else {
+            text_customer_spinner.setText(Constant.name);
+            Name=Constant.name;
+            Customer customer=Common.customerRepository.getCustomerss(Constant.name);
+            if (customer!=null){
+
+                edit_address.setText(customer.Address);
+                edit_contact_number.setText(customer.MobileNumber);
+                edit_retail_code.setText(customer.RetailerCode);
+
+            }
+            else {
+
+            }
+        }
         spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String item, int position) {
-               // Toast.makeText(InvoiceActivity.this, item + "  " + position+"", Toast.LENGTH_SHORT).show();
 
-              //  selectedItems.setText(item + " Position: " + position);
-//                char[] ch = new char[item.length()];
-//
-//                // Copy character by character into array
-//                for (int i = 0; i < item.length(); i++) {
-//                    ch[i] = item.charAt(i);
-//                }
-//
-//                String a="";
-//                // Printing content of array
-//                for (char c : ch) {
-//
-//                    if (c=='('){
-//
-//                    }
-//                    else {
-//                        a.charAt(c);
-//                        if (a.contains("(")){
-//
-//                        }
-//                        else {
-//
-//                        }
-//
-//                    }
-//
-//
-//                }
 
-              //  Log.e("Sdsf","Sdfds"+a);
                 text_customer_spinner.setText(item);
                 Name=item;
+                Constant.name=item;
 
               Customer customer=Common.customerRepository.getCustomerss(item);
               if (customer!=null){
@@ -326,7 +362,7 @@ public class InvoiceActivity extends AppCompatActivity {
                         salesDetails.TotalAmount = itemModel.Amount;
                         SalesMaster salesMasters=  Common.salesMasterRepository.invoice(values);
                         salesDetails.InvoiceId = values;
-                        salesDetails.InvoiceIdNew = salesMasters.InvoiceNumber;
+                        salesDetails.InvoiceIdNew = salesMasters.InvoiceId;
                         salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
                         Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
 
@@ -384,8 +420,11 @@ public class InvoiceActivity extends AppCompatActivity {
                     else {
                         d=0.0;
                     }
-                    double total = prices  -d;
-                    text_net_amounts.setText(String.valueOf(rounded(total,2)+" Tk"));
+                    double total = (prices);
+                    double totals = (prices) * d/100;
+                    double t = total-totals;
+
+                    text_net_amounts.setText(String.valueOf(rounded(t,2)+" Tk"));
                 }
 
 
@@ -528,6 +567,7 @@ public class InvoiceActivity extends AppCompatActivity {
 
     }
 
+
     private void masterListData() {
         //  showLoadingProgress(mActivity);
         compositeDisposable.add(Common.salesMasterRepository.getSalesMasterItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
@@ -558,13 +598,14 @@ public class InvoiceActivity extends AppCompatActivity {
         for (Customer customer : customers){
             ArrayList.add(customer.ShopName);
             //ArrayList.add(customer.ShopName);
-          ArrayList1.add(customer.ShopName+"("+customer.Name+")");
+            ArrayList1.add(customer.ShopName+"("+customer.Name+")");
         }
         customerArrayList = customers;
         customerListEntityArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, customerArrayList);
         customerListEntityArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_customer.setAdapter(customerListEntityArrayAdapter);
+  //      spinner_customer.setAdapter(customerListEntityArrayAdapter);
     }
+
 
     public void showInfoDialog() {
 
@@ -579,9 +620,39 @@ public class InvoiceActivity extends AppCompatActivity {
         final EditText edit_book_code = infoDialog.findViewById(R.id.edit_book_code);
         final Button btn_input = infoDialog.findViewById(R.id.btn_input);
         final Button btn_done = infoDialog.findViewById(R.id.btn_done);
+        final TextView text_customer_spinner = infoDialog.findViewById(R.id.text_customer_spinner);
         //   final  Button btn_done = infoDialog.findViewById(R.id.btn_done);
 
         CorrectSizeUtil.getInstance(this).correctSize(main_root);
+        final SpinnerDialogFor spinnerDialogs;
+
+        spinnerDialogs= new SpinnerDialogFor(InvoiceActivity.this,  bookArrayList,"Select Book");
+        spinnerDialogs.bindOnSpinerListener(new OnSpinerItemClick() {
+            @Override
+            public void onClick(String item, int position) {
+
+                text_customer_spinner.setText(item);
+                Log.e("hgsc","vcc"+item.substring(item.length() - 16));
+                Book book = Common.bookRepository.getBook(item.substring(item.length() - 16));
+
+
+                if (book != null) {
+                    Intent intent = new Intent(InvoiceActivity.this, ItemActivity.class);
+                    intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
+                    startActivity(intent);
+                    finish();
+                    infoDialog.dismiss();
+                } else {
+                    Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        text_customer_spinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spinnerDialogs.showSpinerDialog();
+            }
+        });
 
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override

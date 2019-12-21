@@ -12,4 +12,7 @@ public class Constant {
     public static HashMap<String, List<ItemModel>> map
             = new HashMap<>();
     public static String code=null;
+    public static int size=0;
+    public static int sizes=0;
+    public static String name="";
 }

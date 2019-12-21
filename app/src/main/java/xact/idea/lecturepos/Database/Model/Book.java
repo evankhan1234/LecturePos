@@ -25,6 +25,8 @@ public class Book {
     public String BookName;
     @ColumnInfo(name = "BookNo")
     public String BookNo;
+    @ColumnInfo(name = "BOOK_SPECIMEN_CODE")
+    public String BOOK_SPECIMEN_CODE;
 
 
 }

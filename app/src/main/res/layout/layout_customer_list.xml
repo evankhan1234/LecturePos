@@ -143,9 +143,101 @@
             />
 
     </RelativeLayout>
-
-    <View
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:id="@+id/linear"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
         android:layout_below="@+id/cibact_RLDetail"
+
+        android:layout_marginTop="10px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_view_details"
+            android:layout_width="258px"
+            android:layout_height="88px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="11px"
+            android:layout_marginTop="7px"
+            android:layout_marginRight="10px"
+            android:background="@drawable/status_accepted"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingLeft="0px"
+            android:paddingRight="5px"
+            android:paddingBottom="4px"
+            android:tag="34"
+            android:text="View Details"
+            android:textColor="@color/white"
+            android:textSize="34px"
+            />
+
+        <TextView
+            android:id="@+id/text_create_invoice"
+            android:backgroundTint="#071564"
+            android:layout_width="258px"
+            android:layout_height="88px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="11px"
+            android:layout_marginTop="7px"
+            android:layout_marginRight="10px"
+            android:background="@drawable/status_accepted"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingLeft="0px"
+            android:paddingRight="5px"
+            android:paddingBottom="4px"
+            android:tag="34"
+            android:text="Create Invoice"
+            android:textColor="@color/white"
+            android:textSize="34px"
+            />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/text_update"
+            android:layout_width="228px"
+            android:layout_height="58px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="11px"
+            android:layout_marginTop="7px"
+            android:layout_marginRight="10px"
+            android:background="@drawable/status_accepted"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingLeft="0px"
+            android:paddingRight="5px"
+            android:paddingBottom="4px"
+            android:tag="34"
+            android:text="update"
+            android:textColor="@color/white"
+            android:textSize="34px"
+            />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/text_delete"
+            android:backgroundTint="#FF5722"
+            android:layout_width="228px"
+            android:layout_height="58px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="11px"
+            android:layout_marginTop="7px"
+            android:layout_marginRight="10px"
+            android:background="@drawable/status_accepted"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingLeft="0px"
+            android:paddingRight="5px"
+            android:paddingBottom="4px"
+            android:tag="34"
+            android:text="delete"
+            android:textColor="@color/white"
+            android:textSize="34px"
+            />
+    </LinearLayout>
+    <View
+        android:layout_marginTop="30px"
+        android:layout_below="@+id/linear"
         android:background="#CCC"
         android:layout_width="match_parent"
         android:layout_height="2px"/>

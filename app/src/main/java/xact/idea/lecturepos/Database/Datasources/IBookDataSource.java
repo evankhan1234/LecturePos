@@ -17,7 +17,7 @@ public interface IBookDataSource {
     void emptyBook();
     int size();
 
-
+    Book getBookNo(String BookItem);
     void insertToBook(Book... Books);
 
 

@@ -35,6 +35,11 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
+    public SalesMaster getSalesMaster(String SalesDetailsItemId) {
+        return SaleMastersDao.getSalesMaster(SalesDetailsItemId);
+    }
+
+    @Override
     public Flowable<List<SalesMaster>> getSalesMaster(int favoriteid) {
         return SaleMastersDao.getSalesDetails();
     }

@@ -5,11 +5,22 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import xact.idea.lecturepos.Database.Model.Challan;
+import xact.idea.lecturepos.Utils.Common;
+import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.pager.Pager;
 
@@ -18,6 +29,9 @@ public class ChallanActivity extends AppCompatActivity implements TabLayout.OnTa
     ImageView btn_header_back;
     //This is our viewPager
     private ViewPager viewPager;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    int size;
+    int sizes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,14 +40,22 @@ public class ChallanActivity extends AppCompatActivity implements TabLayout.OnTa
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         btn_header_back =  findViewById(R.id.btn_header_back);
         tabLayout =  findViewById(R.id.tabLayout);
+//        compositeDisposable.add(Common.challanRepositoy.getList("Y").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
+//            @Override
+//            public void accept(List<Challan> customers) throws Exception {
+//                Log.e("xvd","cvcv"+new Gson().toJson(customers));
+//                size=customers.size();
+//
+//            }
+//        }));
 
         //Adding the tabs using addTab() method
-            tabLayout.addTab(tabLayout.newTab().setText("New List"));
-        tabLayout.addTab(tabLayout.newTab().setText("Receive List"));
+            tabLayout.addTab(tabLayout.newTab().setText("New List"+" ("+ Constant.sizes +")"));
+        tabLayout.addTab(tabLayout.newTab().setText("Receive List "+" ("+  Constant.size +")"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //Initializing viewPager
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = findViewById(R.id.pager);
 
         //Creating our pager adapter
         Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -65,5 +87,16 @@ public class ChallanActivity extends AppCompatActivity implements TabLayout.OnTa
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        compositeDisposable.clear();
     }
 }

@@ -48,6 +48,7 @@ import xact.idea.lecturepos.Database.Local.SalesMasterDataSources;
 import xact.idea.lecturepos.Database.Local.SyncDataSources;
 import xact.idea.lecturepos.Database.MainDatabase;
 import xact.idea.lecturepos.Database.Model.Book;
+import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Challan;
 import xact.idea.lecturepos.Database.Model.ChallanDetails;
 import xact.idea.lecturepos.Database.Model.Customer;
@@ -59,14 +60,21 @@ import xact.idea.lecturepos.Model.BookResponseEntity;
 import xact.idea.lecturepos.Model.ChallanDetailsModel;
 import xact.idea.lecturepos.Model.ChallanPostEntity;
 import xact.idea.lecturepos.Model.ChallanResponseEntity;
+import xact.idea.lecturepos.Model.CustomerListResponse;
 import xact.idea.lecturepos.Model.CustomerModel;
 import xact.idea.lecturepos.Model.LoginEntity;
 import xact.idea.lecturepos.Model.Response;
 import xact.idea.lecturepos.Model.RetailsSyncModel;
+import xact.idea.lecturepos.Model.SaleesMasterForModel;
+import xact.idea.lecturepos.Model.SalesDetailsForModel;
+import xact.idea.lecturepos.Model.SalesDetailsPostEntity;
 import xact.idea.lecturepos.Model.SalesModel;
+import xact.idea.lecturepos.Model.SalesPostEntity;
+import xact.idea.lecturepos.Model.StockResponse;
 import xact.idea.lecturepos.Model.SyncChallanModel;
 import xact.idea.lecturepos.Retrofit.IRetrofitApi;
 import xact.idea.lecturepos.Utils.Common;
+import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 import xact.idea.lecturepos.Utils.Utils;
@@ -80,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
     List<BookModel> bookModelList= new ArrayList<>();
     static CompositeDisposable compositeDisposable = new CompositeDisposable();
     TextView tv_store;
+    TextView text_all_cap;
+    TextView text_publisher_chalan;
     LinearLayout linear_logout;
     LinearLayout linear_customers;
     LinearLayout linear_invoice;
@@ -96,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mService=Common.getApiXact();
+        text_all_cap=findViewById(R.id.text_all_cap);
+        text_publisher_chalan=findViewById(R.id.text_publisher_chalan);
         linear_challan=findViewById(R.id.linear_challan);
         linear_logout=findViewById(R.id.linear_logout);
         linear_customers=findViewById(R.id.linear_customers);
@@ -108,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
         root_rlt_dashboard=findViewById(R.id.root_rlt_dashboard);
         tv_store.setSelected(true);
         mActivity=this;
+        String upperString ="("+SharedPreferenceUtil.getUserID(MainActivity.this)+ ") "+SharedPreferenceUtil.getUserName(MainActivity.this);
+        text_all_cap.setAllCaps(true);
+        text_all_cap.setText(upperString.toUpperCase());
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.root_rlt_dashboard));
         linear_logout.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 Utils.showInfoDialog(mActivity);
             }
         });
+
         linear_customers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,16 +170,18 @@ public class MainActivity extends AppCompatActivity {
         linear_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  startActivity(new Intent(MainActivity.this,InvoicePrintActivity.class));
+                startActivity(new Intent(MainActivity.this,InvoicePrintActivity.class));
 
             }
         });
         linear_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadChallan();
+          loadChallan();
+                //loadCustomer();
                 loadCustomer();
-                 loadCustomerSync();
+              loadCustomerSync();
+            downBookStockDetails();
 
             }
         });
@@ -172,6 +190,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initDB();
+        //downBookStockDetails();
+        compositeDisposable.add(Common.challanRepositoy.getList("N").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
+            @Override
+            public void accept(List<Challan> customers) throws Exception {
+                Log.e("SDfd","Dgd"+new Gson().toJson(customers));
+                Constant.sizes =customers.size();
+                text_publisher_chalan.setText("Publishers Chalan (" +String.valueOf(customers.size())+")");
+
+            }
+        }));
+        compositeDisposable.add(Common.challanRepositoy.getList("Y").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
+            @Override
+            public void accept(List<Challan> customers) throws Exception {
+                Log.e("SDfd","Dgd"+new Gson().toJson(customers));
+                Constant.size =customers.size();
+
+            }
+        }));
 //        if (Common.customerRepository.size() > 0) {
 //
 //            loadDepartmentItems();
@@ -213,6 +249,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+        if (Common.customerRepository.size() > 0){
+
+        }else {
+            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+                loadCustomers();
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+        }
         if (Common.challanRepositoy.size() > 0){
             loadChalanItemsFor();
         }else {
@@ -237,7 +285,36 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
+        if (Common.salesMasterRepository.size() > 0){
+            // loadChalanDetails();
+        }else {
+            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+                loadCustomer();
+
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+        }
+
+        if (Common.bookStockRepository.size() > 0){
+            // loadChalanDetails();
+        }else {
+            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+                downBookStockDetails();
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+        }
     }
+
+
     private void initDB() {
         Common.mainDatabase = MainDatabase.getInstance(this);
         Common.customerRepository = CustomerRepository.getInstance(CustomerDataSources.getInstance(Common.mainDatabase.customerDao()));
@@ -269,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
                     retailsSyncModel.retailer_code= customer.RetailerCode;
                     retailsSyncModel.phone= customer.MobileNumber;
                     retailsSyncModel.library_name= customer.ShopName;
+                    retailsSyncModel.status= customer.Status;
                     syncs.add(retailsSyncModel);
 
                 }
@@ -310,40 +388,54 @@ public class MainActivity extends AppCompatActivity {
                     Common.syncRepository.updateSync(sync);
                 }
 
-                Log.e("size","size"+new Gson().toJson(departments));
+                Log.e("size","size"+new Gson().toJson(s));
             }
         }));
 
     }
 
     private void loadCustomers() {
-//        showLoadingProgress(MainActivity.this);
-//        compositeDisposable.add(mService.getBook().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<BookResponseEntity>() {
-//            @Override
-//            public void accept(BookResponseEntity bookResponseEntity) throws Exception {
-//                Log.e("size", "size" + new Gson().toJson(bookResponseEntity));
-//
-//                for (BookResponseEntity.Data books : bookResponseEntity.data) {
-//                    Book book = new Book();
-//                    book.BookPrice = books.BOOK_NET_PRICE;
-//                    book.BookName = books.BOOK_NAME;
-//                    book.BookCode = books.BOOK_CODE;
-//                    book.BookNo = books.BOOK_NO;
-//                    book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
-//                    book.BARCODE_NUMBER = books.BARCODE_NUMBER;
-//                    book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
-//                    Common.bookRepository.insertToBook(book);
-//
-//                }
-//
-//                dismissLoadingProgress();
-//            }
-//        }, new Consumer<Throwable>() {
-//            @Override
-//            public void accept(Throwable throwable) throws Exception {
-//                dismissLoadingProgress();
-//            }
-//        }));
+        showLoadingProgress(MainActivity.this);
+        ChallanPostEntity challanPostEntity = new ChallanPostEntity();
+        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        compositeDisposable.add(mService.downCustomer(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<CustomerListResponse>() {
+            @Override
+            public void accept(CustomerListResponse customerListResponse) throws Exception {
+                Log.e("CustomerListResponse", "CustomerListResponse" + new Gson().toJson(customerListResponse));
+
+
+                for (CustomerListResponse.Data customer : customerListResponse.data) {
+                    Customer customerq =Common.customerRepository.getCustomerss(customer.LIBRARY_NAME);
+                    if (customerq!=null){
+
+                    }
+                    else {
+                        Customer customers = new Customer();
+                        customers.Address=customer.ADDRESS;
+                        customers.ShopName=customer.LIBRARY_NAME;
+                        customers.RetailerCode=customer.RETAILER_CODE;
+                        customers.MobileNumber=customer.PHONE;
+                        customers.UpdateDate=customer.UPD_DATE;
+                        customers.UpdateNo=customer.UPD_NO;
+                        customers.Name=customer.NAME;
+                        customers.StoreId=customer.STORE_ID;
+                        customers.Status=customer.STATUS;
+
+                        Common.customerRepository.insertToCustomer(customers);
+                    }
+
+
+                }
+
+                dismissLoadingProgress();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e("xdvxc","fx"+throwable.getMessage());
+                dismissLoadingProgress();
+            }
+        }));
     }
 
     private  void loadBookItemsFor() {
@@ -379,6 +471,7 @@ public class MainActivity extends AppCompatActivity {
                     book.BookName = books.BOOK_NAME;
                     book.BookCode = books.BOOK_CODE;
                     book.BookNo = books.BOOK_NO;
+                    book.BOOK_SPECIMEN_CODE = books.BOOK_SPECIMEN_CODE;
                     book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
                     book.BARCODE_NUMBER = books.BARCODE_NUMBER;
                     book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
@@ -416,6 +509,60 @@ public class MainActivity extends AppCompatActivity {
                     challanDetails.F_CHALLAN_NO=challan.F_CHALLAN_NO;
 
                     Common.challanDetailsRepository.insertToChallanDetails(challanDetails);
+
+                }
+
+                dismissLoadingProgress();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                dismissLoadingProgress();
+            }
+        }));
+
+    }
+    private  void downBookStockDetails() {
+        showLoadingProgress(MainActivity.this);
+        ChallanPostEntity challanPostEntity = new ChallanPostEntity();
+        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        compositeDisposable.add(mService.downBookStock(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<StockResponse>() {
+            @Override
+            public void accept(StockResponse challanDetailsModel) throws Exception {
+                Log.e("StockResponse", "challanDetailsModel" + new Gson().toJson(challanDetailsModel));
+
+                for (StockResponse.Data stock : challanDetailsModel.data) {
+
+
+                    BookStock bookStocks =Common.bookStockRepository.getBookStock(stock.BOOK_ID);
+                   // int qty =Common.bookStockRepository.maxValue(stock.BOOK_ID);
+                    if (bookStocks!=null){
+                        BookStock bookStock = new BookStock();
+                        bookStock.BOOK_ID=stock.BOOK_ID;
+                        bookStock.LAST_UPDATE_DATE_APP=bookStocks.LAST_UPDATE_DATE_APP;
+                        bookStock.LAST_UPDATE_DATE=bookStocks.LAST_UPDATE_DATE;
+                        bookStock.STORE_ID=SharedPreferenceUtil.getUserID(MainActivity.this);
+                        bookStock.id=bookStocks.id;
+                        bookStock.BOOK_NET_MRP=bookStocks.BOOK_NET_PRICES;
+                        bookStock.QTY_NUMBER= Integer.parseInt(stock.QTY);
+
+                        int total=Integer.parseInt(stock.QTY);
+                        bookStock.BOOK_NET_PRICES= bookStocks.BOOK_NET_PRICES*total;
+
+                        Common.bookStockRepository.updateBookStock(bookStock);
+                    }
+                    else {
+                        Book book =Common.bookRepository.getBookNo(stock.BOOK_ID);
+                        BookStock bookStock = new BookStock();
+                        bookStock.BOOK_ID=stock.BOOK_ID;
+                        assert bookStocks != null;
+                        bookStock.BOOK_NET_MRP= Double.parseDouble(book.BOOK_NET_PRICE);
+                        bookStock.STORE_ID=SharedPreferenceUtil.getUserID(MainActivity.this);
+                        bookStock.QTY_NUMBER= Integer.parseInt(stock.QTY);
+                        bookStock.BOOK_NET_PRICES= Double.parseDouble(book.BOOK_NET_PRICE)*Integer.parseInt(stock.QTY);
+
+                        Common.bookStockRepository.insertToBookStock(bookStock);
+                    }
 
                 }
 
@@ -673,7 +820,7 @@ public class MainActivity extends AppCompatActivity {
                     Common.syncRepository.updateSync(sync);
                 }
 
-                Log.e("currentTime","currentTime"+currentTime);
+                Log.e("sfsfsf","ss"+new Gson().toJson(s));
             }
         }));
 
@@ -715,7 +862,7 @@ public class MainActivity extends AppCompatActivity {
                     String currentTime = formatters.format(dates);
                     salesMaster.UpdDate= currentDate+" "+currentTime;
                     salesMaster.Phone=sales.PhoneNumber;
-                    List<SalesModel.SalesMaster.SalesDetails> getList= getList(sales.id);
+                    List<SalesModel.SalesMaster.SalesDetails> getList= getList(sales.InvoiceId);
 
                     salesMaster.salesDetails=getList;
                     syncs.add(salesMaster);
@@ -775,7 +922,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void accept(Response loginEntity) throws Exception {
                         Log.e("sales","sales"+loginEntity.status_code);
-                      //  loadChalanItemsSync();
+
+                        if (loginEntity.status_code==203){
+                            loadSalesMaster();
+                        }
+
+//                        loadSalesDetails("1001381191219001","01381");
+//                        loadSalesDetails("1001381191212001","01381");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("xdvxc","fx"+throwable.getMessage());
+                        dismissLoadingProgress();
                     }
                 }));
 
@@ -784,8 +943,125 @@ public class MainActivity extends AppCompatActivity {
         }));
 
     }
+    private void loadSalesMaster() {
+        showLoadingProgress(MainActivity.this);
+        SalesPostEntity challanPostEntity = new SalesPostEntity();
+        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.transaction_type="S";
+        compositeDisposable.add(mService.downSalesMaster(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<SaleesMasterForModel>() {
+            @Override
+            public void accept(SaleesMasterForModel customerListResponse) throws Exception {
+                Log.e("SaleesMasterForModel", "CustomerListResponse" + new Gson().toJson(customerListResponse));
 
-    private List<SalesModel.SalesMaster.SalesDetails> getList(int id) {
+
+                for (SaleesMasterForModel.Data customer : customerListResponse.data) {
+                    SalesMaster salesMaster =Common.salesMasterRepository.getSalesMaster(String.valueOf(customer.INVOICE_ID));
+                    if (salesMaster!=null){
+
+                    }
+                    else {
+                        SalesMaster salesMaster1 = new SalesMaster();
+                        Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(customer.INV_DATE);
+
+                        salesMaster1.InvoiceId= customer.INVOICE_ID;
+                        salesMaster1.InvoiceDate= date1;
+                        salesMaster1.InvoiceAmount= Double.parseDouble(customer.INVOICE_AMT);
+                        salesMaster1.RetailCode=customer.RETAILER_CODE;
+                        if (customer.PHONE!=null){
+                            salesMaster1.PhoneNumber=customer.PHONE;
+                        }
+                        else {
+                            salesMaster1.PhoneNumber="011111111";
+                        }
+
+                        salesMaster1.StoreId=customer.STORE_ID;
+                        salesMaster1.Discount= Double.parseDouble(customer.DISCOUNT);
+                        salesMaster1.StoreId=customer.STORE_ID;
+                        salesMaster1.InvoiceNumber=customer.INVOICE_NO;
+                        salesMaster1.InvoiceDates=customer.INV_DATE;
+                        salesMaster1.Note=customer.NOTE;
+                        salesMaster1.PayMode=customer.PAY_MODE;
+                        salesMaster1.Device=customer.DEVICE;
+                        salesMaster1.NetValue= Double.parseDouble(customer.NET_VALUE);
+
+
+                        Common.salesMasterRepository.insertToSalesMaster(salesMaster1);
+
+                      loadSalesDetails(customer.INVOICE_ID,customer.STORE_ID);
+                    }
+
+
+                }
+
+                dismissLoadingProgress();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e("xdvxc","fx"+throwable.getMessage());
+                dismissLoadingProgress();
+            }
+        }));
+    }
+
+    private void loadSalesDetails(final String invoiceId, final String storeId) {
+
+
+        showLoadingProgress(MainActivity.this);
+        SalesDetailsPostEntity challanPostEntity = new SalesDetailsPostEntity();
+        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.transaction_type="S";
+        challanPostEntity.invoice_id=invoiceId;
+        compositeDisposable.add(mService.downSalesDetails(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<SalesDetailsForModel>() {
+            @Override
+            public void accept(SalesDetailsForModel customerListResponse) throws Exception {
+                Log.e("SalesDetailsForModel", "CustomerListResponse" + new Gson().toJson(customerListResponse));
+
+
+                for (SalesDetailsForModel.Data customer : customerListResponse.data) {
+
+                        SalesDetails salesDetails1 = new SalesDetails();
+                        int values = Common.salesMasterRepository.maxValue();
+                        salesDetails1.InvoiceId= values;
+                        salesDetails1.InvoiceIdNew= invoiceId;
+                        Book book =Common.bookRepository.getBookNo(customer.ITEM_ID);
+                        if (book!=null){
+                            salesDetails1.BookName= book.BookName;
+                            salesDetails1.BookId= book.BookNo;
+                        }else {
+                            salesDetails1.BookName= "N/A";
+                            salesDetails1.BookId= customer.ITEM_ID;
+                        }
+
+                        Log.e("dataaa",""+invoiceId);
+                        salesDetails1.MRP= Double.parseDouble(customer.MRP);
+                        salesDetails1.TotalAmount= Double.parseDouble(customer.TOTAL_VALUE);
+                        salesDetails1.StoreId=storeId;
+                        salesDetails1.Discount= Double.parseDouble(customer.DISCOUNT_AMT);
+                        salesDetails1.Quantity= Integer.parseInt(customer.QTY);
+
+
+
+                        Common.salesDetailsRepository.insertToSalesDetails(salesDetails1);
+
+
+
+
+
+                }
+
+                dismissLoadingProgress();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e("xdvxc","fx"+throwable.getMessage());
+                dismissLoadingProgress();
+            }
+        }));
+    }
+
+    private List<SalesModel.SalesMaster.SalesDetails> getList(String id) {
         List<SalesModel.SalesMaster.SalesDetails> salesDetails = new ArrayList<>();
 
         Flowable<List<SalesDetails>> units=  Common.salesDetailsRepository.getSalesDetailsItemById(id);

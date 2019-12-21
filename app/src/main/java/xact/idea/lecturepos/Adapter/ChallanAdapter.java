@@ -65,8 +65,8 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
     public void onBindViewHolder(final ChallanAdapter.ChallanListiewHolder holder, final int position) {
         String challan_no = "<b><font color=#000 >Challan No :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_CODE+"</font>";
         String challan_packet = "<b><font color=#000 >Total Packet :  </font></b> <font color=#358ED3>"+messageEntities.get(position).NO_OF_PACKATE+"</font>";
-        String challan_date = "<b><font color=#000 >Challan Date :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_DATE+"</font>";
-        String challan_quantity = "<b><font color=#000 >Challan Quantity :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_QTY+"</font>";
+        String challan_date = "<b><font color=#000 >Date :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_DATE+"</font>";
+        String challan_quantity = "<b><font color=#000 >Quantity :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_QTY+"</font>";
         String challan_value = "<b><font color=#000 >Total Price :  </font></b> <font color=#358ED3>"+messageEntities.get(position).TOTAL_VALUE+"</font>";
         holder.text_challan_no.setText(Html.fromHtml(challan_no));
         holder.text_challan_date.setText(Html.fromHtml(challan_date));
