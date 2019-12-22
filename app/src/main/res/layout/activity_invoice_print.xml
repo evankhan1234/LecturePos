@@ -53,6 +53,7 @@
                 android:paddingLeft="20dp">
 
                 <TextView
+                    android:tag="28"
                     android:id="@+id/tv_temp_one_company_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -63,6 +64,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:tag="30"
                     android:id="@+id/tv_temp_one_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,6 +74,7 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:tag="30"
                     android:id="@+id/tv_temp_one_phoneNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -81,6 +84,7 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:tag="30"
                     android:id="@+id/tv_temp_one_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -99,6 +103,8 @@
             android:layout_below="@+id/tacktile_top_logo_ll">
 
             <TextView
+                android:tag="40"
+                android:textSize="40px"
                 android:id="@+id/frag_to_TvInvoiceTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -131,14 +137,25 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:tag="25"
+                    android:id="@+id/text_bill_shop_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Brandon Inc."
                     android:textColor="@android:color/black"
                     android:textSize="25px"
                     android:textStyle="bold" />
-
                 <TextView
+                    android:tag="30"
+                    android:id="@+id/text_biil_customer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TransID : BI 3456"
+                    android:textColor="@android:color/black"
+                    android:textSize="30px" />
+                <TextView
+                    android:tag="30"
+                    android:id="@+id/text_bill_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="1, 5th avenue, 7th cross,NYC"
@@ -146,6 +163,8 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:tag="30"
+                    android:id="@+id/text_bill_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="a 5486-4604"
@@ -153,18 +172,15 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:tag="30"
+                    android:id="@+id/text_bill_retail_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="jack@brandonic.com"
                     android:textColor="@android:color/black"
                     android:textSize="30px" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TransID : BI 3456"
-                    android:textColor="@android:color/black"
-                    android:textSize="30px" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -174,6 +190,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ship To"
@@ -181,6 +198,8 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:id="@+id/text_ship_shop_name"
+                    android:tag="25"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Brandon Inc."
@@ -189,6 +208,8 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/text_ship_shop_address"
+                    android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="1, 5th avenue, 7th cross,NYC"
@@ -196,6 +217,8 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:id="@+id/text_ship_shop_number"
+                    android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="a 5486-4604"
@@ -203,6 +226,8 @@
                     android:textSize="30px" />
 
                 <TextView
+                    android:id="@+id/text_ship_retail_code"
+                    android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="jack@brandonic.com"
@@ -220,24 +245,31 @@
                 android:weightSum="3">
 
                 <TextView
+                    android:id="@+id/text_invoice_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
+                    android:tag="30"
                     android:text="#INV11"
                     android:textColor="@android:color/black"
-                    android:textSize="50px" />
+                    android:textSize="30px" />
 
                 <TextView
+                    android:id="@+id/text_invoice_date"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
+                    android:tag="30"
                     android:text="11-07-2016"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="30px" />
 
                 <TextView
+                    android:id="@+id/text_store"
+                    android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -248,19 +280,126 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/table_layout_two"
-            android:orientation="vertical">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="25px"
+                    android:background="#1AA3E2"
 
+
+                    android:layout_below="@+id/address_ll_template"
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="100px"
+                    android:orientation="horizontal"
+                    android:weightSum="4"
+                    android:id="@+id/layout_header"
+
+                    >
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:paddingTop="10px"
+                        android:paddingBottom="10px"
+                        android:tag="30"
+                        android:textSize="30px"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Book Name"
+                        android:gravity="center|center_vertical"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/text_customer_name" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/text_date"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center|center_vertical"
+                        android:paddingTop="10px"
+                        android:paddingBottom="10px"
+                        android:tag="30"
+                        android:text="Quantity"
+                        android:textColor="@color/white"
+                        android:textSize="30px"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:paddingTop="10px"
+                        android:paddingBottom="10px"
+                        android:tag="30"
+                        android:textSize="30px"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Quantity"
+                        android:gravity="center|center_vertical"
+                        android:layout_weight="1"
+
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/text_amounst" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:paddingTop="10px"
+                        android:paddingBottom="10px"
+                        android:tag="35"
+                        android:textSize="35px"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Rate"
+                        android:gravity="center|center_vertical"
+                        android:layout_weight="1"
+
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/text_amount" />
+
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:paddingTop="10px"
+                        android:paddingBottom="10px"
+                        android:tag="35"
+                        android:textSize="35px"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Amount"
+                        android:gravity="center|center_vertical"
+                        android:layout_weight="1"
+
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/text_amounsvt" />
+
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+
+                    android:id="@+id/rcl_approval_in_list"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/layout_header"
+
+
+                    android:layout_height="match_parent"
+
+
+                    android:nestedScrollingEnabled="false"
+
+
+
+
+                    >
+
+                </androidx.recyclerview.widget.RecyclerView>
         <TableLayout
             android:id="@+id/table_layout_two"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/table_layout_top"
+            android:layout_below="@+id/rcl_approval_in_list"
             android:paddingTop="10dp"
             android:weightSum="3">
 
@@ -305,6 +444,7 @@
                         <TableRow android:layout_weight="2">
 
                             <TextView
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:padding="2dp"
                                 android:text="Total"
@@ -313,6 +453,8 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/text_sub_total_value"
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:padding="2dp"
@@ -326,13 +468,17 @@
                         <TableRow android:layout_weight="2">
 
                             <TextView
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:padding="2dp"
-                                android:text="Shipping     (+)"
+                                android:text="Discount     (*)"
                                 android:textColor="@android:color/black"
                                 android:textSize="30px" />
 
                             <TextView
+                                android:id="@+id/text_discount"
+
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:padding="2dp"
@@ -345,13 +491,17 @@
                         <TableRow android:layout_weight="2">
 
                             <TextView
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:padding="2dp"
-                                android:text="Discount      (-)"
+                                android:text="Return      (-)"
                                 android:textColor="@android:color/black"
                                 android:textSize="30px" />
 
                             <TextView
+                                android:id="@+id/text_return"
+
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:padding="2dp"
@@ -361,43 +511,6 @@
                                 android:textSize="30px" />
                         </TableRow>
 
-                        <TableRow android:layout_weight="2">
-
-                            <TextView
-                                android:layout_weight="1"
-                                android:padding="2dp"
-                                android:text="Adjustment (-)"
-                                android:textColor="@android:color/black"
-                                android:textSize="30px" />
-
-                            <TextView
-                                android:layout_weight="1"
-                                android:gravity="end"
-                                android:padding="2dp"
-                                android:paddingRight="25px"
-                                android:text="$01.62"
-                                android:textColor="@android:color/black"
-                                android:textSize="30px" />
-                        </TableRow>
-
-                        <TableRow android:layout_weight="2">
-
-                            <TextView
-                                android:layout_weight="1"
-                                android:padding="2dp"
-                                android:text="Paid              (-)"
-                                android:textColor="@android:color/black"
-                                android:textSize="30px" />
-
-                            <TextView
-                                android:layout_weight="1"
-                                android:gravity="end"
-                                android:padding="2dp"
-                                android:paddingRight="25px"
-                                android:text="$3000.00"
-                                android:textColor="@android:color/black"
-                                android:textSize="30px" />
-                        </TableRow>
 
                         <TableRow
                             android:id="@+id/temp01_table_row_three"
@@ -405,6 +518,7 @@
                             android:background="#4285f4">
 
                             <TextView
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:padding="2dp"
                                 android:text="Balance"
@@ -413,6 +527,8 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/text_total_value"
+                                android:tag="30"
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:paddingRight="25px"
@@ -437,305 +553,7 @@
             </TableRow>
         </TableLayout>
 
-        <TableLayout
-            android:layout_marginTop="40px"
-            android:id="@+id/table_layout_top"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/address_ll_template">
 
-            <TableRow
-                android:id="@+id/temp01_table_row_one"
-                android:layout_weight="8"
-                android:background="#4285f4"
-                android:padding="2dp">
-
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="No."
-                    android:textColor="@android:color/white"
-                    android:textSize="7dp" />
-
-                <TextView
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="Product"
-                    android:textColor="@android:color/white"
-                    android:textSize="7dp" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Qty"
-                    android:textColor="@android:color/white"
-                    android:textSize="7dp" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Rate"
-                    android:textColor="@android:color/white"
-                    android:textSize="7dp" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Tax"
-                    android:textColor="@android:color/white"
-                    android:textSize="7dp" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Amount"
-                    android:textColor="@android:color/white"
-                    android:textSize="7dp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tablerow_data_one"
-                android:layout_height="25px"
-                android:layout_weight="8"
-                android:padding="30px">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="start"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Carbolic Paper"
-                        android:textColor="@android:color/black"
-                        android:textSize="25px" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:text="Storage packing paper best packing paper for goods"
-                        android:textSize="25px" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:text="easy to use and long lasting"
-                        android:textSize="25px" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="1."
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="34kg"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="65.00"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="5.00%"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="2,320.50"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tablerow_data_two"
-                android:layout_height="25px"
-                android:layout_weight="8"
-                android:padding="30px">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="start"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Marble Paper"
-                        android:textColor="@android:color/black"
-                        android:textSize="25px" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:text="Antique Straight best packing paper for"
-                        android:textSize="25px" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:text="goods,easy to use and long lasting"
-                        android:textSize="25px" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="2."
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="42kg"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="82.00"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="6.00%"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="3,650.64"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-            </TableRow>
-
-            <TableRow
-                android:layout_height="25px"
-                android:layout_weight="8"
-                android:padding="30px">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="start"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:text="Embossed Leatherette Tan"
-                        android:textColor="@android:color/black"
-                        android:textSize="25px" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:text="The lightly embossed tan Leatherette is"
-                        android:textSize="25px" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:text="machine-embossee"
-                        android:textSize="25px" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="3."
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="57 pcs."
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="41.00"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="4.00%"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-
-                <TextView
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="top|center_vertical|center_horizontal|center"
-                    android:text="2,430.48"
-                    android:textColor="@android:color/black"
-                    android:textSize="25px" />
-            </TableRow>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/tablerow_data_two"
-                android:background="@android:color/darker_gray" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/tablerow_data_one"
-                android:background="@android:color/darker_gray" />
-        </TableLayout>
 
         <View
             android:id="@+id/frag_to_ViewLine1"
@@ -752,24 +570,52 @@
             android:background="@color/black" />
             </RelativeLayout>
         </ScrollView>
-        <Button
-            android:layout_marginLeft="50px"
-            android:layout_marginRight="50px"
+        <LinearLayout
             android:layout_alignParentBottom="true"
-
-            android:backgroundTint="#1AA3E2"
-            android:tag="35"
-            android:textSize="35px"
-            android:textColor="#fff"
-            android:id="@+id/create"
-            android:background="@drawable/capsule_button"
+            android:orientation="horizontal"
 
             android:layout_width="match_parent"
-            android:layout_height="150px"
-            android:layout_marginTop="40px"
-            android:layout_marginBottom="25px"
-            android:text="Print"
-            android:fontFamily="sans-serif"
-            android:stateListAnimator="@null" />
+            android:layout_height="wrap_content">
+            <Button
+                android:visibility="gone"
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="10px"
+                android:layout_weight="1"
+
+                android:backgroundTint="#E91E63"
+                android:tag="35"
+                android:textSize="35px"
+                android:textColor="#fff"
+                android:id="@+id/create_bill"
+                android:background="@drawable/capsule_button"
+
+                android:layout_width="match_parent"
+                android:layout_height="150px"
+                android:layout_marginTop="40px"
+                android:layout_marginBottom="25px"
+                android:text="Bill Print"
+                android:fontFamily="sans-serif"
+                android:stateListAnimator="@null" />
+            <Button
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="10px"
+                android:layout_weight="1"
+
+                android:backgroundTint="#1AA3E2"
+                android:tag="35"
+                android:textSize="35px"
+                android:textColor="#fff"
+                android:id="@+id/create_challan"
+                android:background="@drawable/capsule_button"
+
+                android:layout_width="match_parent"
+                android:layout_height="150px"
+                android:layout_marginTop="40px"
+                android:layout_marginBottom="25px"
+                android:text="Print"
+                android:fontFamily="sans-serif"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+
     </RelativeLayout>
 </FrameLayout>

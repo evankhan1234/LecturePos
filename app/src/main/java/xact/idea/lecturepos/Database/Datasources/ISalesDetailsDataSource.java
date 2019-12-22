@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
+import xact.idea.lecturepos.Model.SalesDetailPrintModel;
 
 public interface ISalesDetailsDataSource {
   Flowable<List<SalesDetails>> getSalesDetailsItems();
@@ -16,7 +17,7 @@ public interface ISalesDetailsDataSource {
 
   void emptySalesDetails();
   int size();
-
+  Flowable<List<SalesDetailPrintModel>> getBookStockModel(String SalesDetailsItemId);
 
   void insertToSalesDetails(SalesDetails... SalesDetailss);
 

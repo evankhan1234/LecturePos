@@ -48,10 +48,10 @@ public class ChallanActivity extends AppCompatActivity implements TabLayout.OnTa
 //
 //            }
 //        }));
-
-        //Adding the tabs using addTab() method
-            tabLayout.addTab(tabLayout.newTab().setText("New List"+" ("+ Constant.sizes +")"));
+        tabLayout.addTab(tabLayout.newTab().setText("New List"+" ("+ Constant.sizes +")"));
         tabLayout.addTab(tabLayout.newTab().setText("Receive List "+" ("+  Constant.size +")"));
+        //Adding the tabs using addTab() method
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //Initializing viewPager
@@ -83,7 +83,28 @@ public class ChallanActivity extends AppCompatActivity implements TabLayout.OnTa
     public void onTabUnselected(TabLayout.Tab tab) {
 
     }
+    public  void fixed(){
+        compositeDisposable.add(Common.challanRepositoy.getList("N").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
+            @Override
+            public void accept(List<Challan> customers) throws Exception {
+                Log.e("SDfd","Dgd"+new Gson().toJson(customers));
+                Constant.sizes =customers.size();
 
+
+               // text_publisher_chalan.setText("Publishers Chalan (" +String.valueOf(customers.size())+")");
+
+            }
+        }));
+        compositeDisposable.add(Common.challanRepositoy.getList("Y").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
+            @Override
+            public void accept(List<Challan> customers) throws Exception {
+                Log.e("SDfd","Dgd"+new Gson().toJson(customers));
+                Constant.size =customers.size();
+
+
+            }
+        }));
+    }
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 

@@ -170,7 +170,12 @@ public class MainActivity extends AppCompatActivity {
         linear_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,InvoicePrintActivity.class));
+                Intent intent = new Intent(MainActivity.this, InvoicePrintActivity.class);
+                intent.putExtra("customerName","bh");
+                intent.putExtra("sub","150.00");
+                intent.putExtra("invoiceId","1001381191222003");
+                startActivity(intent);
+                finish();
 
             }
         });
@@ -186,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -475,6 +482,7 @@ public class MainActivity extends AppCompatActivity {
                     book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
                     book.BARCODE_NUMBER = books.BARCODE_NUMBER;
                     book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
+                    book.BookNameBangla = books.BOOK_NAME_B;
                     Common.bookRepository.insertToBook(book);
 
                 }
@@ -852,6 +860,7 @@ public class MainActivity extends AppCompatActivity {
                     salesMaster.InvoiceId=sales.InvoiceId;
                     salesMaster.InvoiceNumber=sales.InvoiceNumber;
                     salesMaster.Note=sales.Note;
+                    salesMaster.ReturnAmt=sales.Return;
                     int value=Common.syncRepository.maxValue("sales_mst");
                     salesMaster.UpdNo= String.valueOf(value+1);
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -921,7 +930,7 @@ public class MainActivity extends AppCompatActivity {
                 compositeDisposable.add(mService.syncSales(salesModel).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Response>() {
                     @Override
                     public void accept(Response loginEntity) throws Exception {
-                        Log.e("sales","sales"+loginEntity.status_code);
+                        Log.e("saleswww","sales"+loginEntity.status_code);
 
                         if (loginEntity.status_code==203){
                             loadSalesMaster();

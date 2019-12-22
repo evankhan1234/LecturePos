@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +37,8 @@ public class InventoryActivity extends AppCompatActivity {
     TextView text_quantity;
     TextView text_net_price;
     static CompositeDisposable compositeDisposable = new CompositeDisposable();
+    int quantity;
+    double price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +61,7 @@ public class InventoryActivity extends AppCompatActivity {
                 finish();
             }
         });
-        int quantity=Common.bookStockRepository.TotalQuantity();
-        text_quantity.setText(String.valueOf(quantity)+" Pcs");
-        double price=Common.bookStockRepository.TotalPrice();
-        text_net_price.setText(String.valueOf(price)+" Tk");
+
     }
     private  void loadStockItems() {
 //        Log.e("size","size"+Common.bookStockRepository.size());
@@ -85,7 +85,17 @@ public class InventoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadStockItems();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                quantity=Common.bookStockRepository.TotalQuantity();
+                text_quantity.setText(String.valueOf(quantity)+" Pcs");
+                price=Common.bookStockRepository.TotalPrice();
+                text_net_price.setText(String.valueOf(price)+" Tk");
+                loadStockItems();
+            }
+        }, 300);
+
     }
 
     private  void display(List<StockModel> stockModels) {
