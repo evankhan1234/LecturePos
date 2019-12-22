@@ -24,12 +24,15 @@ import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import xact.idea.lecturepos.ChallanActivity;
 import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Challan;
 import xact.idea.lecturepos.Database.Model.ChallanDetails;
 import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
+import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.LoginActivity;
+import xact.idea.lecturepos.MainActivity;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
@@ -109,7 +112,8 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
         tv_info.setText("Are you want to receive ??");
 
         CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
-        btn_yes.setOnClickListener(new View.OnClickListener() {
+        btn_yes.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -152,10 +156,12 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
 
                         Common.bookStockRepository.insertToBookStock(bookStock);
                     }
-                    notifyDataSetChanged();
-                    infoDialog.dismiss();
-                }
 
+
+                }
+                ((ChallanActivity)mActivity).fixed();
+                notifyDataSetChanged();
+                infoDialog.dismiss();
 
             }
         });

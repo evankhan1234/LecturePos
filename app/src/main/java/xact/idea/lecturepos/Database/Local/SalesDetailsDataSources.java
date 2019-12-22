@@ -5,6 +5,7 @@ import java.util.List;
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Datasources.ISalesDetailsDataSource;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
+import xact.idea.lecturepos.Model.SalesDetailPrintModel;
 
 public class SalesDetailsDataSources implements ISalesDetailsDataSource {
 
@@ -51,6 +52,11 @@ public class SalesDetailsDataSources implements ISalesDetailsDataSource {
     @Override
     public int size() {
         return SaleDetailsDao.value();
+    }
+
+    @Override
+    public Flowable<List<SalesDetailPrintModel>> getBookStockModel(String SalesDetailsItemId) {
+        return SaleDetailsDao.getBookStockModel(SalesDetailsItemId);
     }
 
     @Override

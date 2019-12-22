@@ -11,6 +11,8 @@ import java.util.List;
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
+import xact.idea.lecturepos.Model.SalesDetailPrintModel;
+import xact.idea.lecturepos.Model.StockModel;
 
 @Dao
 public interface SaleDetailsDao {
@@ -40,4 +42,8 @@ public interface SaleDetailsDao {
     @Query("SELECT * from sales_dtl")
         //@Query("SELECT * sales_dtl SalesDetails as c Inner  JOIN Favorite as f ON c.Id = f.id  WHERE f.id=:favoriteid")
     Flowable<List<SalesDetails>> getSalesDetails();
+
+    @Query("SELECT * from sales_dtl as sales inner join books as book ON sales.BookId=book.BookNo WHERE InvoiceIdNew=:SalesDetailsItemId")
+        //@Query("SELECT * book_stock BookStock as c Inner  JOIN Favorite as f ON c.Id = f.id  WHERE f.id=:favoriteid")
+    Flowable<List<SalesDetailPrintModel>> getBookStockModel(String SalesDetailsItemId);
 }

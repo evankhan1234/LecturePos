@@ -82,6 +82,7 @@ public class InvoiceActivity extends AppCompatActivity {
     EditText edit_contact_number;
     EditText edit_note;
     EditText edit_address;
+    EditText editReturn;
     static EditText edit_date;
     TextView text_sub_total;
     TextView text_net_amounts;
@@ -111,6 +112,7 @@ public class InvoiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_invoice);
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
+        editReturn = findViewById(R.id.editReturn);
         radioLogin = findViewById(R.id.radioLogin);
         text_customer_spinner = findViewById(R.id.text_customer_spinner);
         radioCash = findViewById(R.id.radioCash);
@@ -329,7 +331,7 @@ public class InvoiceActivity extends AppCompatActivity {
                     salesMaster.Discount = discount;
                     salesMaster.InvoiceId = "10"+SharedPreferenceUtil.getUserID(InvoiceActivity.this)+formatter.format(date)+totalValue;
                     salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
-                    salesMaster.InvoiceNumber = "10"+SharedPreferenceUtil.getUserID(InvoiceActivity.this)+formatter.format(date)+totalValue;
+                    salesMaster.InvoiceNumber = "S0"+SharedPreferenceUtil.getUserID(InvoiceActivity.this)+formatter.format(date)+totalValue;
                     SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
                     Date dates1 = new Date(System.currentTimeMillis());
                     String currentTime = formatters.format(dates1);
@@ -348,6 +350,7 @@ public class InvoiceActivity extends AppCompatActivity {
                     salesMaster.Note = edit_note.getText().toString();
                     salesMaster.RetailCode = edit_retail_code.getText().toString();
                     salesMaster.PhoneNumber = edit_contact_number.getText().toString();
+                    salesMaster.Return = editReturn.getText().toString();
                     Common.salesMasterRepository.insertToSalesMaster(salesMaster);
                     Flowable<List<Items>> units=  Common.itemRepository.getItemItems();
 
@@ -380,7 +383,13 @@ public class InvoiceActivity extends AppCompatActivity {
 
                     Constant.arrayList.clear();
                     Common.itemRepository.emptyItem();
-                    startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
+                    Intent intent = new Intent(InvoiceActivity.this, InvoicePrintActivity.class);
+                    String s1 = text_sub_total.getText().toString();
+                    s1 = s1.replace(" Tk", "");
+                    intent.putExtra("sub",s1);
+                    intent.putExtra("customerName",Name);
+                    intent.putExtra("invoiceId","10"+SharedPreferenceUtil.getUserID(InvoiceActivity.this)+formatter.format(date)+totalValue);
+                    startActivity(intent);
                     finish();
                     Toast.makeText(InvoiceActivity.this, "Successfully Created a Invoice ", Toast.LENGTH_SHORT).show();
 
@@ -390,7 +399,65 @@ public class InvoiceActivity extends AppCompatActivity {
                 }
             }
         });
+        editReturn.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                double prices;
+                double d = 0.0;
+                String amount = text_sub_total.getText().toString();
+                amount = amount.replace(" Tk", "");
+                //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
+                if (amount.equals("0.0")){
+                    Toast.makeText(InvoiceActivity.this, "Sub Total value is 0", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    double t1;
+                    String s1 = text_sub_total.getText().toString();
+                    s1 = s1.replace(" Tk", "");
+                    prices = Double.parseDouble(s1);
+                    if (!editShippingChargesValue.getText().toString().equals("")){
+                        d = Double.parseDouble(editShippingChargesValue.getText().toString());
+                    }
+                    else {
+                        d=0.0;
+                    }
+                    double total = (prices);
+                    double totals = (prices) * d/100;
+                    double t = total-totals;
+
+                    double ts = 0;
+                    try {
+                        ts = Double.parseDouble(s.toString());
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ts=0;
+
+                    }
+                    if (t>=ts){
+                         t1 = t-ts;
+                    }
+                    else {
+                        t1=0;
+                        Toast.makeText(InvoiceActivity.this, "Return can not grater than Sub Total Value", Toast.LENGTH_SHORT).show();
+                    }
+
+                //    double t1 = t-Double.parseDouble(s.toString());
+
+                    text_net_amounts.setText(String.valueOf(rounded(t1,2)+" Tk"));
+                }
+
+            }
+        });
         editShippingChargesValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable mEdit) {
@@ -424,7 +491,15 @@ public class InvoiceActivity extends AppCompatActivity {
                     double totals = (prices) * d/100;
                     double t = total-totals;
 
-                    text_net_amounts.setText(String.valueOf(rounded(t,2)+" Tk"));
+                    double ts = 0;
+                    try {
+                        ts = Double.parseDouble(editReturn.getText().toString());
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ts=0;
+                    }
+                    double t1 = t-ts;
+                    text_net_amounts.setText(String.valueOf(rounded(t1,2)+" Tk"));
                 }
 
 
