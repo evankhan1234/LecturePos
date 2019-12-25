@@ -21,4 +21,6 @@ public class Login {
     public String ACTIVE;
     @ColumnInfo(name = "DEVICE")
     public String DEVICE;
+    @ColumnInfo(name = "CUSTOMER_NAME")
+    public String CUSTOMER_NAME;
 }

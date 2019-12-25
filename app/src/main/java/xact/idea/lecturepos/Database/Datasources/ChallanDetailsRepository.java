@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.ChallanDetails;
+import xact.idea.lecturepos.Model.ChallanDetailsModelFor;
 
 public class ChallanDetailsRepository implements IChallanDetailsDataSources {
     public IChallanDetailsDataSources IChallanDetailsDataSources;
@@ -35,6 +36,10 @@ public class ChallanDetailsRepository implements IChallanDetailsDataSources {
         return IChallanDetailsDataSources.getChallanDetails(ChallanDetailsItem);
     }
 
+    @Override
+    public Flowable<List<ChallanDetailsModelFor>> getChallanDetailsFor(String ChallanDetailsItem) {
+        return IChallanDetailsDataSources.getChallanDetailsFor(ChallanDetailsItem);
+    }
 
 
     @Override

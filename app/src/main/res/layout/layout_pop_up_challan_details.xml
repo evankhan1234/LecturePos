@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0px">
+    <LinearLayout
+        android:layout_centerInParent="true"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="72px"
+
+        android:layout_marginRight="69px"
+        android:alpha="1.5"
+        android:visibility="visible"
+        android:background="@drawable/dialog_rounded_bg"
+
+        android:orientation="vertical"
+        android:padding="40px">
+
+
+        <TextView
+            android:id="@+id/spinerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Challan Number"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+
+
+        <View
+            android:layout_marginTop="20px"
+            android:layout_width="wrap_content"
+            android:layout_height="0.1dp"
+            android:background="#d1d1d1" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="30px"
+
+
+            android:nestedScrollingEnabled="false"
+            android:id="@+id/rcl_this_customer_list"
+            android:layout_width="match_parent"
+            android:layout_height="650px"
+
+
+
+            android:layout_marginBottom="0px"
+
+
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10px">
+
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0px"
+                android:layout_marginTop="14px"
+                android:lineHeight="62px"
+                android:layout_marginRight="0px"
+                android:gravity="center"
+                android:tag="45"
+                android:text="Are You Want To Log Out?"
+                android:textColor="@color/gray_black"
+                android:textSize="45px" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80px"
+            android:paddingBottom="73px"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="420px"
+                android:layout_height="140px"
+                android:layout_gravity="center"
+
+                android:layout_marginLeft="0px"
+                android:layout_marginRight="15px"
+                android:background="@drawable/btn_no"
+                android:foreground="@drawable/ripple_corner"
+                android:gravity="center"
+                android:paddingBottom="5px"
+                android:stateListAnimator="@null"
+                android:tag="45"
+                android:text="No"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="45px" />
+
+            <Button
+                android:backgroundTint="@color/accept"
+                android:id="@+id/btn_ok"
+                android:layout_width="420px"
+                android:layout_height="140px"
+                android:layout_marginTop="-4px"
+                android:background="@drawable/btn_yes"
+                android:foreground="@drawable/ripple_corner"
+                android:paddingBottom="5px"
+                android:stateListAnimator="@null"
+                android:tag="45"
+                android:text="Yes"
+                android:textColor="@color/white"
+
+                android:textSize="45px"
+                android:visibility="visible" />
+        </LinearLayout>
+        <Button
+
+            android:layout_gravity="center"
+            android:backgroundTint="@color/accept"
+            android:id="@+id/btn_now"
+            android:layout_width="420px"
+            android:layout_height="140px"
+
+            android:background="@drawable/btn_yes"
+            android:foreground="@drawable/ripple_corner"
+            android:paddingBottom="5px"
+            android:stateListAnimator="@null"
+            android:tag="45"
+            android:text="Ok"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+
+            android:textSize="45px"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -19,6 +19,8 @@ public class StockModel {
     public String  BOOK_SPECIMEN_CODE;
     @SerializedName("BARCODE_NUMBER")
     public String  BARCODE_NUMBER;
+    @SerializedName("F_BOOK_EDITION_NO")
+    public String  F_BOOK_EDITION_NO;
 
 
 }

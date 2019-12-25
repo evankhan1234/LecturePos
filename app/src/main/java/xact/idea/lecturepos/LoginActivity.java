@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -97,6 +99,22 @@ public class LoginActivity extends AppCompatActivity {
                             Login login =Common.loginRepository.getLoginUser( loginPostEntity.user_id, loginPostEntity.user_pass);
                             if (login!=null){
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, login.USER_ID + "");
+                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, login.CUSTOMER_NAME + "");
+                                if (SharedPreferenceUtil.getSync(LoginActivity.this).equals("green")){
+                                    SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
+                                }
+                                else {
+                                    SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "gray");
+                                }
+
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                                Date date = new Date(System.currentTimeMillis());
+                                String currentDate = formatter.format(date);
+                                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                                Date dates = new Date(System.currentTimeMillis());
+                                String currentTime = formatters.format(dates);
+                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate+" "+currentTime+ "");
+
                                 startActivity(new Intent(LoginActivity.this, OnBoardingActivity.class));
                                 finish();
                             }
@@ -118,11 +136,21 @@ public class LoginActivity extends AppCompatActivity {
                                     }else{
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, loginEntity.user_id + "");
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, loginEntity.data.CUSTOMER_NAME + "");
+                                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                                        Date date = new Date(System.currentTimeMillis());
+                                        String currentDate = formatter.format(date);
+                                        SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                                        Date dates = new Date(System.currentTimeMillis());
+                                        String currentTime = formatters.format(dates);
+                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "gray");
+                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate+" "+currentTime+ "");
+
                                         Login login = new Login();
                                         login.ACTIVE=loginEntity.data.ACTIVE;
                                         login.USER_ID=loginEntity.data.USER_ID;
                                         login.PASSWORD=loginEntity.data.PASSWORD;
                                         login.DEVICE=loginEntity.data.DEVICE;
+                                        login.CUSTOMER_NAME=loginEntity.data.CUSTOMER_NAME;
                                         Common.loginRepository.insertToLogin(login);
                                         startActivity(new Intent(LoginActivity.this, OnBoardingActivity.class));
                                         finish();

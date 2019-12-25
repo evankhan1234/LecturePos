@@ -37,6 +37,7 @@ import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Model.SalesDetailPrintModel;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 
 public class InvoicePrintActivity extends AppCompatActivity {
 
@@ -228,33 +229,41 @@ public class InvoicePrintActivity extends AppCompatActivity {
         al.add(new RawPrintable.Builder(new byte[]{27, 100, 4}).build()); // feed lines example in raw mode
         String BILL = "";
 
-        BILL = "                    Customer Copy        \n "+
-                "                                         \n "+
-                "                                         \n "+
-                "                  "+customer.ShopName+" \n "+
-               "                   "+customer.Name+" \n "+
-               "                   "+customer.MobileNumber+" \n "+
-               "                   "+customer.Address+" \n "+
-               "                   "+customer.RetailerCode+" \n "+
-               "                   "+customer.StoreId+" \n "
-                + "\n";
+        BILL =    "                  "+ SharedPreferenceUtil.getUserName(InvoicePrintActivity.this) +" \n \n"+
+
+                "                   Customer Copy        \n \n"+
+                "          Invoice Number : "+salesMaster.InvoiceNumber+" \n  \n"+
+                "          Date : "+salesMaster.InvoiceDates+" \n \n "+
+
+               "          Customer Name: "+customer.Name+" \n "+
+               "          Phone Number: "+customer.MobileNumber+" \n "+
+                 "\n";
         BILL = BILL
                 + "-----------------------------------------------\n";
 
 
-        BILL = BILL + String.format("%1$-10s %2$10s %3$13s %4$10s", "বইয়ের নাম", "সংখ্যা", "মূল্য", "মোট টাকা");
+        BILL = BILL + String.format("%-20s%-10s%-10s%-10s", "   Book Name", "Quantity", "Price", "Amount");
         BILL = BILL + "\n";
         BILL = BILL
                 + "-----------------------------------------------";
 
         for (SalesDetailPrintModel salesDetailPrintModel: printModels){
 
+            String value;
+
             String quantity=getValue(String.valueOf(salesDetailPrintModel.Quantity));
             String rate=getValue(String.valueOf(salesDetailPrintModel.BookPrice));
             double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice);
             String totalPrice=getValue(String.valueOf(price));
+            String bookName=salesDetailPrintModel.BookName;
+            if (bookName.length()>15){
+                value=bookName.substring(0, 18);
+            }
+            else {
+                value=salesDetailPrintModel.BookName;
+            }
 
-            BILL = BILL + "\n " + String.format("%1$-10s %2$10s %3$11s %4$10s", salesDetailPrintModel.BookNameBangla, quantity, rate, totalPrice);
+            BILL = BILL + "\n " + String.format("%-20s%-9s%-9s%-10s", value, salesDetailPrintModel.Quantity, salesDetailPrintModel.BookPrice, String.valueOf(price));
         }
 
 
@@ -265,15 +274,15 @@ public class InvoicePrintActivity extends AppCompatActivity {
         String Total=getValue(String.valueOf(salesMaster.NetValue));
         String Return=getValue(String.valueOf(salesMaster.Return));
         String Discount=getValue(String.valueOf(salesMaster.Discount));
-        BILL = BILL + "                   টাকা      :" + "      " + subTotal + " টাকা"+"\n";
-        BILL = BILL + "                   মূল্যহ্রাস    :" + "      " + Discount +" %"+ "\n";
-        BILL = BILL + "                    জমা      :" + "      " + Return + " টাকা"+"\n";
-        BILL = BILL + "                   মোট টাকা   :" + "      " + Total + " টাকা"+"\n";
+        BILL = BILL + "                   Sub Total :" + "  " + sub + " Tk"+"\n";
+        BILL = BILL + "                    Discount  :" + "  " + salesMaster.Discount +" %"+ "\n";
+        BILL = BILL + "                    Return   :" + "  " + salesMaster.Return + " Tk"+"\n";
+        BILL = BILL + "                    Total Amount   :" + " " + salesMaster.NetValue + " Tk"+"\n";
 
         BILL = BILL
                 + "-----------------------------------------------\n";
         BILL = BILL + "\n\n ";
-        BILL = BILL + "\n\n\n\n\n\n\n\n";
+
         al.add( (new TextPrintable.Builder())
                 .setText(BILL)
                 .setCharacterCode(DefaultPrinter.Companion.getCHARCODE_PC1252())
@@ -286,31 +295,37 @@ public class InvoicePrintActivity extends AppCompatActivity {
         BILLS =  "                    Challan Copy        \n "+
                 "                                         \n "+
                 "                                         \n "+
+                "             Name:  "+customer.Name+" \n "+
+                "             Number: "+customer.MobileNumber+" \n "
 
-                "                  "+customer.ShopName+" \n "+
-                "                   "+customer.Name+" \n "+
-                "                   "+customer.MobileNumber+" \n "+
-                "                   "+customer.Address+" \n "+
-                "                   "+customer.RetailerCode+" \n "+
-                "                   "+customer.StoreId+" \n "
-                + "\n";
+                ;
         BILLS = BILLS
                 + "-----------------------------------------------\n";
 
 
-        BILLS = BILLS + String.format("%1$-10s %2$10s %3$13s %4$10s", "বইয়ের নাম", "সংখ্যা");
+        BILLS = BILLS + String.format("%1$-10s %2$10s", "           Book Name","            Quantity");
         BILLS = BILLS + "\n";
         BILLS = BILLS
-                + "-----------------------------------------------";
+                + "-----------------------------------------------"+
+
+
+                "                                         \n ";
 
         for (SalesDetailPrintModel salesDetailPrintModel: printModels){
 
+            String value;
             String quantity=getValue(String.valueOf(salesDetailPrintModel.Quantity));
             String rate=getValue(String.valueOf(salesDetailPrintModel.BookPrice));
             double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice);
             String totalPrice=getValue(String.valueOf(price));
-
-            BILLS = BILLS + "\n " + String.format("%1$-10s %2$10s %3$11s %4$10s", salesDetailPrintModel.BookNameBangla, quantity);
+            String bookName=salesDetailPrintModel.BookName;
+            if (bookName.length()>25){
+                value=bookName.substring(0, 25);
+            }
+            else {
+                value=salesDetailPrintModel.BookName;
+            }
+            BILLS = BILLS + "\n " + String.format("%1$-10s %2$10s", value,"       "+ salesDetailPrintModel.Quantity);
         }
 
 
@@ -402,7 +417,7 @@ public class InvoicePrintActivity extends AppCompatActivity {
             double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice);
             String totalPrice=getValue(String.valueOf(price));
 
-            BILL = BILL + "\n " + String.format("%1$-10s %2$10s %3$11s %4$10s", salesDetailPrintModel.BookNameBangla, quantity);
+            BILL = BILL  + String.format("%1$-10s %2$10s %3$11s %4$10s", salesDetailPrintModel.BookNameBangla, quantity);
         }
 
 

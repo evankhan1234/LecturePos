@@ -1,12 +1,20 @@
 package xact.idea.lecturepos;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -76,6 +84,7 @@ import xact.idea.lecturepos.Retrofit.IRetrofitApi;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.CustomDialog;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 import xact.idea.lecturepos.Utils.Utils;
 
@@ -84,10 +93,11 @@ import static xact.idea.lecturepos.Utils.Utils.showLoadingProgress;
 
 public class MainActivity extends AppCompatActivity {
 
-    List<CustomerModel> customerModelList= new ArrayList<>();
-    List<BookModel> bookModelList= new ArrayList<>();
+    List<CustomerModel> customerModelList = new ArrayList<>();
+    List<BookModel> bookModelList = new ArrayList<>();
     static CompositeDisposable compositeDisposable = new CompositeDisposable();
     TextView tv_store;
+    TextView text_date_time;
     TextView text_all_cap;
     TextView text_publisher_chalan;
     LinearLayout linear_logout;
@@ -101,117 +111,204 @@ public class MainActivity extends AppCompatActivity {
     Activity mActivity;
     IRetrofitApi mService;
     RelativeLayout root_rlt_dashboard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mService=Common.getApiXact();
-        text_all_cap=findViewById(R.id.text_all_cap);
-        text_publisher_chalan=findViewById(R.id.text_publisher_chalan);
-        linear_challan=findViewById(R.id.linear_challan);
-        linear_logout=findViewById(R.id.linear_logout);
-        linear_customers=findViewById(R.id.linear_customers);
-        linear_invoice=findViewById(R.id.linear_invoice);
-        linear_notes=findViewById(R.id.linear_notes);
-        linear_sync=findViewById(R.id.linear_sync);
-        linear_stock=findViewById(R.id.linear_stock);
-        linear_order=findViewById(R.id.linear_order);
-        tv_store=findViewById(R.id.tv_store);
-        root_rlt_dashboard=findViewById(R.id.root_rlt_dashboard);
+        mService = Common.getApiXact();
+        text_date_time = findViewById(R.id.text_date_time);
+        text_all_cap = findViewById(R.id.text_all_cap);
+        text_publisher_chalan = findViewById(R.id.text_publisher_chalan);
+        linear_challan = findViewById(R.id.linear_challan);
+        linear_logout = findViewById(R.id.linear_logout);
+        linear_customers = findViewById(R.id.linear_customers);
+        linear_invoice = findViewById(R.id.linear_invoice);
+        linear_notes = findViewById(R.id.linear_notes);
+        linear_sync = findViewById(R.id.linear_sync);
+        linear_stock = findViewById(R.id.linear_stock);
+        linear_order = findViewById(R.id.linear_order);
+        tv_store = findViewById(R.id.tv_store);
+        root_rlt_dashboard = findViewById(R.id.root_rlt_dashboard);
         tv_store.setSelected(true);
-        mActivity=this;
-        String upperString ="("+SharedPreferenceUtil.getUserID(MainActivity.this)+ ") "+SharedPreferenceUtil.getUserName(MainActivity.this);
+        mActivity = this;
+        String upperString = "(" + SharedPreferenceUtil.getUserID(MainActivity.this) + ") " + SharedPreferenceUtil.getUserName(MainActivity.this);
         text_all_cap.setAllCaps(true);
         text_all_cap.setText(upperString.toUpperCase());
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.root_rlt_dashboard));
+
         linear_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.showInfoDialog(mActivity);
+                if (SharedPreferenceUtil.getSync(MainActivity.this).equals("green")){
+                    showInfoDialogReminder(mActivity);
+
+                }
+                else {
+                    Utils.showInfoDialog(mActivity);
+                }
+
             }
         });
 
         linear_customers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,CustomerActivity.class));
+                startActivity(new Intent(MainActivity.this, CustomerActivity.class));
 
             }
         });
         linear_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,InvoiceActivity.class));
+                startActivity(new Intent(MainActivity.this, InvoiceActivity.class));
 
             }
         });
         linear_notes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,InvoiceListActivity.class));
+                startActivity(new Intent(MainActivity.this, InvoiceListActivity.class));
 
             }
         });
         linear_challan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,ChallanActivity.class));
+                startActivity(new Intent(MainActivity.this, ChallanActivity.class));
 
             }
         });
         linear_stock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,InventoryActivity.class));
+                startActivity(new Intent(MainActivity.this, InventoryActivity.class));
 
             }
         });
         linear_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, InvoicePrintActivity.class);
-                intent.putExtra("customerName","bh");
-                intent.putExtra("sub","150.00");
-                intent.putExtra("invoiceId","1001381191222003");
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(MainActivity.this, InvoicePrintActivity.class);
+//                intent.putExtra("customerName","bh");
+//                intent.putExtra("sub","150.00");
+//                intent.putExtra("invoiceId","1001381191222003");
+//                startActivity(intent);
+//                finish();
 
             }
         });
         linear_sync.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-          loadChallan();
-                //loadCustomer();
+                loadChallan();
+
                 loadCustomer();
-              loadCustomerSync();
-            downBookStockDetails();
+                loadCustomerSync();
+                downBookStockDetails();
+                SharedPreferenceUtil.saveShared(MainActivity.this, SharedPreferenceUtil.USER_SYNC, "gray");
+                linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.back));
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = new Date(System.currentTimeMillis());
+                String currentDate = formatter.format(date);
+                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                Date dates = new Date(System.currentTimeMillis());
+                String currentTime = formatters.format(dates);
+                text_date_time.setText(currentDate +" "+currentTime);
+
+                SharedPreferenceUtil.saveShared(MainActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate+" "+currentTime+ "");
 
             }
         });
     }
 
+    public  void showInfoDialogReminder(final Context mContext) {
 
+        final CustomDialog infoDialog = new CustomDialog(mContext, R.style.CustomDialogTheme);
+        LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.layout_pop_up_reminder, null);
+
+        infoDialog.setContentView(v);
+        infoDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout main_root = infoDialog.findViewById(R.id.main_root);
+        Button btn_yes = infoDialog.findViewById(R.id.btn_ok);
+        Button btn_no = infoDialog.findViewById(R.id.btn_cancel);
+        Button btn_now = infoDialog.findViewById(R.id.btn_now);
+
+        CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(View view) {
+                SharedPreferenceUtil.removeShared(mContext,SharedPreferenceUtil.TYPE_USER_ID);
+                infoDialog.dismiss();
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                ((Activity) mContext).finishAffinity();
+            }
+        });
+        btn_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoDialog.dismiss();
+            }
+        });
+        btn_now.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                loadChallan();
+
+                loadCustomer();
+                loadCustomerSync();
+                downBookStockDetails();
+                SharedPreferenceUtil.saveShared(MainActivity.this, SharedPreferenceUtil.USER_SYNC, "gray");
+                linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.green));
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = new Date(System.currentTimeMillis());
+                String currentDate = formatter.format(date);
+                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                Date dates = new Date(System.currentTimeMillis());
+                String currentTime = formatters.format(dates);
+                text_date_time.setText(currentDate +" "+currentTime);
+
+                SharedPreferenceUtil.saveShared(MainActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate+" "+currentTime+ "");
+
+                infoDialog.dismiss();
+            }
+        });
+        infoDialog.show();
+    }
+    @SuppressLint("ResourceType")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
         super.onResume();
+        if (SharedPreferenceUtil.getSync(MainActivity.this).equals("gray")) {
+            linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.back));
+        } else {
+            linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.green));
+
+
+        }
+        text_date_time.setText(SharedPreferenceUtil.getSyncDateTime(MainActivity.this));
         initDB();
         //downBookStockDetails();
         compositeDisposable.add(Common.challanRepositoy.getList("N").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
             @Override
             public void accept(List<Challan> customers) throws Exception {
-                Log.e("SDfd","Dgd"+new Gson().toJson(customers));
-                Constant.sizes =customers.size();
-                text_publisher_chalan.setText("Publishers Chalan (" +String.valueOf(customers.size())+")");
+                Log.e("SDfd", "Dgd" + new Gson().toJson(customers));
+                Constant.sizes = customers.size();
+                text_publisher_chalan.setText("Publishers Chalan (" + String.valueOf(customers.size()) + ")");
 
             }
         }));
         compositeDisposable.add(Common.challanRepositoy.getList("Y").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
             @Override
             public void accept(List<Challan> customers) throws Exception {
-                Log.e("SDfd","Dgd"+new Gson().toJson(customers));
-                Constant.size =customers.size();
+                Log.e("SDfd", "Dgd" + new Gson().toJson(customers));
+                Constant.size = customers.size();
 
             }
         }));
@@ -244,11 +341,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        }
-        if (Common.bookRepository.size() > 0){
+        if (Common.bookRepository.size() > 0) {
             loadBookItemsFor();
-        }else {
+        } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-          loadBookItems();
+                loadBookItems();
             } else {
                 Snackbar snackbar = Snackbar
                         .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
@@ -256,10 +353,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        if (Common.customerRepository.size() > 0){
+        if (Common.customerRepository.size() > 0) {
 
-        }else {
+        } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+                Customer customers = new Customer();
+                customers.Address = "Dhaka";
+                customers.ShopName = "Retail Library";
+                customers.RetailerCode = "1001";
+                customers.MobileNumber = "00000000000";
+                customers.UpdateDate = "25-DEC-19";
+                customers.UpdateNo = "0";
+                customers.Name = "Retail Customer";
+                customers.StoreId = SharedPreferenceUtil.getUserID(MainActivity.this);
+                customers.Status = "I";
+
+                Common.customerRepository.insertToCustomer(customers);
                 loadCustomers();
             } else {
                 Snackbar snackbar = Snackbar
@@ -268,11 +377,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        if (Common.challanRepositoy.size() > 0){
+        if (Common.challanRepositoy.size() > 0) {
             loadChalanItemsFor();
-        }else {
+        } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-              loadChalanItems();
+                loadChalanItems();
             } else {
                 Snackbar snackbar = Snackbar
                         .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
@@ -280,9 +389,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        if (Common.challanDetailsRepository.size() > 0){
-           // loadChalanDetails();
-        }else {
+        if (Common.challanDetailsRepository.size() > 0) {
+            // loadChalanDetails();
+        } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
                 loadChalanDetails();
             } else {
@@ -293,9 +402,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if (Common.salesMasterRepository.size() > 0){
+        if (Common.salesMasterRepository.size() > 0) {
             // loadChalanDetails();
-        }else {
+        } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
                 loadCustomer();
 
@@ -307,9 +416,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if (Common.bookStockRepository.size() > 0){
+        if (Common.bookStockRepository.size() > 0) {
             // loadChalanDetails();
-        }else {
+        } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
                 downBookStockDetails();
             } else {
@@ -336,35 +445,50 @@ public class MainActivity extends AppCompatActivity {
         Common.itemRepository = ItemRepository.getInstance(ItemDataSources.getInstance(Common.mainDatabase.itemDao()));
 
     }
-    private  void loadCustomerSync() {
+
+    private void loadCustomerSync() {
 
         compositeDisposable.add(Common.customerRepository.getCustomerItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Customer>>() {
             @Override
             public void accept(List<Customer> departments) throws Exception {
                 List<RetailsSyncModel.Data> syncs = new ArrayList<>();
-                for (Customer customer: departments){
+                for (Customer customer : departments) {
 
                     RetailsSyncModel.Data retailsSyncModel = new RetailsSyncModel.Data();
-                    retailsSyncModel.upd_no= customer.UpdateNo;
-                    retailsSyncModel.upd_date= customer.UpdateDate;
-                    retailsSyncModel.address= customer.Address;
-                    retailsSyncModel.name= customer.Name;
-                    retailsSyncModel.store_id= customer.StoreId;
-                    retailsSyncModel.retailer_code= customer.RetailerCode;
-                    retailsSyncModel.phone= customer.MobileNumber;
-                    retailsSyncModel.library_name= customer.ShopName;
-                    retailsSyncModel.status= customer.Status;
+                    retailsSyncModel.upd_no = customer.UpdateNo;
+                    retailsSyncModel.upd_date = customer.UpdateDate;
+                    if (customer.Address!=null){
+                        retailsSyncModel.address = customer.Address;
+                    }
+                    else {
+                        retailsSyncModel.address=" ";
+                    }
+
+                    retailsSyncModel.name = customer.Name;
+                    retailsSyncModel.store_id = customer.StoreId;
+                    retailsSyncModel.retailer_code = customer.RetailerCode;
+                    retailsSyncModel.phone = customer.MobileNumber;
+                    retailsSyncModel.library_name = customer.ShopName;
+                    retailsSyncModel.status = customer.Status;
                     syncs.add(retailsSyncModel);
 
                 }
 
                 RetailsSyncModel s = new RetailsSyncModel();
-                s.data=syncs;
+                s.data = syncs;
+
+                Log.e("vv", "dfvfd" + new Gson().toJson(s));
                 compositeDisposable.add(mService.syncCustomer(s).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Response>() {
                     @Override
                     public void accept(Response loginEntity) throws Exception {
-                        Log.e("customer","sync"+loginEntity.status_code);
+                        Log.e("ada", "a" + loginEntity.status_code);
                         loadCustomers();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("adasd", "fx" + throwable.getMessage());
+                        dismissLoadingProgress();
                     }
                 }));
 
@@ -372,30 +496,29 @@ public class MainActivity extends AppCompatActivity {
                 Date dates = new Date(System.currentTimeMillis());
                 String currentTime = formatters.format(dates);
 
-                Sync name=Common.syncRepository.valueFor("customer");
-                if (name==null){
+                Sync name = Common.syncRepository.valueFor("customer");
+                if (name == null) {
                     Sync sync = new Sync();
-                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("customer");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="customer";
+                    sync.CUSTOMER_CODE = SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("customer");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "customer";
                     Common.syncRepository.insertToSync(sync);
-                }
-                else{
+                } else {
                     Sync sync = new Sync();
-                    sync.id=name.id;
-                    sync.CUSTOMER_CODE=name.CUSTOMER_CODE;
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("customer");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="customer";
+                    sync.id = name.id;
+                    sync.CUSTOMER_CODE = name.CUSTOMER_CODE;
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("customer");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "customer";
                     Common.syncRepository.updateSync(sync);
                 }
 
-                Log.e("size","size"+new Gson().toJson(s));
+                Log.e("size", "size" + new Gson().toJson(s));
             }
         }));
 
@@ -404,7 +527,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadCustomers() {
         showLoadingProgress(MainActivity.this);
         ChallanPostEntity challanPostEntity = new ChallanPostEntity();
-        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
         compositeDisposable.add(mService.downCustomer(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<CustomerListResponse>() {
             @Override
             public void accept(CustomerListResponse customerListResponse) throws Exception {
@@ -412,23 +535,26 @@ public class MainActivity extends AppCompatActivity {
 
 
                 for (CustomerListResponse.Data customer : customerListResponse.data) {
-                    Customer customerq =Common.customerRepository.getCustomerss(customer.LIBRARY_NAME);
-                    if (customerq!=null){
+                    Customer customerq = Common.customerRepository.getCustomerss(customer.LIBRARY_NAME);
+                    if (customerq != null) {
 
-                    }
-                    else {
-                        Customer customers = new Customer();
-                        customers.Address=customer.ADDRESS;
-                        customers.ShopName=customer.LIBRARY_NAME;
-                        customers.RetailerCode=customer.RETAILER_CODE;
-                        customers.MobileNumber=customer.PHONE;
-                        customers.UpdateDate=customer.UPD_DATE;
-                        customers.UpdateNo=customer.UPD_NO;
-                        customers.Name=customer.NAME;
-                        customers.StoreId=customer.STORE_ID;
-                        customers.Status=customer.STATUS;
+                    } else {
+                     int value=customer.PHONE.length();
+                        if (customer.PHONE.length()==11){
+                            Customer customers = new Customer();
+                            customers.Address = customer.ADDRESS;
+                            customers.ShopName = customer.LIBRARY_NAME;
+                            customers.RetailerCode = customer.RETAILER_CODE;
+                            customers.MobileNumber = customer.PHONE;
+                            customers.UpdateDate = customer.UPD_DATE;
+                            customers.UpdateNo = customer.UPD_NO;
+                            customers.Name = customer.NAME;
+                            customers.StoreId = customer.STORE_ID;
+                            customers.Status = customer.STATUS;
 
-                        Common.customerRepository.insertToCustomer(customers);
+                            Common.customerRepository.insertToCustomer(customers);
+                        }
+
                     }
 
 
@@ -439,33 +565,35 @@ public class MainActivity extends AppCompatActivity {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Log.e("xdvxc","fx"+throwable.getMessage());
+                Log.e("xdvxc", "fx" + throwable.getMessage());
                 dismissLoadingProgress();
             }
         }));
     }
 
-    private  void loadBookItemsFor() {
+    private void loadBookItemsFor() {
 
         compositeDisposable.add(Common.bookRepository.getBookItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Book>>() {
             @Override
             public void accept(List<Book> departments) throws Exception {
-                Log.e("Book","Book"+new Gson().toJson(departments));
+                Log.e("Book", "Book" + new Gson().toJson(departments));
             }
         }));
 
     }
-    private  void loadChalanItemsFor() {
+
+    private void loadChalanItemsFor() {
 
         compositeDisposable.add(Common.challanRepositoy.getChallanItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
             @Override
             public void accept(List<Challan> departments) throws Exception {
-                Log.e("Challan","Challan"+new Gson().toJson(departments));
+                Log.e("Challan", "Challan" + new Gson().toJson(departments));
             }
         }));
 
     }
-    private  void loadBookItems() {
+
+    private void loadBookItems() {
         showLoadingProgress(MainActivity.this);
         compositeDisposable.add(mService.getBook().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<BookResponseEntity>() {
             @Override
@@ -483,11 +611,12 @@ public class MainActivity extends AppCompatActivity {
                     book.BARCODE_NUMBER = books.BARCODE_NUMBER;
                     book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
                     book.BookNameBangla = books.BOOK_NAME_B;
+                    book.F_BOOK_EDITION_NO = books.F_BOOK_EDITION_NO;
                     Common.bookRepository.insertToBook(book);
 
                 }
 
-               dismissLoadingProgress();
+                dismissLoadingProgress();
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -498,10 +627,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private  void loadChalanDetails() {
+    private void loadChalanDetails() {
         showLoadingProgress(MainActivity.this);
         ChallanPostEntity challanPostEntity = new ChallanPostEntity();
-        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
         compositeDisposable.add(mService.getChalanDetails(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ChallanDetailsModel>() {
             @Override
             public void accept(ChallanDetailsModel challanDetailsModel) throws Exception {
@@ -511,10 +640,10 @@ public class MainActivity extends AppCompatActivity {
 
                     ChallanDetails challanDetails = new ChallanDetails();
 
-                    challanDetails.BOOK_NET_PRICE=challan.BOOK_NET_PRICE;
-                    challanDetails.F_BOOK_NO=challan.F_BOOK_NO;
-                    challanDetails.CHALLAN_BOOK_QTY=challan.CHALLAN_BOOK_QTY;
-                    challanDetails.F_CHALLAN_NO=challan.F_CHALLAN_NO;
+                    challanDetails.BOOK_NET_PRICE = challan.BOOK_NET_PRICE;
+                    challanDetails.F_BOOK_NO = challan.F_BOOK_NO;
+                    challanDetails.CHALLAN_BOOK_QTY = challan.CHALLAN_BOOK_QTY;
+                    challanDetails.F_CHALLAN_NO = challan.F_CHALLAN_NO;
 
                     Common.challanDetailsRepository.insertToChallanDetails(challanDetails);
 
@@ -530,10 +659,11 @@ public class MainActivity extends AppCompatActivity {
         }));
 
     }
-    private  void downBookStockDetails() {
+
+    private void downBookStockDetails() {
         showLoadingProgress(MainActivity.this);
         ChallanPostEntity challanPostEntity = new ChallanPostEntity();
-        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
         compositeDisposable.add(mService.downBookStock(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<StockResponse>() {
             @Override
             public void accept(StockResponse challanDetailsModel) throws Exception {
@@ -542,32 +672,31 @@ public class MainActivity extends AppCompatActivity {
                 for (StockResponse.Data stock : challanDetailsModel.data) {
 
 
-                    BookStock bookStocks =Common.bookStockRepository.getBookStock(stock.BOOK_ID);
-                   // int qty =Common.bookStockRepository.maxValue(stock.BOOK_ID);
-                    if (bookStocks!=null){
+                    BookStock bookStocks = Common.bookStockRepository.getBookStock(stock.BOOK_ID);
+                    // int qty =Common.bookStockRepository.maxValue(stock.BOOK_ID);
+                    if (bookStocks != null) {
                         BookStock bookStock = new BookStock();
-                        bookStock.BOOK_ID=stock.BOOK_ID;
-                        bookStock.LAST_UPDATE_DATE_APP=bookStocks.LAST_UPDATE_DATE_APP;
-                        bookStock.LAST_UPDATE_DATE=bookStocks.LAST_UPDATE_DATE;
-                        bookStock.STORE_ID=SharedPreferenceUtil.getUserID(MainActivity.this);
-                        bookStock.id=bookStocks.id;
-                        bookStock.BOOK_NET_MRP=bookStocks.BOOK_NET_PRICES;
-                        bookStock.QTY_NUMBER= Integer.parseInt(stock.QTY);
+                        bookStock.BOOK_ID = stock.BOOK_ID;
+                        bookStock.LAST_UPDATE_DATE_APP = bookStocks.LAST_UPDATE_DATE_APP;
+                        bookStock.LAST_UPDATE_DATE = bookStocks.LAST_UPDATE_DATE;
+                        bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
+                        bookStock.id = bookStocks.id;
+                        bookStock.BOOK_NET_MRP = bookStocks.BOOK_NET_PRICES;
+                        bookStock.QTY_NUMBER = Integer.parseInt(stock.QTY);
 
-                        int total=Integer.parseInt(stock.QTY);
-                        bookStock.BOOK_NET_PRICES= bookStocks.BOOK_NET_PRICES*total;
+                        int total = Integer.parseInt(stock.QTY);
+                        bookStock.BOOK_NET_PRICES = bookStocks.BOOK_NET_PRICES * total;
 
                         Common.bookStockRepository.updateBookStock(bookStock);
-                    }
-                    else {
-                        Book book =Common.bookRepository.getBookNo(stock.BOOK_ID);
+                    } else {
+                        Book book = Common.bookRepository.getBookNo(stock.BOOK_ID);
                         BookStock bookStock = new BookStock();
-                        bookStock.BOOK_ID=stock.BOOK_ID;
+                        bookStock.BOOK_ID = stock.BOOK_ID;
                         assert bookStocks != null;
-                        bookStock.BOOK_NET_MRP= Double.parseDouble(book.BOOK_NET_PRICE);
-                        bookStock.STORE_ID=SharedPreferenceUtil.getUserID(MainActivity.this);
-                        bookStock.QTY_NUMBER= Integer.parseInt(stock.QTY);
-                        bookStock.BOOK_NET_PRICES= Double.parseDouble(book.BOOK_NET_PRICE)*Integer.parseInt(stock.QTY);
+                        bookStock.BOOK_NET_MRP = Double.parseDouble(book.BOOK_NET_PRICE);
+                        bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
+                        bookStock.QTY_NUMBER = Integer.parseInt(stock.QTY);
+                        bookStock.BOOK_NET_PRICES = Double.parseDouble(book.BOOK_NET_PRICE) * Integer.parseInt(stock.QTY);
 
                         Common.bookStockRepository.insertToBookStock(bookStock);
                     }
@@ -585,10 +714,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private  void loadChalanItems() {
+    private void loadChalanItems() {
         showLoadingProgress(MainActivity.this);
         ChallanPostEntity challanPostEntity = new ChallanPostEntity();
-        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
         compositeDisposable.add(mService.getChalan(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ChallanResponseEntity>() {
             @Override
             public void accept(ChallanResponseEntity challanResponseEntity) throws Exception {
@@ -598,48 +727,48 @@ public class MainActivity extends AppCompatActivity {
                     Challan challan = new Challan();
 
                     Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(books.CHALLAN_DATE);
-                    challan.CHALLAN_CODE=books.CHALLAN_CODE;
-                    challan.Date=date1;
-                    challan.receive_date=books.RECEIVE_DAT;
-                    challan.IS_RECEIVE=books.IS_RECEIVE;
-                    challan.CHALLAN_DATE=books.CHALLAN_DATE;
-                    challan.CHALLAN_NO=books.CHALLAN_NO;
-                    challan.CHALLAN_QTY=books.CHALLAN_QTY;
-                    challan.CHALLAN_SL_NO=books.CHALLAN_SL_NO;
-                    challan.F_EMPLOYEE_NO_CHALLAN_BY=books.F_EMPLOYEE_NO_CHALLAN_BY;
-                    challan.NO_OF_PACKATE=books.NO_OF_PACKATE;
-                    challan.TOTAL_BOOK_COST=books.TOTAL_BOOK_COST;
-                    challan.PER_HANDLING_COST=books.PER_HANDLING_COST;
-                    challan.PER_PACKAGING_COST=books.PER_PACKAGING_COST;
-                    challan.IS_PACKAGING_DUE=books.IS_PACKAGING_DUE;
-                    challan.NO_OF_PACKATE=books.NO_OF_PACKATE;
-                    challan.TOTAL_PACKAGING_COST=books.TOTAL_PACKAGING_COST;
-                    challan.COMPLETED_BOOKING_PKT_QTY=books.COMPLETED_BOOKING_PKT_QTY;
-                    challan.F_COMPANY_NO=books.F_COMPANY_NO;
-                    challan.F_TRANSPORT_BR_NO=books.F_TRANSPORT_BR_NO;
-                    challan.TOTAL_HANDLING_COST=books.TOTAL_HANDLING_COST;
-                    challan.IS_HANDLING_DUE=books.TOTAL_HANDLING_COST;
-                    challan.TOTAL_VALUE=books.TOTAL_VALUE;
-                    challan.COMMENTS=books.COMMENTS;
-                    challan.F_BOOK_ORDER_NO=books.F_BOOK_ORDER_NO;
-                    challan.F_ORDER_INVOICE_NO=books.F_ORDER_INVOICE_NO;
-                    challan.SL_NUM=books.SL_NUM;
-                    challan.LAST_ACTION=books.LAST_ACTION;
-                    challan.LAST_ACTION_TIME=books.LAST_ACTION_TIME;
-                    challan.LAST_ACTION_LOGON_NO=books.LAST_ACTION_LOGON_NO;
-                    challan.INSERT_TIME=books.INSERT_TIME;
-                    challan.INSERT_USER_NO=books.INSERT_USER_NO;
-                    challan.INSERT_LOGON_NO=books.INSERT_LOGON_NO;
-                    challan.F_FISCAL_YEAR_NO=books.F_FISCAL_YEAR_NO;
-                    challan.F_CUSTOMER_NO=books.F_CUSTOMER_NO;
-                    challan.F_GODOWN_NO=books.F_GODOWN_NO;
-                    challan.IS_BOOKED=books.IS_BOOKED;
-                    challan.IS_BUSY=books.IS_BUSY;
-                    challan.BUSY_USER_NO=books.BUSY_USER_NO;
-                    challan.BUSY_TIME=books.BUSY_TIME;
-                    challan.TOTAL_COMMISION=books.TOTAL_COMMISION;
-                    challan.OVERALL_DISCOUNT=books.OVERALL_DISCOUNT;
-                    challan.IS_BOOKED=books.IS_BOOKED;
+                    challan.CHALLAN_CODE = books.CHALLAN_CODE;
+                    challan.Date = date1;
+                    challan.receive_date = books.RECEIVE_DAT;
+                    challan.IS_RECEIVE = books.IS_RECEIVE;
+                    challan.CHALLAN_DATE = books.CHALLAN_DATE;
+                    challan.CHALLAN_NO = books.CHALLAN_NO;
+                    challan.CHALLAN_QTY = books.CHALLAN_QTY;
+                    challan.CHALLAN_SL_NO = books.CHALLAN_SL_NO;
+                    challan.F_EMPLOYEE_NO_CHALLAN_BY = books.F_EMPLOYEE_NO_CHALLAN_BY;
+                    challan.NO_OF_PACKATE = books.NO_OF_PACKATE;
+                    challan.TOTAL_BOOK_COST = books.TOTAL_BOOK_COST;
+                    challan.PER_HANDLING_COST = books.PER_HANDLING_COST;
+                    challan.PER_PACKAGING_COST = books.PER_PACKAGING_COST;
+                    challan.IS_PACKAGING_DUE = books.IS_PACKAGING_DUE;
+                    challan.NO_OF_PACKATE = books.NO_OF_PACKATE;
+                    challan.TOTAL_PACKAGING_COST = books.TOTAL_PACKAGING_COST;
+                    challan.COMPLETED_BOOKING_PKT_QTY = books.COMPLETED_BOOKING_PKT_QTY;
+                    challan.F_COMPANY_NO = books.F_COMPANY_NO;
+                    challan.F_TRANSPORT_BR_NO = books.F_TRANSPORT_BR_NO;
+                    challan.TOTAL_HANDLING_COST = books.TOTAL_HANDLING_COST;
+                    challan.IS_HANDLING_DUE = books.TOTAL_HANDLING_COST;
+                    challan.TOTAL_VALUE = books.TOTAL_VALUE;
+                    challan.COMMENTS = books.COMMENTS;
+                    challan.F_BOOK_ORDER_NO = books.F_BOOK_ORDER_NO;
+                    challan.F_ORDER_INVOICE_NO = books.F_ORDER_INVOICE_NO;
+                    challan.SL_NUM = books.SL_NUM;
+                    challan.LAST_ACTION = books.LAST_ACTION;
+                    challan.LAST_ACTION_TIME = books.LAST_ACTION_TIME;
+                    challan.LAST_ACTION_LOGON_NO = books.LAST_ACTION_LOGON_NO;
+                    challan.INSERT_TIME = books.INSERT_TIME;
+                    challan.INSERT_USER_NO = books.INSERT_USER_NO;
+                    challan.INSERT_LOGON_NO = books.INSERT_LOGON_NO;
+                    challan.F_FISCAL_YEAR_NO = books.F_FISCAL_YEAR_NO;
+                    challan.F_CUSTOMER_NO = books.F_CUSTOMER_NO;
+                    challan.F_GODOWN_NO = books.F_GODOWN_NO;
+                    challan.IS_BOOKED = books.IS_BOOKED;
+                    challan.IS_BUSY = books.IS_BUSY;
+                    challan.BUSY_USER_NO = books.BUSY_USER_NO;
+                    challan.BUSY_TIME = books.BUSY_TIME;
+                    challan.TOTAL_COMMISION = books.TOTAL_COMMISION;
+                    challan.OVERALL_DISCOUNT = books.OVERALL_DISCOUNT;
+                    challan.IS_BOOKED = books.IS_BOOKED;
 
                     Common.challanRepositoy.insertToChallan(challan);
                 }
@@ -655,10 +784,11 @@ public class MainActivity extends AppCompatActivity {
         }));
 
     }
-    private  void loadChalanItemsSync() {
+
+    private void loadChalanItemsSync() {
         showLoadingProgress(MainActivity.this);
         ChallanPostEntity challanPostEntity = new ChallanPostEntity();
-        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
         compositeDisposable.add(mService.getChalan(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<ChallanResponseEntity>() {
             @Override
             public void accept(ChallanResponseEntity challanResponseEntity) throws Exception {
@@ -670,84 +800,82 @@ public class MainActivity extends AppCompatActivity {
                     //SimpleDateFormat formatterss = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
                     SimpleDateFormat formatterss = new SimpleDateFormat("dd-MMM-yy");
                     try {
-                        datess= formatterss.parse(books.RECEIVE_DAT);
-                        Log.e("currentTime","currentTime"+datess);
+                        datess = formatterss.parse(books.RECEIVE_DAT);
+                        Log.e("currentTime", "currentTime" + datess);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    Challan challan1 =Common.challanRepositoy.getChallans(books.CHALLAN_NO);
-                    if (challan1!=null){
+                    Challan challan1 = Common.challanRepositoy.getChallans(books.CHALLAN_NO);
+                    if (challan1 != null) {
 
-                        Date date1 =null;
-                       // SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+                        Date date1 = null;
+                        // SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
                         SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
                         try {
-                            date1= formatter1.parse(challan1.receive_date);
-                            Log.e("currentTime","currentTime"+date1);
+                            date1 = formatter1.parse(challan1.receive_date);
+                            Log.e("currentTime", "currentTime" + date1);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        if (datess.after(date1)){
+                        if (datess.after(date1)) {
 //                            Date date3 = new SimpleDateFormat("dd-MMM-yy").parse(books.CHALLAN_DATE);
 
 
-                            challan.receive_date=books.RECEIVE_DAT;
-                            challan.IS_RECEIVE=books.IS_RECEIVE;
-                            challan.CHALLAN_NO=books.CHALLAN_NO;
-                            challan.id=challan1.id;
+                            challan.receive_date = books.RECEIVE_DAT;
+                            challan.IS_RECEIVE = books.IS_RECEIVE;
+                            challan.CHALLAN_NO = books.CHALLAN_NO;
+                            challan.id = challan1.id;
 
                             Common.challanRepositoy.updateChallan(challan);
 
-                        }
-                        else {
+                        } else {
 
                         }
-                    }
-                    else{
+                    } else {
                         Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(books.CHALLAN_DATE);
-                        challan.CHALLAN_CODE=books.CHALLAN_CODE;
-                        challan.Date=date1;
-                        challan.receive_date=books.RECEIVE_DAT;
-                        challan.IS_RECEIVE="N";
+                        challan.CHALLAN_CODE = books.CHALLAN_CODE;
+                        challan.Date = date1;
+                        challan.receive_date = books.RECEIVE_DAT;
+                        challan.IS_RECEIVE = "N";
 
-                        challan.CHALLAN_DATE=books.CHALLAN_DATE;
-                        challan.CHALLAN_NO=books.CHALLAN_NO;
-                        challan.CHALLAN_QTY=books.CHALLAN_QTY;
-                        challan.CHALLAN_SL_NO=books.CHALLAN_SL_NO;
-                        challan.F_EMPLOYEE_NO_CHALLAN_BY=books.F_EMPLOYEE_NO_CHALLAN_BY;
-                        challan.NO_OF_PACKATE=books.NO_OF_PACKATE;
-                        challan.TOTAL_BOOK_COST=books.TOTAL_BOOK_COST;
-                        challan.PER_HANDLING_COST=books.PER_HANDLING_COST;
-                        challan.PER_PACKAGING_COST=books.PER_PACKAGING_COST;
-                        challan.IS_PACKAGING_DUE=books.IS_PACKAGING_DUE;
-                        challan.NO_OF_PACKATE=books.NO_OF_PACKATE;
-                        challan.TOTAL_PACKAGING_COST=books.TOTAL_PACKAGING_COST;
-                        challan.COMPLETED_BOOKING_PKT_QTY=books.COMPLETED_BOOKING_PKT_QTY;
-                        challan.F_COMPANY_NO=books.F_COMPANY_NO;
-                        challan.F_TRANSPORT_BR_NO=books.F_TRANSPORT_BR_NO;
-                        challan.TOTAL_HANDLING_COST=books.TOTAL_HANDLING_COST;
-                        challan.IS_HANDLING_DUE=books.TOTAL_HANDLING_COST;
-                        challan.TOTAL_VALUE=books.TOTAL_VALUE;
-                        challan.COMMENTS=books.COMMENTS;
-                        challan.F_BOOK_ORDER_NO=books.F_BOOK_ORDER_NO;
-                        challan.F_ORDER_INVOICE_NO=books.F_ORDER_INVOICE_NO;
-                        challan.SL_NUM=books.SL_NUM;
-                        challan.LAST_ACTION=books.LAST_ACTION;
-                        challan.LAST_ACTION_TIME=books.LAST_ACTION_TIME;
-                        challan.LAST_ACTION_LOGON_NO=books.LAST_ACTION_LOGON_NO;
-                        challan.INSERT_TIME=books.INSERT_TIME;
-                        challan.INSERT_USER_NO=books.INSERT_USER_NO;
-                        challan.INSERT_LOGON_NO=books.INSERT_LOGON_NO;
-                        challan.F_FISCAL_YEAR_NO=books.F_FISCAL_YEAR_NO;
-                        challan.F_CUSTOMER_NO=books.F_CUSTOMER_NO;
-                        challan.F_GODOWN_NO=books.F_GODOWN_NO;
-                        challan.IS_BOOKED=books.IS_BOOKED;
-                        challan.IS_BUSY=books.IS_BUSY;
-                        challan.BUSY_USER_NO=books.BUSY_USER_NO;
-                        challan.BUSY_TIME=books.BUSY_TIME;
-                        challan.TOTAL_COMMISION=books.TOTAL_COMMISION;
-                        challan.OVERALL_DISCOUNT=books.OVERALL_DISCOUNT;
-                        challan.IS_BOOKED=books.IS_BOOKED;
+                        challan.CHALLAN_DATE = books.CHALLAN_DATE;
+                        challan.CHALLAN_NO = books.CHALLAN_NO;
+                        challan.CHALLAN_QTY = books.CHALLAN_QTY;
+                        challan.CHALLAN_SL_NO = books.CHALLAN_SL_NO;
+                        challan.F_EMPLOYEE_NO_CHALLAN_BY = books.F_EMPLOYEE_NO_CHALLAN_BY;
+                        challan.NO_OF_PACKATE = books.NO_OF_PACKATE;
+                        challan.TOTAL_BOOK_COST = books.TOTAL_BOOK_COST;
+                        challan.PER_HANDLING_COST = books.PER_HANDLING_COST;
+                        challan.PER_PACKAGING_COST = books.PER_PACKAGING_COST;
+                        challan.IS_PACKAGING_DUE = books.IS_PACKAGING_DUE;
+                        challan.NO_OF_PACKATE = books.NO_OF_PACKATE;
+                        challan.TOTAL_PACKAGING_COST = books.TOTAL_PACKAGING_COST;
+                        challan.COMPLETED_BOOKING_PKT_QTY = books.COMPLETED_BOOKING_PKT_QTY;
+                        challan.F_COMPANY_NO = books.F_COMPANY_NO;
+                        challan.F_TRANSPORT_BR_NO = books.F_TRANSPORT_BR_NO;
+                        challan.TOTAL_HANDLING_COST = books.TOTAL_HANDLING_COST;
+                        challan.IS_HANDLING_DUE = books.TOTAL_HANDLING_COST;
+                        challan.TOTAL_VALUE = books.TOTAL_VALUE;
+                        challan.COMMENTS = books.COMMENTS;
+                        challan.F_BOOK_ORDER_NO = books.F_BOOK_ORDER_NO;
+                        challan.F_ORDER_INVOICE_NO = books.F_ORDER_INVOICE_NO;
+                        challan.SL_NUM = books.SL_NUM;
+                        challan.LAST_ACTION = books.LAST_ACTION;
+                        challan.LAST_ACTION_TIME = books.LAST_ACTION_TIME;
+                        challan.LAST_ACTION_LOGON_NO = books.LAST_ACTION_LOGON_NO;
+                        challan.INSERT_TIME = books.INSERT_TIME;
+                        challan.INSERT_USER_NO = books.INSERT_USER_NO;
+                        challan.INSERT_LOGON_NO = books.INSERT_LOGON_NO;
+                        challan.F_FISCAL_YEAR_NO = books.F_FISCAL_YEAR_NO;
+                        challan.F_CUSTOMER_NO = books.F_CUSTOMER_NO;
+                        challan.F_GODOWN_NO = books.F_GODOWN_NO;
+                        challan.IS_BOOKED = books.IS_BOOKED;
+                        challan.IS_BUSY = books.IS_BUSY;
+                        challan.BUSY_USER_NO = books.BUSY_USER_NO;
+                        challan.BUSY_TIME = books.BUSY_TIME;
+                        challan.TOTAL_COMMISION = books.TOTAL_COMMISION;
+                        challan.OVERALL_DISCOUNT = books.OVERALL_DISCOUNT;
+                        challan.IS_BOOKED = books.IS_BOOKED;
                         Common.challanRepositoy.insertToChallan(challan);
                     }
 
@@ -765,6 +893,7 @@ public class MainActivity extends AppCompatActivity {
         }));
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -778,25 +907,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private  void loadChallan() {
+    private void loadChallan() {
 
         compositeDisposable.add(Common.challanRepositoy.getList("Y").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Challan>>() {
             @Override
             public void accept(List<Challan> customers) throws Exception {
                 List<SyncChallanModel.Sync> syncs = new ArrayList<>();
-                for (Challan challan :customers){
+                for (Challan challan : customers) {
                     SyncChallanModel.Sync syncChallanModel = new SyncChallanModel.Sync();
-                    syncChallanModel.receive_date=challan.receive_date;
-                    syncChallanModel.is_receive=challan.IS_RECEIVE;
-                    syncChallanModel.challan_no=challan.CHALLAN_NO;
+                    syncChallanModel.receive_date = challan.receive_date;
+                    syncChallanModel.is_receive = challan.IS_RECEIVE;
+                    syncChallanModel.challan_no = challan.CHALLAN_NO;
                     syncs.add(syncChallanModel);
                 }
                 SyncChallanModel s = new SyncChallanModel();
-                s.data=syncs;
+                s.data = syncs;
                 compositeDisposable.add(mService.syncChalan(s).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Response>() {
                     @Override
                     public void accept(Response loginEntity) throws Exception {
-                        Log.e("data","Sdfds"+loginEntity.status_code);
+                        Log.e("data", "Sdfds" + loginEntity.status_code);
                         loadChalanItemsSync();
                     }
                 }));
@@ -805,134 +934,131 @@ public class MainActivity extends AppCompatActivity {
                 Date dates = new Date(System.currentTimeMillis());
                 String currentTime = formatters.format(dates);
 
-                Sync name=Common.syncRepository.valueFor("challan");
-                if (name==null){
+                Sync name = Common.syncRepository.valueFor("challan");
+                if (name == null) {
                     Sync sync = new Sync();
-                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("challan");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="challan";
+                    sync.CUSTOMER_CODE = SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("challan");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "challan";
                     Common.syncRepository.insertToSync(sync);
-                }
-                else{
+                } else {
                     Sync sync = new Sync();
-                    sync.id=name.id;
-                    sync.CUSTOMER_CODE=name.CUSTOMER_CODE;
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("challan");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="challan";
+                    sync.id = name.id;
+                    sync.CUSTOMER_CODE = name.CUSTOMER_CODE;
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("challan");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "challan";
                     Common.syncRepository.updateSync(sync);
                 }
 
-                Log.e("sfsfsf","ss"+new Gson().toJson(s));
+                Log.e("sfsfsf", "ss" + new Gson().toJson(s));
             }
         }));
 
     }
 
-    private  void loadCustomer() {
+    private void loadCustomer() {
 
         compositeDisposable.add(Common.salesMasterRepository.getSalesMasterItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
-            public void accept(List<SalesMaster> userActivities) throws Exception
-            {
+            public void accept(List<SalesMaster> userActivities) throws Exception {
 
 
-                 List<SalesModel.SalesMaster> syncs = new ArrayList<>();
+                List<SalesModel.SalesMaster> syncs = new ArrayList<>();
 
-                for (SalesMaster sales :userActivities ){
-                 final  SalesModel.SalesMaster salesMaster = new SalesModel.SalesMaster();
+                for (SalesMaster sales : userActivities) {
+                    final SalesModel.SalesMaster salesMaster = new SalesModel.SalesMaster();
 
-                    salesMaster.StoreId=sales.StoreId;
-                    salesMaster.Device=sales.Device;
-                    salesMaster.Discount=String.valueOf(sales.Discount);
-                    salesMaster.PayMode=sales.PayMode;
-                    salesMaster.NetValue=String.valueOf(sales.NetValue);
-                    salesMaster.RetailCode=sales.RetailCode;
-                    salesMaster.InvoiceAmount=String.valueOf(sales.InvoiceAmount);
-                    salesMaster.InvoiceDate=sales.InvoiceDates;
-                    salesMaster.TrnType="S";
-                    salesMaster.Status="I";
-                    salesMaster.InvoiceId=sales.InvoiceId;
-                    salesMaster.InvoiceNumber=sales.InvoiceNumber;
-                    salesMaster.Note=sales.Note;
-                    salesMaster.ReturnAmt=sales.Return;
-                    int value=Common.syncRepository.maxValue("sales_mst");
-                    salesMaster.UpdNo= String.valueOf(value+1);
+                    salesMaster.StoreId = sales.StoreId;
+                    salesMaster.Device = sales.Device;
+                    salesMaster.Discount = String.valueOf(sales.Discount);
+                    salesMaster.PayMode = sales.PayMode;
+                    salesMaster.NetValue = String.valueOf(sales.NetValue);
+                    salesMaster.RetailCode = sales.RetailCode;
+                    salesMaster.InvoiceAmount = String.valueOf(sales.InvoiceAmount);
+                    salesMaster.InvoiceDate = sales.InvoiceDates;
+                    salesMaster.TrnType = "S";
+                    salesMaster.Status = "I";
+                    salesMaster.InvoiceId = sales.InvoiceId;
+                    salesMaster.InvoiceNumber = sales.InvoiceNumber;
+                    salesMaster.Note = sales.Note;
+                    salesMaster.ReturnAmt = sales.Return;
+                    int value = Common.syncRepository.maxValue("sales_mst");
+                    salesMaster.UpdNo = String.valueOf(value + 1);
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                     Date date = new Date(System.currentTimeMillis());
                     String currentDate = formatter.format(date);
                     SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
                     Date dates = new Date(System.currentTimeMillis());
                     String currentTime = formatters.format(dates);
-                    salesMaster.UpdDate= currentDate+" "+currentTime;
-                    salesMaster.Phone=sales.PhoneNumber;
-                    List<SalesModel.SalesMaster.SalesDetails> getList= getList(sales.InvoiceId);
+                    salesMaster.UpdDate = currentDate + " " + currentTime;
+                    salesMaster.Phone = sales.PhoneNumber;
+                    List<SalesModel.SalesMaster.SalesDetails> getList = getList(sales.InvoiceId);
 
-                    salesMaster.salesDetails=getList;
+                    salesMaster.salesDetails = getList;
                     syncs.add(salesMaster);
-
-
 
 
                 }
                 Date dates = new Date(System.currentTimeMillis());
                 SalesModel salesModel = new SalesModel();
-                salesModel.data=syncs;
-                Sync name=Common.syncRepository.valueFor("sales_mst");
-                if (name==null){
+                salesModel.data = syncs;
+                Sync name = Common.syncRepository.valueFor("sales_mst");
+                if (name == null) {
                     Sync sync = new Sync();
-                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("sales_mst");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="sales_mst";
+                    sync.CUSTOMER_CODE = SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("sales_mst");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "sales_mst";
                     Common.syncRepository.insertToSync(sync);
-                }
-                else{
+                } else {
                     Sync sync = new Sync();
-                    sync.id=name.id;
-                    sync.CUSTOMER_CODE=name.CUSTOMER_CODE;
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("sales_mst");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="sales_mst";
+                    sync.id = name.id;
+                    sync.CUSTOMER_CODE = name.CUSTOMER_CODE;
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("sales_mst");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "sales_mst";
                     Common.syncRepository.updateSync(sync);
                 }
-                Sync names=Common.syncRepository.valueFor("sales_dtl");
-                if (names==null){
+                Sync names = Common.syncRepository.valueFor("sales_dtl");
+                if (names == null) {
                     Sync sync = new Sync();
-                    sync.CUSTOMER_CODE=SharedPreferenceUtil.getUserID(MainActivity.this);
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("sales_dtl");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="sales_dtl";
+                    sync.CUSTOMER_CODE = SharedPreferenceUtil.getUserID(MainActivity.this);
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("sales_dtl");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "sales_dtl";
                     Common.syncRepository.insertToSync(sync);
-                }
-                else{
+                } else {
                     Sync sync = new Sync();
-                    sync.id=names.id;
-                    sync.CUSTOMER_CODE=names.CUSTOMER_CODE;
-                    sync.DEVICE="Mobile";
-                    sync.SYNC_DATETIME=dates;
-                    int value=Common.syncRepository.maxValue("sales_dtl");
-                    sync.SYNC_NUMBER=value+1;
-                    sync.TABLE_NAME="sales_dtl";
+                    sync.id = names.id;
+                    sync.CUSTOMER_CODE = names.CUSTOMER_CODE;
+                    sync.DEVICE = "Mobile";
+                    sync.SYNC_DATETIME = dates;
+                    int value = Common.syncRepository.maxValue("sales_dtl");
+                    sync.SYNC_NUMBER = value + 1;
+                    sync.TABLE_NAME = "sales_dtl";
                     Common.syncRepository.updateSync(sync);
                 }
                 compositeDisposable.add(mService.syncSales(salesModel).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Response>() {
                     @Override
                     public void accept(Response loginEntity) throws Exception {
-                        Log.e("saleswww","sales"+loginEntity.status_code);
+                        Log.e("saleswww", "sales" + loginEntity.status_code);
 
-                        if (loginEntity.status_code==203){
+                        if (loginEntity.status_code == 200) {
+                            loadSalesMaster();
+                        }
+                        else if (loginEntity.status_code == 203){
                             loadSalesMaster();
                         }
 
@@ -942,21 +1068,23 @@ public class MainActivity extends AppCompatActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.e("xdvxc","fx"+throwable.getMessage());
+                        Log.e("xdvxc", "fx" + throwable.getMessage());
+                        loadSalesMaster();
                         dismissLoadingProgress();
                     }
                 }));
 
-                Log.e("1","dsd"+new Gson().toJson(salesModel));
+                Log.e("1", "dsd" + new Gson().toJson(salesModel));
             }
         }));
 
     }
+
     private void loadSalesMaster() {
         showLoadingProgress(MainActivity.this);
         SalesPostEntity challanPostEntity = new SalesPostEntity();
-        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
-        challanPostEntity.transaction_type="S";
+        challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.transaction_type = "S";
         compositeDisposable.add(mService.downSalesMaster(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<SaleesMasterForModel>() {
             @Override
             public void accept(SaleesMasterForModel customerListResponse) throws Exception {
@@ -964,39 +1092,37 @@ public class MainActivity extends AppCompatActivity {
 
 
                 for (SaleesMasterForModel.Data customer : customerListResponse.data) {
-                    SalesMaster salesMaster =Common.salesMasterRepository.getSalesMaster(String.valueOf(customer.INVOICE_ID));
-                    if (salesMaster!=null){
+                    SalesMaster salesMaster = Common.salesMasterRepository.getSalesMaster(String.valueOf(customer.INVOICE_ID));
+                    if (salesMaster != null) {
 
-                    }
-                    else {
+                    } else {
                         SalesMaster salesMaster1 = new SalesMaster();
                         Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(customer.INV_DATE);
 
-                        salesMaster1.InvoiceId= customer.INVOICE_ID;
-                        salesMaster1.InvoiceDate= date1;
-                        salesMaster1.InvoiceAmount= Double.parseDouble(customer.INVOICE_AMT);
-                        salesMaster1.RetailCode=customer.RETAILER_CODE;
-                        if (customer.PHONE!=null){
-                            salesMaster1.PhoneNumber=customer.PHONE;
-                        }
-                        else {
-                            salesMaster1.PhoneNumber="011111111";
+                        salesMaster1.InvoiceId = customer.INVOICE_ID;
+                        salesMaster1.InvoiceDate = date1;
+                        salesMaster1.InvoiceAmount = Double.parseDouble(customer.INVOICE_AMT);
+                        salesMaster1.RetailCode = customer.RETAILER_CODE;
+                        if (customer.PHONE != null) {
+                            salesMaster1.PhoneNumber = customer.PHONE;
+                        } else {
+                            salesMaster1.PhoneNumber = "011111111";
                         }
 
-                        salesMaster1.StoreId=customer.STORE_ID;
-                        salesMaster1.Discount= Double.parseDouble(customer.DISCOUNT);
-                        salesMaster1.StoreId=customer.STORE_ID;
-                        salesMaster1.InvoiceNumber=customer.INVOICE_NO;
-                        salesMaster1.InvoiceDates=customer.INV_DATE;
-                        salesMaster1.Note=customer.NOTE;
-                        salesMaster1.PayMode=customer.PAY_MODE;
-                        salesMaster1.Device=customer.DEVICE;
-                        salesMaster1.NetValue= Double.parseDouble(customer.NET_VALUE);
+                        salesMaster1.StoreId = customer.STORE_ID;
+                        salesMaster1.Discount = Double.parseDouble(customer.DISCOUNT);
+                        salesMaster1.StoreId = customer.STORE_ID;
+                        salesMaster1.InvoiceNumber = customer.INVOICE_NO;
+                        salesMaster1.InvoiceDates = customer.INV_DATE;
+                        salesMaster1.Note = customer.NOTE;
+                        salesMaster1.PayMode = customer.PAY_MODE;
+                        salesMaster1.Device = customer.DEVICE;
+                        salesMaster1.NetValue = Double.parseDouble(customer.NET_VALUE);
 
 
                         Common.salesMasterRepository.insertToSalesMaster(salesMaster1);
 
-                      loadSalesDetails(customer.INVOICE_ID,customer.STORE_ID);
+                        loadSalesDetails(customer.INVOICE_ID, customer.STORE_ID);
                     }
 
 
@@ -1007,7 +1133,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Log.e("xdvxc","fx"+throwable.getMessage());
+                Log.e("xdvxc", "fx" + throwable.getMessage());
                 dismissLoadingProgress();
             }
         }));
@@ -1018,9 +1144,9 @@ public class MainActivity extends AppCompatActivity {
 
         showLoadingProgress(MainActivity.this);
         SalesDetailsPostEntity challanPostEntity = new SalesDetailsPostEntity();
-        challanPostEntity.customer_no=SharedPreferenceUtil.getUserID(MainActivity.this);
-        challanPostEntity.transaction_type="S";
-        challanPostEntity.invoice_id=invoiceId;
+        challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
+        challanPostEntity.transaction_type = "S";
+        challanPostEntity.invoice_id = invoiceId;
         compositeDisposable.add(mService.downSalesDetails(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<SalesDetailsForModel>() {
             @Override
             public void accept(SalesDetailsForModel customerListResponse) throws Exception {
@@ -1029,32 +1155,28 @@ public class MainActivity extends AppCompatActivity {
 
                 for (SalesDetailsForModel.Data customer : customerListResponse.data) {
 
-                        SalesDetails salesDetails1 = new SalesDetails();
-                        int values = Common.salesMasterRepository.maxValue();
-                        salesDetails1.InvoiceId= values;
-                        salesDetails1.InvoiceIdNew= invoiceId;
-                        Book book =Common.bookRepository.getBookNo(customer.ITEM_ID);
-                        if (book!=null){
-                            salesDetails1.BookName= book.BookName;
-                            salesDetails1.BookId= book.BookNo;
-                        }else {
-                            salesDetails1.BookName= "N/A";
-                            salesDetails1.BookId= customer.ITEM_ID;
-                        }
+                    SalesDetails salesDetails1 = new SalesDetails();
+                    int values = Common.salesMasterRepository.maxValue();
+                    salesDetails1.InvoiceId = values;
+                    salesDetails1.InvoiceIdNew = invoiceId;
+                    Book book = Common.bookRepository.getBookNo(customer.ITEM_ID);
+                    if (book != null) {
+                        salesDetails1.BookName = book.BookName;
+                        salesDetails1.BookId = book.BookNo;
+                    } else {
+                        salesDetails1.BookName = "N/A";
+                        salesDetails1.BookId = customer.ITEM_ID;
+                    }
 
-                        Log.e("dataaa",""+invoiceId);
-                        salesDetails1.MRP= Double.parseDouble(customer.MRP);
-                        salesDetails1.TotalAmount= Double.parseDouble(customer.TOTAL_VALUE);
-                        salesDetails1.StoreId=storeId;
-                        salesDetails1.Discount= Double.parseDouble(customer.DISCOUNT_AMT);
-                        salesDetails1.Quantity= Integer.parseInt(customer.QTY);
-
-
-
-                        Common.salesDetailsRepository.insertToSalesDetails(salesDetails1);
+                    Log.e("dataaa", "" + invoiceId);
+                    salesDetails1.MRP = Double.parseDouble(customer.MRP);
+                    salesDetails1.TotalAmount = Double.parseDouble(customer.TOTAL_VALUE);
+                    salesDetails1.StoreId = storeId;
+                    salesDetails1.Discount = Double.parseDouble(customer.DISCOUNT_AMT);
+                    salesDetails1.Quantity = Integer.parseInt(customer.QTY);
 
 
-
+                    Common.salesDetailsRepository.insertToSalesDetails(salesDetails1);
 
 
                 }
@@ -1064,7 +1186,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Log.e("xdvxc","fx"+throwable.getMessage());
+                Log.e("xdvxc", "fx" + throwable.getMessage());
                 dismissLoadingProgress();
             }
         }));
@@ -1073,26 +1195,27 @@ public class MainActivity extends AppCompatActivity {
     private List<SalesModel.SalesMaster.SalesDetails> getList(String id) {
         List<SalesModel.SalesMaster.SalesDetails> salesDetails = new ArrayList<>();
 
-        Flowable<List<SalesDetails>> units=  Common.salesDetailsRepository.getSalesDetailsItemById(id);
-        for (SalesDetails salesDetails1 : units.blockingFirst()){
+        Flowable<List<SalesDetails>> units = Common.salesDetailsRepository.getSalesDetailsItemById(id);
+        for (SalesDetails salesDetails1 : units.blockingFirst()) {
             SalesModel.SalesMaster.SalesDetails details = new SalesModel.SalesMaster.SalesDetails();
-            details.BookId=salesDetails1.BookId;
-            details.StoreId=salesDetails1.StoreId;
-            details.InvoiceId=salesDetails1.InvoiceIdNew;
-            details.MRP=String.valueOf(salesDetails1.MRP);
-            details.Discount=String.valueOf(salesDetails1.Discount);
-            details.DiscountPc="";
-            int value=Common.syncRepository.maxValue("sales_dtl");
-            details.UpdNo= String.valueOf(value+1);
+            details.BookId = salesDetails1.BookId;
+            details.StoreId = salesDetails1.StoreId;
+            details.InvoiceId = salesDetails1.InvoiceIdNew;
+            details.MRP = String.valueOf(salesDetails1.MRP);
+            details.Discount = String.valueOf(salesDetails1.Discount);
+            details.DiscountPc = "";
+            details.ReturnAmt = "0.0";
+            int value = Common.syncRepository.maxValue("sales_dtl");
+            details.UpdNo = String.valueOf(value + 1);
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date date = new Date(System.currentTimeMillis());
             String currentDate = formatter.format(date);
             SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
             Date dates = new Date(System.currentTimeMillis());
             String currentTime = formatters.format(dates);
-            details.UpdDate= currentDate+" "+currentTime;
-            details.TotalAmount=String.valueOf(salesDetails1.TotalAmount);
-            details.Quantity=String.valueOf(salesDetails1.Quantity);
+            details.UpdDate = currentDate + " " + currentTime;
+            details.TotalAmount = String.valueOf(salesDetails1.TotalAmount);
+            details.Quantity = String.valueOf(salesDetails1.Quantity);
             salesDetails.add(details);
         }
         return salesDetails;

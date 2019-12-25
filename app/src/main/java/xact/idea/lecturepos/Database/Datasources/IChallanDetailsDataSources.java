@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.ChallanDetails;
+import xact.idea.lecturepos.Model.ChallanDetailsModelFor;
 
 public interface IChallanDetailsDataSources {
     Flowable<List<ChallanDetails>> getChallanDetailsItems();
@@ -13,7 +14,7 @@ public interface IChallanDetailsDataSources {
 
     ChallanDetails getChallanDetails(String ChallanDetailsItem);
 
-
+    Flowable<List<ChallanDetailsModelFor>> getChallanDetailsFor(String ChallanDetailsItem);
     void emptyChallanDetails();
     int size();
 

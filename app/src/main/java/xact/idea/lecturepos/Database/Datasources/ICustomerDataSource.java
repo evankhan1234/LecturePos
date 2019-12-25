@@ -14,7 +14,7 @@ public interface ICustomerDataSource {
 
 
     Flowable<List<Customer>> getCustomer(int favoriteid);
-
+    Customer getCustomePhoe(String Name);
     void emptyCustomer();
     int size();
 

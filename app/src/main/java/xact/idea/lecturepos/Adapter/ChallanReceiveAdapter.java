@@ -1,21 +1,41 @@
 package xact.idea.lecturepos.Adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import xact.idea.lecturepos.ChallanActivity;
+import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Challan;
+import xact.idea.lecturepos.Database.Model.ChallanDetails;
+import xact.idea.lecturepos.Model.ChallanDetailsModelFor;
 import xact.idea.lecturepos.R;
+import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.CustomDialog;
+import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 
 public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAdapter.ChallanListiewHolder> {
 
@@ -23,6 +43,8 @@ public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAd
     private Activity mActivity = null;
     private List<Challan> messageEntities;
     boolean row_index=true;
+    private ChallanDetailsAdapter mAdapters;
+    static CompositeDisposable compositeDisposable = new CompositeDisposable();
     //    ChallanClickInterface ChallanClickInterface;
     public ChallanReceiveAdapter(Activity activity, List<Challan> messageEntitie) {
         mActivity = activity;
@@ -65,6 +87,14 @@ public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAd
             holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.colorPrimary));
             row_index=true;
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInfoDialogView(mActivity,position);
+
+            }
+
+        });
 
     }
 
@@ -98,5 +128,109 @@ public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAd
             view_color = itemView.findViewById(R.id.view_color);
 
         }
+    }
+    public  void showInfoDialogView(final Context mContext, final int position)
+    {
+
+        final CustomDialog infoDialog = new CustomDialog(mContext, R.style.CustomDialogTheme);
+        LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.layout_pop_up_challan_details, null);
+
+        infoDialog.setContentView(v);
+        infoDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout main_root = infoDialog.findViewById(R.id.main_root);
+        TextView tv_info = infoDialog.findViewById(R.id.tv_info);
+        Button btn_yes = infoDialog.findViewById(R.id.btn_ok);
+        Button btn_no = infoDialog.findViewById(R.id.btn_cancel);
+        Button btn_now = infoDialog.findViewById(R.id.btn_now);
+        LinearLayout linear = infoDialog.findViewById(R.id.linear);
+
+        TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
+        RecyclerView rcl_this_customer_list = infoDialog.findViewById(R.id.rcl_this_customer_list);
+        tv_info.setText("Are you want to receive ??");
+        linear.setVisibility(View.GONE);
+        tv_info.setVisibility(View.GONE);
+        btn_now.setVisibility(View.VISIBLE);
+        spinerTitle.setText(" Challan No: "+messageEntities.get(position).CHALLAN_NO);
+        CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
+        LinearLayoutManager lm = new LinearLayoutManager(mActivity);
+        lm.setOrientation(LinearLayoutManager.VERTICAL);
+        rcl_this_customer_list.setLayoutManager(lm);
+        compositeDisposable.add(Common.challanDetailsRepository.getChallanDetailsFor(messageEntities.get(position).CHALLAN_NO).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<ChallanDetailsModelFor>>() {
+            @Override
+            public void accept(List<ChallanDetailsModelFor> units) throws Exception {
+                Log.e("data","data"+new Gson().toJson(units));
+                mAdapters = new ChallanDetailsAdapter(mActivity, units);
+                rcl_this_customer_list.setAdapter(mAdapters);
+
+            }
+        }));
+
+        CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
+        btn_yes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = new Date(System.currentTimeMillis());
+                String currentDate = formatter.format(date);
+                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                Date dates = new Date(System.currentTimeMillis());
+                String currentTime = formatters.format(dates);
+                Common.challanRepositoy.updateReciver("Y",messageEntities.get(position).CHALLAN_NO,currentDate+" "+currentTime,currentDate);
+                //  ChallanDetails challanDetails =Common.challanDetailsRepository.getChallanDetails(messageEntities.get(position).CHALLAN_NO);
+
+                Flowable<List<ChallanDetails>> units=  Common.challanDetailsRepository.getChallanDetailsItemById(Integer.parseInt(messageEntities.get(position).CHALLAN_NO));
+                for (ChallanDetails challanDetails : units.blockingFirst()) {
+                    BookStock bookStocks =Common.bookStockRepository.getBookStock(challanDetails.F_BOOK_NO);
+                    int qty =Common.bookStockRepository.maxValue(challanDetails.F_BOOK_NO);
+                    if (bookStocks!=null){
+                        BookStock bookStock = new BookStock();
+                        bookStock.BOOK_ID=challanDetails.F_BOOK_NO;
+                        bookStock.LAST_UPDATE_DATE_APP=date;
+                        bookStock.LAST_UPDATE_DATE=currentDate+" "+currentTime;
+                        bookStock.STORE_ID= SharedPreferenceUtil.getUserID(mContext);
+                        bookStock.id=bookStocks.id;
+                        bookStock.BOOK_NET_MRP=Double.parseDouble(challanDetails.BOOK_NET_PRICE);
+                        bookStock.QTY_NUMBER= Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY)+qty;
+
+                        int total=Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY)+qty;
+                        bookStock.BOOK_NET_PRICES= Double.parseDouble(challanDetails.BOOK_NET_PRICE)*total;
+
+                        Common.bookStockRepository.updateBookStock(bookStock);
+                    }
+                    else {
+                        BookStock bookStock = new BookStock();
+                        bookStock.BOOK_ID=challanDetails.F_BOOK_NO;
+                        bookStock.LAST_UPDATE_DATE_APP=date;
+                        bookStock.BOOK_NET_MRP=Double.parseDouble(challanDetails.BOOK_NET_PRICE);
+                        bookStock.LAST_UPDATE_DATE=currentDate+" "+currentTime;
+                        bookStock.STORE_ID=SharedPreferenceUtil.getUserID(mContext);
+                        bookStock.QTY_NUMBER= Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY);
+                        bookStock.BOOK_NET_PRICES= Double.parseDouble(challanDetails.BOOK_NET_PRICE)*Integer.parseInt(challanDetails.CHALLAN_BOOK_QTY);
+
+                        Common.bookStockRepository.insertToBookStock(bookStock);
+                    }
+
+
+                }
+                SharedPreferenceUtil.saveShared(mActivity, SharedPreferenceUtil.USER_SYNC, "green");
+                SharedPreferenceUtil.saveShared(mActivity, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate+" "+currentTime+ "");
+                ((ChallanActivity)mActivity).fixed();
+                notifyDataSetChanged();
+                infoDialog.dismiss();
+
+            }
+        });
+        btn_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoDialog.dismiss();
+            }
+        });
+        infoDialog.show();
+
+
+
     }
 }

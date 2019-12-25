@@ -39,6 +39,11 @@ public class CustomerDataSources implements ICustomerDataSource {
     }
 
     @Override
+    public Customer getCustomePhoe(String Name) {
+        return CustomerDao.getCustomePhoe(Name);
+    }
+
+    @Override
     public void emptyCustomer() {
         CustomerDao.emptyCustomer();
     }

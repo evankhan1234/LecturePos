@@ -35,6 +35,11 @@ public class CustomerRepository implements ICustomerDataSource {
     }
 
     @Override
+    public Customer getCustomePhoe(String Name) {
+        return ICustomerDataSource.getCustomePhoe(Name);
+    }
+
+    @Override
     public void emptyCustomer() {
         ICustomerDataSource.emptyCustomer();
     }
