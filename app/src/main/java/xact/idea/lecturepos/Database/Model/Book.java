@@ -29,6 +29,8 @@ public class Book {
     public String BookNameBangla;
     @ColumnInfo(name = "BOOK_SPECIMEN_CODE")
     public String BOOK_SPECIMEN_CODE;
+    @ColumnInfo(name = "F_BOOK_EDITION_NO")
+    public String F_BOOK_EDITION_NO;
 
 
 }

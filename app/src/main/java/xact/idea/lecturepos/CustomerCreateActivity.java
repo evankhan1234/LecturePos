@@ -61,26 +61,34 @@ public class CustomerCreateActivity extends AppCompatActivity {
                 Log.e("Fsdfs","SFs"+retail_code.getText().toString());
                 Log.e("Fsdfs","SFs"+address.getText().toString());
                 if (!edit_name.getText().toString().equals("") &&!phone.getText().toString().equals("") &&!retail_code.getText().toString().equals("") ){
-                    Customer c = new Customer();
-                    c.Status="I";
-                    c.Name=edit_name.getText().toString();
-                    c.Address=address.getText().toString();
-                    c.MobileNumber=phone.getText().toString();
-                    c.StoreId= SharedPreferenceUtil.getUserID(CustomerCreateActivity.this);
-                    c.RetailerCode=retail_code.getText().toString();
-                    c.ShopName=edit_shop_name.getText().toString();
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                    Date date = new Date(System.currentTimeMillis());
-                    String currentDate = formatter.format(date);
-                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
-                    Date dates = new Date(System.currentTimeMillis());
-                    String currentTime = formatters.format(dates);
-                    c.UpdateDate=currentDate+" "+currentTime;
-                    c.UpdateNo="0";
-                    Common.customerRepository.insertToCustomer(c);
 
-                    startActivity(new Intent(CustomerCreateActivity.this,CustomerActivity.class));
-                    finish();
+                    if (phone.getText().toString().length()==11){
+                        Customer c = new Customer();
+                        c.Status="I";
+                        c.Name=edit_name.getText().toString();
+                        c.Address=address.getText().toString();
+                        c.MobileNumber=phone.getText().toString();
+                        c.StoreId= SharedPreferenceUtil.getUserID(CustomerCreateActivity.this);
+                        c.RetailerCode=retail_code.getText().toString();
+                        c.ShopName=edit_shop_name.getText().toString();
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                        Date date = new Date(System.currentTimeMillis());
+                        String currentDate = formatter.format(date);
+                        SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                        Date dates = new Date(System.currentTimeMillis());
+                        String currentTime = formatters.format(dates);
+                        c.UpdateDate=currentDate+" "+currentTime;
+                        c.UpdateNo="0";
+                        Common.customerRepository.insertToCustomer(c);
+
+                        startActivity(new Intent(CustomerCreateActivity.this,CustomerActivity.class));
+                        finish();
+                    }
+                    else {
+                        Toast.makeText(CustomerCreateActivity.this, "Please input valid Number", Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
                 else {
                     Toast.makeText(CustomerCreateActivity.this, "Please fill All the fields", Toast.LENGTH_SHORT).show();

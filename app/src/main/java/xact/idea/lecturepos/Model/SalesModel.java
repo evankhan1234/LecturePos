@@ -75,6 +75,8 @@ public class SalesModel {
             public String UpdNo;
             @SerializedName("UpdDate")
             public String UpdDate;
+            @SerializedName("ReturnAmt")
+            public String ReturnAmt;
         }
     }
 
