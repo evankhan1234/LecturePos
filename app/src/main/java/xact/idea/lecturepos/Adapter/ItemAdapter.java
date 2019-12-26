@@ -56,13 +56,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
     public void onBindViewHolder(final ItemAdapter.ItemModelListiewHolder holder, final int position) {
 
         //   int row_index;
-        double total = messageEntities.get(position).Quantity * messageEntities.get(position).Price;
+        double total = messageEntities.get(position).Amount ;
 
-        String text = "<b><font color=#000 >Book Name :  </font></b> <font color=#358ED3>"+messageEntities.get(position).BookName+"</font>";
-        String text1 = "<b><font color=#000 >Discount =  </font></b> <font color=#358ED3>"+messageEntities.get(position).Discount+"</font> <b><font color=#FFC107 > Tk </font></b>";
-        String text4 = "<b><font color=#000 >Total =  </font></b> <font color=#358ED3>"+messageEntities.get(position).Amount+"</font> <b><font color=#FFC107 > Tk </font></b>";
-        String text2 = "<font color=#358ED3>"+messageEntities.get(position).Quantity+"</font>";
-        String text3 = " <b><font color=#000> *  </font></b><font color=#358ED3>"+messageEntities.get(position).Price+ "</font> <b><font color=#000 > =  </font> </b><font color=#358ED3>"+rounded(total,2)+" </font>  <b><font color=#FFC107 > Tk </font></b>";
+        String text = messageEntities.get(position).BookNameBangla;
+        String text1 = "- "+String.valueOf(messageEntities.get(position).Discount)+" %";
+        String text4 = "Line Total : "+String.valueOf(rounded(total,2));
+        String text2 = String.valueOf(messageEntities.get(position).Quantity);
+        String text3 = "x"+String.valueOf(messageEntities.get(position).Price);
         holder.text_book.setText(Html.fromHtml(text));
         holder.text_quantity.setText(Html.fromHtml(text2));
         holder.text_price.setText(Html.fromHtml(text3));
@@ -94,7 +94,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
         });
         if (row_index){
 
-            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.accept));
+            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.light_yellow));
             row_index=false;
         }
         else {

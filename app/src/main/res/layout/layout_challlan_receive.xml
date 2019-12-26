@@ -144,20 +144,22 @@
                 android:background="@drawable/cell_shape"
                 android:id="@+id/text_amouvnt" />
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
-            android:nestedScrollingEnabled="false"
             android:id="@+id/rcl_this_customer_list"
             android:layout_width="match_parent"
-            android:layout_height="650px"
-
-
-
+            android:layout_height="wrap_content"
             android:layout_marginBottom="0px"
+            android:minHeight="350px"
+
+
+            android:nestedScrollingEnabled="false"
 
 
             >
 
         </androidx.recyclerview.widget.RecyclerView>
+
         <TextView
             android:id="@+id/tv_total"
             android:layout_width="match_parent"
@@ -172,6 +174,7 @@
             android:textColor="@color/gray_black"
             android:textSize="40px" />
         <RelativeLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10px">
@@ -193,6 +196,7 @@
 
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

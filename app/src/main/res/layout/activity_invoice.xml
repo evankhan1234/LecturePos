@@ -388,6 +388,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/text_customer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -431,6 +432,8 @@
                             />
 
                         <TextView
+                            android:textStyle="bold"
+
                             android:id="@+id/text_sub_total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -477,6 +480,7 @@
                     android:layout_height="match_parent"
                   >
                     <TextView
+                        android:visibility="gone"
                         android:textSize="35px"
                         android:tag="35"
                         android:layout_marginLeft="20px"
@@ -506,7 +510,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8px"
-                        android:text="Tk"/>
+
+                        android:text=" (-) Discount(%)"/>
                     <EditText
 
                         android:gravity="right"
@@ -538,6 +543,7 @@
                     android:layout_height="match_parent"
                     >
                     <TextView
+                        android:visibility="gone"
                         android:textSize="35px"
                         android:tag="35"
                         android:layout_marginLeft="20px"
@@ -567,13 +573,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8px"
-                        android:text="Tk"/>
+                        android:text=" (-) Return  Tk"/>
                     <EditText
 
                         android:gravity="right"
                         android:layout_gravity="right"
                         android:textColor="@color/hint_text_color_new"
                         android:textColorHint="@color/hint_text_color_new"
+
 
 
                         android:textSize="35px"
@@ -585,7 +592,7 @@
                         android:layout_width="250px"
                         android:layout_height="100px"
                         android:layout_marginBottom="10px"
-                        android:hint="Return" android:ems="10" android:inputType="number"/>
+                        android:hint="Return" android:ems="10" android:inputType="numberDecimal"/>
                 </LinearLayout>
             </LinearLayout>
             <View

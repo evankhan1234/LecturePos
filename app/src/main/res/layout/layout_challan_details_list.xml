@@ -1,187 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="50px"
+    android:layout_margin="0px"
     android:clipToPadding="false"
-    android:layout_margin="0px">
+    >
 
-    <androidx.cardview.widget.CardView
-
-        android:id="@+id/card_view"
-
+    <LinearLayout
 
         android:layout_width="match_parent"
-        android:layout_height="300px"
+        android:layout_height="wrap_content"
 
-        card_view:cardElevation="5px"
 
-        card_view:cardBackgroundColor="#FFFFFF"
 
-        card_view:cardUseCompatPadding="true"
-        card_view:cardCornerRadius="5px">
-        <View
-            android:id="@+id/view_color"
-            android:background="@color/colorPrimary"
-            android:layout_width="10px"
-            android:layout_height="wrap_content"/>
+
+        android:background="#fff"
+        android:orientation="vertical"
+
+        android:visibility="visible">
         <LinearLayout
 
-            android:layout_marginBottom="10px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5px"
-            android:layout_marginLeft="5px"
-            android:layout_marginRight="5px"
-            android:orientation="vertical"
-            android:visibility="visible"
-            android:padding="10px">
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:id="@+id/layout_header"
+
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <TextView
+
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:tag="30"
+                android:textSize="30px"
+                android:layout_width="0dp"
+
+                android:layout_height="match_parent"
+
+                android:gravity="center|center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/cell_shape"
+                android:id="@+id/text_challan_no" />
+            <TextView
+                android:visibility="gone"
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:tag="30"
+                android:textSize="30px"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Dhaka Horizon"
+                android:gravity="center|center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/cell_shape"
+                android:id="@+id/text_punchIn_location" />
+
+            <TextView
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:tag="30"
+                android:textSize="30px"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+
+                android:gravity="center|center_vertical"
+                android:layout_weight="1"
+
+                android:background="@drawable/cell_shape"
+                android:id="@+id/text_challan_date" />
+
+            <TextView
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:tag="30"
+                android:textSize="30px"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+
+
+                android:gravity="center|center_vertical"
+                android:layout_weight="1"
+
+                android:background="@drawable/cell_shape"
+                android:id="@+id/text_challan_quantity" />
 
 
 
+            <TextView
+                android:paddingTop="10px"
+                android:paddingBottom="10px"
+                android:tag="30"
+                android:textSize="30px"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center|center_vertical"
+                android:layout_weight="1"
 
-
-            <LinearLayout
-
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <RelativeLayout
-                    android:id="@+id/cibact_RLDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingLeft="20px"
-                    android:paddingTop="10px"
-                    android:paddingRight="20px"
-                    android:paddingBottom="10px">
-
-                    <LinearLayout
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-
-                        android:layout_toLeftOf="@+id/linLayoutAmount"
-                        android:layout_toRightOf="@+id/adp_cib_TvNameCircle"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/text_challan_no"
-                            android:layout_width="match_parent"
-                            android:layout_height="80px"
-                            android:layout_marginBottom="1px"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical|center_horizontal|center|start"
-                            android:singleLine="true"
-                            android:tag="35"
-                            android:text="zdczxv"
-                            android:textColor="@color/text_color_new"
-                            android:textSize="35px"
-                            />
-                        <TextView
-                            android:id="@+id/text_challan_quantity"
-                            android:layout_width="match_parent"
-                            android:layout_height="80px"
-                            android:layout_marginBottom="1px"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical|center_horizontal|center|start"
-                            android:singleLine="true"
-                            android:tag="35"
-                            android:text="zdczxv"
-                            android:textColor="@color/text_color_new"
-                            android:textSize="35px"
-                            />
-                        <TextView
-                            android:visibility="gone"
-                            android:id="@+id/text_challan_packet"
-                            android:layout_width="match_parent"
-                            android:layout_height="80px"
-                            android:layout_marginBottom="1px"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical|center_horizontal|center|start"
-                            android:singleLine="true"
-                            android:tag="35"
-                            android:text="zdczxv"
-                            android:textColor="@color/text_color_new"
-                            android:textSize="35px"
-                            />
-
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/linLayoutAmount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:gravity="end"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-
-                            <TextView
-                                android:id="@+id/text_challan_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="80px"
-                                android:gravity="end"
-                                android:paddingLeft="1px"
-                                android:paddingRight="1px"
-                                android:text="zdczxv"
-                                android:tag="35"
-                                android:textStyle="bold"
-                                android:textColor="@color/hint_text_color_new"
-                                android:textSize="35px"
-                                />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/text_total_value"
-                            android:layout_width="match_parent"
-                            android:layout_height="80px"
-                            android:layout_marginTop="23px"
-
-                            android:gravity="bottom|right|center_vertical|center_horizontal|center|end"
-                            android:paddingLeft="1px"
-                            android:paddingRight="1px"
-                            android:tag="35"
-                            android:text="zdczxv"
-                            android:textColor="@color/hint_text_color_new"
-                            android:textSize="35px"/>
-
-
-                    </LinearLayout>
-
-
-                </RelativeLayout>
-
-
-
-
-            </LinearLayout>
-
-
-
-
-
-
-
+                android:background="@drawable/cell_shape"
+                android:id="@+id/text_total_value" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+
+        <TableLayout
+            android:visibility="gone"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:paddingLeft="10px"
+            android:paddingRight="10px" >
+            <TableRow android:background="#4CAF50"
+                android:padding="20px">
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Name" />
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Punch In Location" />
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Punch In Time" />
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Duration" />
+            </TableRow>
+            <TableRow
+                android:layout_weight="4"
+                android:layout_marginTop="30px"
+                android:background="@drawable/border"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MD. Sarawer Jahan Evan" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Banani Horizon" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="10:30 P.M" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="2 Hours" />
+            </TableRow>
+
+        </TableLayout>
+
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
 
 </RelativeLayout>

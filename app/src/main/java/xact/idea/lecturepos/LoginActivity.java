@@ -3,7 +3,9 @@ package xact.idea.lecturepos;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -49,7 +51,9 @@ import xact.idea.lecturepos.Database.Local.SalesDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.SalesMasterDataSources;
 import xact.idea.lecturepos.Database.Local.SyncDataSources;
 import xact.idea.lecturepos.Database.MainDatabase;
+import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Database.Model.Login;
+import xact.idea.lecturepos.Model.BookResponseEntity;
 import xact.idea.lecturepos.Model.LoginEntity;
 import xact.idea.lecturepos.Model.LoginPostEntity;
 import xact.idea.lecturepos.Retrofit.IRetrofitApi;
@@ -71,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     IRetrofitApi mService;
     RelativeLayout rlt_root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,52 +95,71 @@ public class LoginActivity extends AppCompatActivity {
                     showLoadingProgress(LoginActivity.this);
 
                     if (!edit_text_email.getText().toString().equals("") && !edit_text_password.getText().toString().equals("")) {
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                        Date date = new Date(System.currentTimeMillis());
+                        String currentDate = formatter.format(date);
+                        SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                        Date dates = new Date(System.currentTimeMillis());
+                        String currentTime = formatters.format(dates);
                         LoginPostEntity loginPostEntity = new LoginPostEntity();
                         loginPostEntity.user_id = edit_text_email.getText().toString();
                         loginPostEntity.user_pass = edit_text_password.getText().toString();
-                        Log.e("ff","dgg"+Common.loginRepository.size());
-                        if (Common.loginRepository.size()>0){
+                        String androidId = Settings.Secure.getString(getContentResolver(),
+                                Settings.Secure.ANDROID_ID);
+                        String str = android.os.Build.MODEL;
+                        String str1 = Build.DEVICE;
+                        loginPostEntity.device_id = androidId;
+                        loginPostEntity.device_info = str + "" + str1;
+                        loginPostEntity.login_time = currentDate + " " + currentTime;
+                        loginPostEntity.device_ime = " ";
+                        Log.e("ff", "dgg" + Common.loginRepository.size());
+                        if (Common.loginRepository.size() > 0) {
 
-                            Login login =Common.loginRepository.getLoginUser( loginPostEntity.user_id, loginPostEntity.user_pass);
-                            if (login!=null){
+                            Login login = Common.loginRepository.getLoginUser(loginPostEntity.user_id, loginPostEntity.user_pass);
+                            if (login != null) {
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, login.USER_ID + "");
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, login.CUSTOMER_NAME + "");
-                                if (SharedPreferenceUtil.getSync(LoginActivity.this).equals("green")){
+                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, login.CUSTOMER_ADDRESS + "");
+                                if (SharedPreferenceUtil.getSync(LoginActivity.this).equals("green")) {
                                     SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
-                                }
-                                else {
+                                } else {
                                     SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "gray");
                                 }
 
-                                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                                Date date = new Date(System.currentTimeMillis());
-                                String currentDate = formatter.format(date);
-                                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
-                                Date dates = new Date(System.currentTimeMillis());
-                                String currentTime = formatters.format(dates);
-                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate+" "+currentTime+ "");
+
+                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime + "");
 
                                 startActivity(new Intent(LoginActivity.this, OnBoardingActivity.class));
                                 finish();
-                            }
-                            else{
+                            } else {
                                 Toast.makeText(LoginActivity.this, "Username and Password Incorrect", Toast.LENGTH_SHORT).show();
                                 dismissLoadingProgress();
                             }
-                        }
-                        else
-                        {
-                            Log.e("ff","dgg"+new Gson().toJson(loginPostEntity));
+                        } else {
+                            Log.e("ff", "dgg" + new Gson().toJson(loginPostEntity));
                             compositeDisposable.add(mService.Login(loginPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<LoginEntity>() {
                                 @Override
                                 public void accept(LoginEntity loginEntity) throws Exception {
-                                    Log.e("ff","dgg"+new Gson().toJson(loginEntity));
-                                    if (loginEntity.data.USER_ID==null){
+                                    Log.e("ff", "dgg" + new Gson().toJson(loginEntity));
+                                    if (loginEntity.data.USER_ID == null) {
                                         Toast.makeText(LoginActivity.this, "Username and Password Incorrect", Toast.LENGTH_SHORT).show();
                                         dismissLoadingProgress();
-                                    }else{
+                                    } else {
+//                                        if (Common.bookRepository.size() > 0) {
+//
+//                                        } else {
+//                                            if (Utils.broadcastIntent(LoginActivity.this, rlt_root)) {
+//                                                loadBookItems();
+//                                            } else {
+//                                                Snackbar snackbar = Snackbar
+//                                                        .make(rlt_root, "No Internet", Snackbar.LENGTH_LONG);
+//                                                snackbar.show();
+//                                            }
+//
+//                                        }
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, loginEntity.user_id + "");
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, loginEntity.data.CUSTOMER_NAME + "");
+                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_ADDRESS, loginEntity.data.CUSTOMER_ADDRESS + "");
                                         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                                         Date date = new Date(System.currentTimeMillis());
                                         String currentDate = formatter.format(date);
@@ -143,14 +167,15 @@ public class LoginActivity extends AppCompatActivity {
                                         Date dates = new Date(System.currentTimeMillis());
                                         String currentTime = formatters.format(dates);
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "gray");
-                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate+" "+currentTime+ "");
+                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime + "");
 
                                         Login login = new Login();
-                                        login.ACTIVE=loginEntity.data.ACTIVE;
-                                        login.USER_ID=loginEntity.data.USER_ID;
-                                        login.PASSWORD=loginEntity.data.PASSWORD;
-                                        login.DEVICE=loginEntity.data.DEVICE;
-                                        login.CUSTOMER_NAME=loginEntity.data.CUSTOMER_NAME;
+                                        login.ACTIVE = loginEntity.data.ACTIVE;
+                                        login.USER_ID = loginEntity.data.USER_ID;
+                                        login.PASSWORD = loginEntity.data.PASSWORD;
+                                        login.DEVICE = loginEntity.data.DEVICE;
+                                        login.CUSTOMER_NAME = loginEntity.data.CUSTOMER_NAME;
+                                        login.CUSTOMER_ADDRESS = loginEntity.data.CUSTOMER_ADDRESS;
                                         Common.loginRepository.insertToLogin(login);
                                         startActivity(new Intent(LoginActivity.this, OnBoardingActivity.class));
                                         finish();
@@ -163,13 +188,11 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void accept(Throwable throwable) throws Exception {
                                     dismissLoadingProgress();
-                                    Log.e("ff","dgg"+throwable.getMessage());
+                                    Log.e("ff", "dgg" + throwable.getMessage());
 
                                 }
                             }));
                         }
-
-
 
 
                     } else {
@@ -185,19 +208,21 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        edit_text_password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable mEdit) {
-                show_pass.setImageDrawable(getResources().getDrawable(R.drawable.show_password));
-                //  edit_text_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            }
+        edit_text_password.addTextChangedListener(new
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+                                                          TextWatcher() {
+                                                              @Override
+                                                              public void afterTextChanged(Editable mEdit) {
+                                                                  show_pass.setImageDrawable(getResources().getDrawable(R.drawable.show_password));
+                                                                  //  edit_text_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                                              }
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
+                                                              public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                                              }
+
+                                                              public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                                              }
+                                                          });
         show_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,6 +271,42 @@ public class LoginActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         compositeDisposable.clear();
+    }
+
+    private void loadBookItems() {
+        showLoadingProgress(LoginActivity.this);
+        compositeDisposable.add(mService.getBook().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<BookResponseEntity>() {
+            @Override
+            public void accept(BookResponseEntity bookResponseEntity) throws Exception {
+                Log.e("size", "size" + new Gson().toJson(bookResponseEntity));
+
+                for (BookResponseEntity.Data books : bookResponseEntity.data) {
+                    Book book = new Book();
+                    book.BookPrice = books.BOOK_NET_PRICE;
+                    book.BookName = books.BOOK_NAME;
+                    book.BookCode = books.BOOK_CODE;
+                    book.BookNo = books.BOOK_NO;
+                    book.BOOK_SPECIMEN_CODE = books.BOOK_SPECIMEN_CODE;
+                    book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
+                    book.BARCODE_NUMBER = books.BARCODE_NUMBER;
+                    book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
+                    book.BookNameBangla = books.BOOK_NAME_B;
+                    book.BOOK_FACE_VALUE = books.BOOK_FACE_VALUE;
+                    book.F_BOOK_EDITION_NO = books.F_BOOK_EDITION_NO;
+                    Common.bookRepository.insertToBook(book);
+
+                }
+
+                //  downBookStockDetails();
+                dismissLoadingProgress();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                dismissLoadingProgress();
+            }
+        }));
+
     }
 
     @Override

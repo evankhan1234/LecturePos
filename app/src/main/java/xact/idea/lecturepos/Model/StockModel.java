@@ -10,6 +10,8 @@ public class StockModel {
     public String  BOOK_NET_PRICES;
     @SerializedName("BookName")
     public String  BookName;
+    @SerializedName("BookNameBangla")
+    public String  BookNameBangla;
     @SerializedName("QTY_NUMBER")
     public int  QTY_NUMBER;
     @SerializedName("BOOK_NET_MRP")

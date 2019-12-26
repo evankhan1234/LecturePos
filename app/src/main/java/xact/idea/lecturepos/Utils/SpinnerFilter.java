@@ -26,7 +26,7 @@ public class SpinnerFilter extends Filter {
             ArrayList<String> filteredPlayers = new ArrayList<>();
             for (int i = 0; i < items.size(); i++) {
                 String   test = constraint.toString().replaceAll("\\p{P}","");
-                if (items.get(i).toUpperCase().contains(test)) {
+                if (items.get(i).toUpperCase().contains(constraint.toString())) {
                     filteredPlayers.add(items.get(i));
                 }
             }

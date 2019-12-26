@@ -23,6 +23,10 @@ public interface CustomerDao {
     Customer getCustomerss(String Name);
     @Query("SELECT * FROM RETAIL_CUSTOMERS WHERE MobileNumber=:Name")
     Customer getCustomePhoe(String Name);
+    @Query("SELECT * FROM RETAIL_CUSTOMERS WHERE RetailerCode=:Name")
+    Customer getCustomeRetailCode(String Name);
+    @Query("SELECT * FROM RETAIL_CUSTOMERS WHERE Name=:Name")
+    Customer getCustomeName(String Name);
 
     @Query("Select Count(id)  FROM RETAIL_CUSTOMERS")
     int value();

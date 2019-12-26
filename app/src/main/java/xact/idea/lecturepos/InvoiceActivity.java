@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -97,6 +98,7 @@ public class InvoiceActivity extends AppCompatActivity {
     private ArrayList<String> ArrayList = new ArrayList<>();
     private ArrayList<String> ArrayList1 = new ArrayList<>();
     private ArrayList<String> bookArrayList = new ArrayList<>();
+    private ArrayList<String> bookArrayListAgain = new ArrayList<>();
     ArrayAdapter<Customer> customerListEntityArrayAdapter;
     ArrayAdapter<String> bookListEntityArrayAdapter;
     Spinner spinner_customer;
@@ -107,7 +109,7 @@ public class InvoiceActivity extends AppCompatActivity {
     String sessionId;
     String dataId;
     SpinnerDialogCustomer spinnerDialog;
-
+    SpinnerDialogFor spinnerDialogs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,8 +151,8 @@ public class InvoiceActivity extends AppCompatActivity {
                 Customer customer = Common.customerRepository.getCustomePhoe(item.substring(item.length() - 11));
                 if (customer != null) {
                     text_customer_spinner.setText(customer.ShopName);
-                    Name = item;
-                    Constant.name = item;
+                    Name = customer.ShopName;
+                    Constant.name = customer.ShopName;
                     edit_address.setText(customer.Address);
                     edit_contact_number.setText(customer.MobileNumber);
                     edit_retail_code.setText(customer.RetailerCode);
@@ -182,7 +184,7 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void accept(List<StockModel> books) throws Exception {
                 for (StockModel book : books) {
-                    bookArrayList.add("(" + book.BOOK_SPECIMEN_CODE + ") " + book.BookName+ " "+book.F_BOOK_EDITION_NO + " " + book.BARCODE_NUMBER );
+                    bookArrayList.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+book.BARCODE_NUMBER );
                     //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
                     //ArrayList.add(customer.ShopName);
                 }
@@ -194,7 +196,7 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //
-                SpinnerDialogFor spinnerDialogs;
+
 
                 spinnerDialogs = new SpinnerDialogFor(InvoiceActivity.this, bookArrayList, "Select Book");
                 spinnerDialogs.showSpinerDialog();
@@ -233,7 +235,26 @@ public class InvoiceActivity extends AppCompatActivity {
         if (sessionId == null) {
             //   showInfoDialog();
         } else if (sessionId.equals("value")) {
-            // showInfoDialog();
+            compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+                @Override
+                public void accept(List<StockModel> books) throws Exception {
+                    for (StockModel book : books) {
+                        bookArrayListAgain.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+book.BARCODE_NUMBER );
+                        //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
+                        //ArrayList.add(customer.ShopName);
+                    }
+
+                    //  dismissLoadingProgress();
+                }
+            }));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    spinnerDialogs = new SpinnerDialogFor(InvoiceActivity.this, bookArrayListAgain, "Select Book");
+                    spinnerDialogs.showSpinerDialog();
+                }
+            }, 300);
 
         } else {
 
@@ -291,128 +312,136 @@ public class InvoiceActivity extends AppCompatActivity {
                 String amounts = text_sub_total.getText().toString();
                 amounts = amounts.replace(" Tk", "");
                 //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
-                if (!amounts.equals("0.0")) {
+                if (!text_customer_spinner.getText().toString().equals("Select")){
+                    if (!amounts.equals("0.0")) {
 
-                    int selectedId = radioLogin.getCheckedRadioButtonId();
-                    String s = text_net_amounts.getText().toString();
-                    s = s.replace(" Tk", "");
-                    // find the radiobutton by returned id
-                    RadioButton radioSexButton = findViewById(selectedId);
+                        int selectedId = radioLogin.getCheckedRadioButtonId();
+                        String s = text_net_amounts.getText().toString();
+                        s = s.replace(" Tk", "");
+                        // find the radiobutton by returned id
+                        RadioButton radioSexButton = findViewById(selectedId);
 
-                    String pay = String.valueOf(radioSexButton.getText());
-                    double discount = 0;
-                    double amount = 0;
-                    amount = Double.parseDouble(s);
-                    try {
-                        discount = Double.parseDouble(editShippingChargesValue.getText().toString());
-
-
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-
-                    SalesMaster salesMaster = new SalesMaster();
-                    int value = Common.salesMasterRepository.maxValue();
-                    String totalValue;
-                    value = value + 1;
-                    if (value < 9) {
-                        totalValue = "00" + value;
-
-                    } else if (value > 9) {
-                        totalValue = "0" + value;
-                    } else {
-                        totalValue = String.valueOf(value);
-                    }
-
-                    Date date1 = null;
-                    Date date2 = null;
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-                    Date date = new Date(System.currentTimeMillis());
-                    try {
-                        date1 = new SimpleDateFormat("dd-MM-yyyy").parse(edit_date.getText().toString());
-                        // date2= new SimpleDateFormat("yy-MM-dd").parse(edit_date.getText().toString());
+                        String pay = String.valueOf(radioSexButton.getText());
+                        double discount = 0;
+                        double amount = 0;
+                        amount = Double.parseDouble(s);
+                        try {
+                            discount = Double.parseDouble(editShippingChargesValue.getText().toString());
 
 
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
 
-                    salesMaster.CustomerName = Name;
-                    salesMaster.Discount = discount;
-                    salesMaster.InvoiceId = "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
-                    salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
-                    salesMaster.InvoiceNumber = "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
-                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
-                    Date dates1 = new Date(System.currentTimeMillis());
-                    String currentTime = formatters.format(dates1);
-                    salesMaster.InvoiceDates = edit_date.getText().toString() + " " + currentTime;
-                    salesMaster.InvoiceDate = date1;
-                    //salesMaster.Discount = discount;
-                    salesMaster.InvoiceAmount = amount;
-                    salesMaster.NetValue = amount;
-                    String str = android.os.Build.MODEL;
-                    String str1 = Build.DEVICE;
-                    salesMaster.Device = str1 + " " + str;
-                    salesMaster.update_date = date1;
-                    salesMaster.PayMode = pay;
-                    Date dates = new Date(System.currentTimeMillis());
-                    salesMaster.Date = dates;
-                    salesMaster.Note = edit_note.getText().toString();
-                    salesMaster.RetailCode = edit_retail_code.getText().toString();
-                    salesMaster.PhoneNumber = edit_contact_number.getText().toString();
-                    salesMaster.Return = editReturn.getText().toString();
-                    Common.salesMasterRepository.insertToSalesMaster(salesMaster);
-                    Flowable<List<Items>> units = Common.itemRepository.getItemItems();
+                        SalesMaster salesMaster = new SalesMaster();
+                        int value = Common.salesMasterRepository.maxValue();
+                        String totalValue;
+                        value = value + 1;
+                        if (value < 9) {
+                            totalValue = "00" + value;
 
-                    for (Items itemModel : units.blockingFirst()) {
-                        int values = Common.salesMasterRepository.maxValue();
-                        SalesDetails salesDetails = new SalesDetails();
-                        salesDetails.BookId = itemModel.BookId;
-                        salesDetails.BookName = itemModel.BookName;
-                        salesDetails.Discount = itemModel.Discount;
-                        salesDetails.MRP = itemModel.Price;
-                        salesDetails.Quantity = itemModel.Quantity;
-                        salesDetails.TotalAmount = itemModel.Amount;
-                        SalesMaster salesMasters = Common.salesMasterRepository.invoice(values);
-                        salesDetails.InvoiceId = values;
-                        salesDetails.InvoiceIdNew = salesMasters.InvoiceId;
-                        salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
-                        Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
+                        } else if (value > 9) {
+                            totalValue = "0" + value;
+                        } else {
+                            totalValue = String.valueOf(value);
+                        }
+
+                        Date date1 = null;
+                        Date date2 = null;
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+                        Date date = new Date(System.currentTimeMillis());
+                        try {
+                            date1 = new SimpleDateFormat("dd-MM-yyyy").parse(edit_date.getText().toString());
+                            // date2= new SimpleDateFormat("yy-MM-dd").parse(edit_date.getText().toString());
 
 
-                        BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        Customer customer =Common.customerRepository.getCustomerss(Name);
+                        salesMaster.CustomerName = customer.Name;
+                        salesMaster.Discount = discount;
+                        salesMaster.InvoiceId = "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
+                        salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+                        salesMaster.InvoiceNumber = "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
+                        SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
+                        Date dates1 = new Date(System.currentTimeMillis());
+                        String currentTime = formatters.format(dates1);
+                        salesMaster.InvoiceDates = edit_date.getText().toString() + " " + currentTime;
+                        salesMaster.InvoiceDate = date1;
+                        //salesMaster.Discount = discount;
+                        salesMaster.InvoiceAmount = amount;
+                        salesMaster.NetValue = amount;
+                        String str = android.os.Build.MODEL;
+                        String str1 = Build.DEVICE;
+                        salesMaster.Device = str1 + " " + str;
+                        salesMaster.update_date = date1;
+                        salesMaster.PayMode = pay;
+                        Date dates = new Date(System.currentTimeMillis());
+                        salesMaster.Date = dates;
+                        salesMaster.Note = edit_note.getText().toString();
+                        salesMaster.RetailCode = edit_retail_code.getText().toString();
+                        salesMaster.PhoneNumber = edit_contact_number.getText().toString();
+                        salesMaster.Return = editReturn.getText().toString();
+                        Common.salesMasterRepository.insertToSalesMaster(salesMaster);
+                        Flowable<List<Items>> units = Common.itemRepository.getItemItems();
+
+                        for (Items itemModel : units.blockingFirst()) {
+                            int values = Common.salesMasterRepository.maxValue();
+                            SalesDetails salesDetails = new SalesDetails();
+                            salesDetails.BookId = itemModel.BookId;
+                            salesDetails.BookName = itemModel.BookName;
+                            salesDetails.Discount = itemModel.Discount;
+                            salesDetails.MRP = itemModel.Price;
+                            salesDetails.Quantity = itemModel.Quantity;
+                            salesDetails.TotalAmount = itemModel.Amount;
+                            SalesMaster salesMasters = Common.salesMasterRepository.invoice(values);
+                            salesDetails.InvoiceId = values;
+                            salesDetails.InvoiceIdNew = salesMasters.InvoiceId;
+                            salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+                            Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
+
+
+                            BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
 //                        BookStock bookStock = new BookStock();
 //                        bookStock.id=bookStocks.id;
 //                        bookStock.QTY_NUMBER=bookStocks.QTY_NUMBER-itemModel.Quantity;
 //                        Common.bookStockRepository.updateBookStock(bookStock);
-                        Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER - itemModel.Quantity, bookStocks.BOOK_ID);
+                            Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER - itemModel.Quantity, bookStocks.BOOK_ID);
 
+                        }
+                        SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
+                        Date date11 = new Date(System.currentTimeMillis());
+                        String currentDate = formatter1.format(date11);
+                        SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
+                        Date dates11 = new Date(System.currentTimeMillis());
+                        String currentTime1 = formatters1.format(dates11);
+                        SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
+                        SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
+
+                        Constant.arrayList.clear();
+                        Constant.name="";
+                        Common.itemRepository.emptyItem();
+                        Intent intent = new Intent(InvoiceActivity.this, InvoicePrintActivity.class);
+                        String s1 = text_sub_total.getText().toString();
+                        s1 = s1.replace(" Tk", "");
+                        intent.putExtra("sub", s1);
+                        intent.putExtra("customerName", Name);
+                        intent.putExtra("invoiceId", "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
+                        startActivity(intent);
+                        finish();
+                        Toast.makeText(InvoiceActivity.this, "Successfully Created a Invoice ", Toast.LENGTH_SHORT).show();
+
+
+                    } else {
+                        Toast.makeText(InvoiceActivity.this, "Please Add Items", Toast.LENGTH_SHORT).show();
                     }
-                    SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
-                    Date date11 = new Date(System.currentTimeMillis());
-                    String currentDate = formatter1.format(date11);
-                    SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
-                    Date dates11 = new Date(System.currentTimeMillis());
-                    String currentTime1 = formatters1.format(dates11);
-                    SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
-                    SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
-
-                    Constant.arrayList.clear();
-                    Common.itemRepository.emptyItem();
-                    Intent intent = new Intent(InvoiceActivity.this, InvoicePrintActivity.class);
-                    String s1 = text_sub_total.getText().toString();
-                    s1 = s1.replace(" Tk", "");
-                    intent.putExtra("sub", s1);
-                    intent.putExtra("customerName", Name);
-                    intent.putExtra("invoiceId", "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
-                    startActivity(intent);
-                    finish();
-                    Toast.makeText(InvoiceActivity.this, "Successfully Created a Invoice ", Toast.LENGTH_SHORT).show();
-
-
-                } else {
-                    Toast.makeText(InvoiceActivity.this, "Please Add Items", Toast.LENGTH_SHORT).show();
                 }
+                else {
+                    Toast.makeText(InvoiceActivity.this, "Please Select Customer", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         editReturn.addTextChangedListener(new TextWatcher() {

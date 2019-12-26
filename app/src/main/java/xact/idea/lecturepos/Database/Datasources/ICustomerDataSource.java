@@ -17,10 +17,10 @@ public interface ICustomerDataSource {
     Customer getCustomePhoe(String Name);
     void emptyCustomer();
     int size();
-
+    Customer getCustomeRetailCode(String Name);
     Customer getCustomerss(String Name);
     void insertToCustomer(Customer... Customers);
-
+    Customer getCustomeName(String Name);
 
     void updateCustomer(Customer... Customers);
 

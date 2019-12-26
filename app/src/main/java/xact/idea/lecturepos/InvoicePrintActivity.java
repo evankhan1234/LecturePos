@@ -45,6 +45,8 @@ public class InvoicePrintActivity extends AppCompatActivity {
     String customerName;
     String sub;
     Button create_bill;
+    TextView tv_temp_one_company_name;
+    TextView tv_temp_one_address;
     TextView text_bill_shop_name;
     TextView text_biil_customer_name;
     TextView text_bill_address;
@@ -80,6 +82,8 @@ public class InvoicePrintActivity extends AppCompatActivity {
         initListeners();
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
+        tv_temp_one_company_name=findViewById(R.id.tv_temp_one_company_name);
+        tv_temp_one_address=findViewById(R.id.tv_temp_one_address);
         create_bill=findViewById(R.id.create_bill);
         create_challan=findViewById(R.id.create_challan);
         text_invoice_number=findViewById(R.id.text_invoice_number);
@@ -100,6 +104,8 @@ public class InvoicePrintActivity extends AppCompatActivity {
         text_sub_total_value=findViewById(R.id.text_sub_total_value);
         invoiceId = getIntent().getStringExtra("invoiceId");
         sub = getIntent().getStringExtra("sub");
+        tv_temp_one_company_name.setText(SharedPreferenceUtil.getUserName(InvoicePrintActivity.this));
+        tv_temp_one_address.setText(SharedPreferenceUtil.getUserAddress(InvoicePrintActivity.this));
         if (invoiceId!=null){
 
             customerName = getIntent().getStringExtra("customerName");
@@ -232,17 +238,17 @@ public class InvoicePrintActivity extends AppCompatActivity {
         BILL =    "                  "+ SharedPreferenceUtil.getUserName(InvoicePrintActivity.this) +" \n \n"+
 
                 "                   Customer Copy        \n \n"+
-                "          Invoice Number : "+salesMaster.InvoiceNumber+" \n  \n"+
-                "          Date : "+salesMaster.InvoiceDates+" \n \n "+
+                "Invoice Number : "+salesMaster.InvoiceNumber+"\n"+
+                "Date : "+salesMaster.InvoiceDates+"\n"+
 
-               "          Customer Name: "+customer.Name+" \n "+
-               "          Phone Number: "+customer.MobileNumber+" \n "+
+               "Customer Name: "+customer.Name+" \n"+
+               "Phone Number: "+customer.MobileNumber+"\n"+
                  "\n";
         BILL = BILL
                 + "-----------------------------------------------\n";
 
 
-        BILL = BILL + String.format("%-20s%-10s%-10s%-10s", "   Book Name", "Quantity", "Price", "Amount");
+        BILL = BILL + String.format("%-22s%-10s%-10s%-10s", "    Book Name", "Qty", "Price", "Amount");
         BILL = BILL + "\n";
         BILL = BILL
                 + "-----------------------------------------------";
@@ -253,7 +259,8 @@ public class InvoicePrintActivity extends AppCompatActivity {
 
             String quantity=getValue(String.valueOf(salesDetailPrintModel.Quantity));
             String rate=getValue(String.valueOf(salesDetailPrintModel.BookPrice));
-            double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice);
+            double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice)* (1-Double.parseDouble(salesDetailPrintModel.Discount)/100);
+            double ww =  Double.parseDouble(salesDetailPrintModel.BookPrice)* (1-Double.parseDouble(salesDetailPrintModel.Discount)/100);
             String totalPrice=getValue(String.valueOf(price));
             String bookName=salesDetailPrintModel.BookName;
             if (bookName.length()>15){
@@ -263,7 +270,7 @@ public class InvoicePrintActivity extends AppCompatActivity {
                 value=salesDetailPrintModel.BookName;
             }
 
-            BILL = BILL + "\n " + String.format("%-20s%-9s%-9s%-10s", value, salesDetailPrintModel.Quantity, salesDetailPrintModel.BookPrice, String.valueOf(price));
+            BILL = BILL + "\n " + String.format("%-22s%-9s%-9s%-10s", value, salesDetailPrintModel.Quantity, ww, String.valueOf(price));
         }
 
 
@@ -274,10 +281,10 @@ public class InvoicePrintActivity extends AppCompatActivity {
         String Total=getValue(String.valueOf(salesMaster.NetValue));
         String Return=getValue(String.valueOf(salesMaster.Return));
         String Discount=getValue(String.valueOf(salesMaster.Discount));
-        BILL = BILL + "                   Sub Total :" + "  " + sub + " Tk"+"\n";
-        BILL = BILL + "                    Discount  :" + "  " + salesMaster.Discount +" %"+ "\n";
-        BILL = BILL + "                    Return   :" + "  " + salesMaster.Return + " Tk"+"\n";
-        BILL = BILL + "                    Total Amount   :" + " " + salesMaster.NetValue + " Tk"+"\n";
+        BILL = BILL + "                   Sub Total    :" + "  " + sub + " Tk"+"\n";
+        BILL = BILL + "                   Discount     :" + "  " + salesMaster.Discount +" %"+ "\n";
+        BILL = BILL + "                   Return       :" + "  " + salesMaster.Return + " Tk"+"\n";
+        BILL = BILL + "                   Total Amount :" + " " + salesMaster.NetValue + " Tk"+"\n";
 
         BILL = BILL
                 + "-----------------------------------------------\n";
@@ -294,22 +301,20 @@ public class InvoicePrintActivity extends AppCompatActivity {
 
         BILLS =  "                    Challan Copy        \n "+
                 "                                         \n "+
-                "                                         \n "+
-                "             Name:  "+customer.Name+" \n "+
-                "             Number: "+customer.MobileNumber+" \n "
+                "Invoice Number : "+salesMaster.InvoiceNumber+"\n"+
+                "Date : "+salesMaster.InvoiceDates+"\n"+
+                "Name:  "+customer.Name+"\n"+
+                "Number: "+customer.MobileNumber+"\n"
 
                 ;
         BILLS = BILLS
                 + "-----------------------------------------------\n";
 
 
-        BILLS = BILLS + String.format("%1$-10s %2$10s", "           Book Name","            Quantity");
+        BILLS = BILLS + String.format("%1$-10s %2$10s", "Book Name","                  Quantity");
         BILLS = BILLS + "\n";
         BILLS = BILLS
-                + "-----------------------------------------------"+
-
-
-                "                                         \n ";
+                + "-----------------------------------------------";
 
         for (SalesDetailPrintModel salesDetailPrintModel: printModels){
 
@@ -319,13 +324,24 @@ public class InvoicePrintActivity extends AppCompatActivity {
             double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice);
             String totalPrice=getValue(String.valueOf(price));
             String bookName=salesDetailPrintModel.BookName;
+            String spacer = null;
             if (bookName.length()>25){
                 value=bookName.substring(0, 25);
             }
             else {
-                value=salesDetailPrintModel.BookName;
+                if (bookName.length()-25>0){
+
+                }
+                else {
+
+
+                    for (int i=0;i<25-bookName.length();i++){
+                        spacer=spacer+" ";
+                    }
+                }
+                value=salesDetailPrintModel.BookName+spacer;
             }
-            BILLS = BILLS + "\n " + String.format("%1$-10s %2$10s", value,"       "+ salesDetailPrintModel.Quantity);
+            BILLS = BILLS + "\n " + String.format("%1$-10s %2$10s", value,""+ salesDetailPrintModel.Quantity);
         }
 
 
@@ -334,8 +350,7 @@ public class InvoicePrintActivity extends AppCompatActivity {
         BILLS = BILLS + "\n\n ";
 
 
-        BILLS = BILLS
-                + "-----------------------------------------------\n";
+
         BILLS = BILLS + "\n\n ";
         BILLS = BILLS + "\n\n\n\n\n\n\n\n";
 //

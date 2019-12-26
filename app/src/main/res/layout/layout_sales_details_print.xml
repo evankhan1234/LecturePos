@@ -24,7 +24,7 @@
             android:id="@+id/spinerTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Challan Number"
+            android:text="Invoice  Number"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -158,19 +158,7 @@
             >
 
         </androidx.recyclerview.widget.RecyclerView>
-        <TextView
-            android:id="@+id/tv_total"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0px"
-            android:layout_marginTop="14px"
-            android:lineHeight="62px"
-            android:layout_marginRight="0px"
-            android:gravity="right"
-            android:tag="40"
-            android:text="Total"
-            android:textColor="@color/gray_black"
-            android:textSize="40px" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -186,10 +174,12 @@
                 android:layout_marginRight="0px"
                 android:gravity="center"
                 android:tag="45"
-                android:text="Are You Want To Log Out?"
+                android:text="Are You Want To Print Out?"
                 android:textColor="@color/gray_black"
                 android:textSize="45px" />
         </RelativeLayout>
+
+
 
 
         <LinearLayout
@@ -214,13 +204,13 @@
                 android:paddingBottom="5px"
                 android:stateListAnimator="@null"
                 android:tag="45"
-                android:text="No"
+                android:text="Cancel"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="45px" />
 
             <Button
-                android:backgroundTint="@color/accept"
+                android:backgroundTint="#F44336"
                 android:id="@+id/btn_ok"
                 android:layout_width="420px"
                 android:layout_height="140px"
@@ -236,25 +226,7 @@
                 android:textSize="45px"
                 android:visibility="visible" />
         </LinearLayout>
-        <Button
 
-            android:layout_gravity="center"
-            android:backgroundTint="@color/accept"
-            android:id="@+id/btn_now"
-            android:layout_width="420px"
-            android:layout_height="140px"
-
-            android:background="@drawable/btn_yes"
-            android:foreground="@drawable/ripple_corner"
-            android:paddingBottom="5px"
-            android:stateListAnimator="@null"
-            android:tag="45"
-            android:text="Ok"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
-
-            android:textSize="45px"
-            android:visibility="gone" />
     </LinearLayout>
 
 

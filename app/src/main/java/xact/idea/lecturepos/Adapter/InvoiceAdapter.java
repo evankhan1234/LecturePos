@@ -1,30 +1,50 @@
 package xact.idea.lecturepos.Adapter;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import xact.idea.lecturepos.ChallanActivity;
+import xact.idea.lecturepos.Database.Model.BookStock;
+import xact.idea.lecturepos.Database.Model.ChallanDetails;
+import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
+import xact.idea.lecturepos.InvoiceActivity;
+import xact.idea.lecturepos.InvoicePrintActivity;
+import xact.idea.lecturepos.Model.ChallanDetailsModelFor;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.CustomDialog;
+import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
+
+import static xact.idea.lecturepos.Utils.Utils.rounded;
 
 public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMasterListiewHolder> {
 
@@ -32,7 +52,9 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
     private Activity mActivity = null;
     private List<SalesMaster> messageEntities;
     private SalesDetailsAdapter mAdapters;
-    int row_index=0;
+    boolean row_index=true;
+    double value;
+    double value2;
     //    SalesMasterClickInterface SalesMasterClickInterface;
     public InvoiceAdapter(Activity activity, List<SalesMaster> messageEntitie) {
         mActivity = activity;
@@ -80,35 +102,168 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.rcl_this_customer_list.setLayoutManager(lm);
+
+//        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+//            @Override
+//            public void accept(List<SalesDetails> units) throws Exception {
+//                Log.e("data","data"+new Gson().toJson(units));
+//                mAdapters = new SalesDetailsAdapter(mActivity, units);
+//                holder.rcl_this_customer_list.setAdapter(mAdapters);
+//
+//            }
+//        }));
+//        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+//            @Override
+//            public void accept(List<SalesDetails> units) throws Exception {
+//                Log.e("hgh","data"+new Gson().toJson(units));
+//
+//
+//            }
+//        }));
+
+        holder.text_view_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInfoDialogView(mActivity,position);
+            }
+        });
+        holder.text_create_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+                    @Override
+                    public void accept(List<SalesDetails> units) throws Exception {
+                        Log.e("data","data"+new Gson().toJson(units));
+
+                        for (SalesDetails salesDetails:units){
+                            // value+=salesDetails.MRP;
+                            //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+
+                            value2 +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
+                        }
+                        //tv_total.setText("Total Price: "+String.valueOf(price));
+
+                        Customer customer=Common.customerRepository.getCustomeName(messageEntities.get(position).CustomerName);
+                        if (customer!=null){
+                            Intent intent = new Intent(mActivity, InvoicePrintActivity.class);
+
+                            intent.putExtra("sub",String.valueOf(rounded(value2,2)));
+
+
+                            intent.putExtra("customerName", customer.ShopName);
+                            intent.putExtra("invoiceId", messageEntities.get(position).InvoiceId);
+                            mActivity.startActivity(intent);
+                            mActivity.finish();
+                        }
+                        else {
+                            Toast.makeText(mActivity, "Customer is not valid", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }));
+
+
+                //infoDialog.dismiss();
+            }
+        });
+        if (row_index){
+
+            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.light_yellow));
+            row_index=false;
+        }
+        else {
+            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.colorPrimary));
+            row_index=true;
+        }
+
+
+
+    }
+
+    public  void showInfoDialogView(final Context mContext, final int position)
+    {
+
+        final CustomDialog infoDialog = new CustomDialog(mContext, R.style.CustomDialogTheme);
+        LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.layout_sales_details_print, null);
+
+        infoDialog.setContentView(v);
+        infoDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout main_root = infoDialog.findViewById(R.id.main_root);
+        TextView tv_info = infoDialog.findViewById(R.id.tv_info);
+
+        Button btn_no = infoDialog.findViewById(R.id.btn_cancel);
+        Button btn_ok = infoDialog.findViewById(R.id.btn_ok);
+
+     //   LinearLayout linear = infoDialog.findViewById(R.id.linear);
+       // TextView tv_total = infoDialog.findViewById(R.id.tv_total);
+        TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
+        RecyclerView rcl_this_customer_list = infoDialog.findViewById(R.id.rcl_this_customer_list);
+        tv_info.setText("Are you want to receive ??");
+//        linear.setVisibility(View.GONE);
+     //   tv_info.setVisibility(View.GONE);
+
+        spinerTitle.setText(" Invoice Number: "+messageEntities.get(position).InvoiceNumber);
+        CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
+        LinearLayoutManager lm = new LinearLayoutManager(mActivity);
+        lm.setOrientation(LinearLayoutManager.VERTICAL);
+        rcl_this_customer_list.setLayoutManager(lm);
+
+
         compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
             @Override
             public void accept(List<SalesDetails> units) throws Exception {
                 Log.e("data","data"+new Gson().toJson(units));
+
+                for (SalesDetails salesDetails:units){
+                   // value+=salesDetails.MRP;
+                 //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+
+                    value +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
+                }
+                //tv_total.setText("Total Price: "+String.valueOf(price));
                 mAdapters = new SalesDetailsAdapter(mActivity, units);
-                holder.rcl_this_customer_list.setAdapter(mAdapters);
+                rcl_this_customer_list.setAdapter(mAdapters);
 
             }
         }));
-        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+
+
+        CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
+
+        btn_no.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void accept(List<SalesDetails> units) throws Exception {
-                Log.e("hgh","data"+new Gson().toJson(units));
+            public void onClick(View view) {
+                infoDialog.dismiss();
+            }
+        });
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Customer customer=Common.customerRepository.getCustomeName(messageEntities.get(position).CustomerName);
+                if (customer!=null){
+                    Intent intent = new Intent(mActivity, InvoicePrintActivity.class);
 
+                    intent.putExtra("sub",String.valueOf(rounded(value,2)));
+
+
+                    intent.putExtra("customerName", customer.ShopName);
+                    intent.putExtra("invoiceId", messageEntities.get(position).InvoiceId);
+                    mActivity.startActivity(intent);
+                    mActivity.finish();
+                    infoDialog.dismiss();
+                }
+                else {
+                    Toast.makeText(mActivity, "Customer is not valid", Toast.LENGTH_SHORT).show();
+                    infoDialog.dismiss();
+                }
 
             }
-        }));
-
-
+        });
+        infoDialog.show();
 
 
 
     }
-    private void detailsListData() {
-        //  showLoadingProgress(mActivity);
-
-
-    }
-
     @Override
     public int getItemCount() {
         Log.e("evan", "sd" + messageEntities.size());
@@ -122,8 +277,11 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         private TextView text_code;
         private TextView text_invoice_date;
         private TextView text_discount;
+        private TextView text_view_details;
+        private TextView text_create_invoice;
         private TextView text_total;
         private RecyclerView rcl_this_customer_list;
+        private View view_color;
 
 
 
@@ -139,7 +297,9 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
             text_discount = itemView.findViewById(R.id.text_discount);
             text_total = itemView.findViewById(R.id.text_total);
             rcl_this_customer_list = itemView.findViewById(R.id.rcl_this_customer_list);
-
+            view_color = itemView.findViewById(R.id.view_color);
+            text_view_details = itemView.findViewById(R.id.text_view_details);
+            text_create_invoice = itemView.findViewById(R.id.text_create_invoice);
 
 
         }

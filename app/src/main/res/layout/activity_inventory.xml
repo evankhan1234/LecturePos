@@ -293,7 +293,7 @@
                     android:textSize="35px"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="MRP"
+                    android:text="Net Price"
                     android:gravity="center|center_vertical"
                     android:layout_weight="1"
 

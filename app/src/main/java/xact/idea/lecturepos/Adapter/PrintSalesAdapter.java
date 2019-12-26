@@ -19,6 +19,8 @@ import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
+import static xact.idea.lecturepos.Utils.Utils.rounded;
+
 public class PrintSalesAdapter extends RecyclerView.Adapter<PrintSalesAdapter.SalesDetailPrintModelListiewHolder> {
 
 
@@ -51,10 +53,11 @@ public class PrintSalesAdapter extends RecyclerView.Adapter<PrintSalesAdapter.Sa
         //Log.e("SDFsf","SDfs"+messageEntities.get(position).Name);
         holder.text_book.setText(messageEntities.get(position).BookName);
            holder.text_quantity.setText(String.valueOf(messageEntities.get(position).Quantity));
-       holder.text_rate.setText(messageEntities.get(position).BookPrice);
+        double ss=Double.parseDouble(messageEntities.get(position).BookPrice)* (1-Double.parseDouble(messageEntities.get(position).Discount)/100);
+       holder.text_rate.setText(String.valueOf(rounded(ss,2)));
 
-        double price = messageEntities.get(position).Quantity * Double.parseDouble(messageEntities.get(position).BookPrice);
-        holder.text_price.setText(String.valueOf(price));
+        double price = messageEntities.get(position).Quantity * Double.parseDouble(messageEntities.get(position).BookPrice)* (1-Double.parseDouble(messageEntities.get(position).Discount)/100);
+        holder.text_price.setText(String.valueOf(rounded(price,2)));
 
 //        char[] ch = new char[(String.valueOf(messageEntities.get(position).Quantity).length())];
 //

@@ -67,6 +67,9 @@ public class SpinnerDialogFor implements Filterable {
         if(isShowKeyboard()){
             showKeyboard(searchBox);
         }
+        searchBox.requestFocus();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(searchBox, InputMethodManager.SHOW_IMPLICIT);
         adapter = new ArrayAdapter<>(context, R.layout.items_view, items);
          RecyclerView rcl_this_customer_list =v. findViewById(R.id.rcl_this_customer_list);
 

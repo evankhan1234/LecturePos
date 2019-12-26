@@ -50,6 +50,11 @@ public class CustomerRepository implements ICustomerDataSource {
     }
 
     @Override
+    public Customer getCustomeRetailCode(String Name) {
+        return ICustomerDataSource.getCustomeRetailCode(Name);
+    }
+
+    @Override
     public Customer getCustomerss(String Name) {
         return ICustomerDataSource.getCustomerss(Name);
     }
@@ -57,6 +62,11 @@ public class CustomerRepository implements ICustomerDataSource {
     @Override
     public void insertToCustomer(Customer... Customers) {
         ICustomerDataSource.insertToCustomer(Customers);
+    }
+
+    @Override
+    public Customer getCustomeName(String Name) {
+        return ICustomerDataSource.getCustomeName(Name);
     }
 
     @Override

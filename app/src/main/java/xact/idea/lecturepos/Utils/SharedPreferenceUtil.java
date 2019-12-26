@@ -14,6 +14,7 @@ public class SharedPreferenceUtil {
     public static final String USER_EMAIL = "email";
     public static final String USER_SUNC_DATE_TIME = "syncdate";
     public static final String USER_SYNC = "sync";
+    public static final String USER_ADDRESS = "address";
     public static void saveShared(Context c, String type, String val) {
         SharedPreferences.Editor ed = c.getSharedPreferences(mSharedName, Context.MODE_PRIVATE).edit();
         ed.putString(type, val);
@@ -70,6 +71,10 @@ public class SharedPreferenceUtil {
     }
     public static String getSync(Context c) {
         String val = getShared(c, USER_SYNC);
+        return val;
+    }
+    public static String getUserAddress(Context c) {
+        String val = getShared(c, USER_ADDRESS);
         return val;
     }
 }
