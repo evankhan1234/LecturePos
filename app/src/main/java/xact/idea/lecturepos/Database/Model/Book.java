@@ -19,6 +19,9 @@ public class Book {
     public String BARCODE_NUMBER;
     @ColumnInfo(name = "BOOK_NET_PRICE")
     public String BOOK_NET_PRICE;
+    @ColumnInfo(name = "BOOK_FACE_VALUE")
+    public String BOOK_FACE_VALUE;
+
     @ColumnInfo(name = "BookPrice")
     public String BookPrice;
     @ColumnInfo(name = "BookName")

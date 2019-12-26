@@ -23,6 +23,8 @@ public class LoginEntity {
         public String  DEVICE;
         @SerializedName("CUSTOMER_NAME")
         public String  CUSTOMER_NAME;
+        @SerializedName("CUSTOMER_ADDRESS")
+        public String  CUSTOMER_ADDRESS;
 
 
 

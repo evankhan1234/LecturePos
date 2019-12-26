@@ -23,4 +23,6 @@ public class Login {
     public String DEVICE;
     @ColumnInfo(name = "CUSTOMER_NAME")
     public String CUSTOMER_NAME;
+    @ColumnInfo(name = "CUSTOMER_ADDRESS")
+    public String CUSTOMER_ADDRESS;
 }

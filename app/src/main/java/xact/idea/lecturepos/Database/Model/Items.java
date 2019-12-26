@@ -13,6 +13,8 @@ public class Items {
     public int id;
     @ColumnInfo(name = "Price")
     public double Price;
+    @ColumnInfo(name = "ValuePrice")
+    public double ValuePrice;
     @ColumnInfo(name = "Discount")
     public double Discount;
     @ColumnInfo(name = "Amount")
@@ -21,6 +23,8 @@ public class Items {
     public int Quantity;
     @ColumnInfo(name = "BookName")
     public String BookName;
+    @ColumnInfo(name = "BookNameBangla")
+    public String BookNameBangla;
     @ColumnInfo(name = "BookId")
     public String BookId;
 

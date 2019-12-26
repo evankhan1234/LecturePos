@@ -73,25 +73,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="30px" />
 
-                <TextView
-                    android:tag="30"
-                    android:id="@+id/tv_temp_one_phoneNo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="123456789"
-                    android:textColor="@android:color/black"
-                    android:textSize="30px" />
 
-                <TextView
-                    android:tag="30"
-                    android:id="@+id/tv_temp_one_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="bizdev@tacktile.net"
-                    android:textColor="@android:color/black"
-                    android:textSize="30px" />
             </LinearLayout>
         </LinearLayout>
 
@@ -384,7 +366,7 @@
                     android:layout_below="@+id/layout_header"
 
 
-                    android:layout_height="match_parent"
+                    android:layout_height="500px"
 
 
                     android:nestedScrollingEnabled="false"
@@ -471,7 +453,7 @@
                                 android:tag="30"
                                 android:layout_weight="1"
                                 android:padding="2dp"
-                                android:text="Discount     (*)"
+                                android:text="Discount     (%)"
                                 android:textColor="@android:color/black"
                                 android:textSize="30px" />
 

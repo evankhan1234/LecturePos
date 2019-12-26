@@ -240,6 +240,7 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
         infoDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         RelativeLayout main_root = infoDialog.findViewById(R.id.main_root);
         TextView tv_info = infoDialog.findViewById(R.id.tv_info);
+        TextView tv_total = infoDialog.findViewById(R.id.tv_total);
         Button btn_yes = infoDialog.findViewById(R.id.btn_ok);
         Button btn_no = infoDialog.findViewById(R.id.btn_cancel);
         TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
@@ -254,6 +255,14 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
             @Override
             public void accept(List<ChallanDetailsModelFor> units) throws Exception {
                 Log.e("data","data"+new Gson().toJson(units));
+                int price = 0;
+
+                for (ChallanDetailsModelFor challanDetailsModelFor: units){
+                    Log.e("Dxfxf","xf"+challanDetailsModelFor.BOOK_NET_PRICE);
+                    price+=Integer.parseInt(challanDetailsModelFor.BOOK_NET_PRICE)*Integer.parseInt(challanDetailsModelFor.CHALLAN_BOOK_QTY);
+                   // price+=d;
+                }
+                tv_total.setText("Total Price: "+String.valueOf(price));
                 mAdapters = new ChallanDetailsAdapter(mActivity, units);
                 rcl_this_customer_list.setAdapter(mAdapters);
 

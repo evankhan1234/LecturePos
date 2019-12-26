@@ -1,5 +1,7 @@
 package xact.idea.lecturepos.Model;
 
+import androidx.room.ColumnInfo;
+
 import com.google.gson.annotations.SerializedName;
 
 public class SalesDetailPrintModel {
@@ -18,6 +20,9 @@ public class SalesDetailPrintModel {
     public String  BARCODE_NUMBER;
     @SerializedName("BookNameBangla")
     public String  BookNameBangla;
-
+    @SerializedName("Discount")
+    public String  Discount;
+    @ColumnInfo(name = "BOOK_FACE_VALUE")
+    public String BOOK_FACE_VALUE;
 
 }

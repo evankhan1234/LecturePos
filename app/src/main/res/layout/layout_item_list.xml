@@ -85,7 +85,7 @@
                             android:singleLine="true"
                             android:tag="35"
                             android:text="zdczxv"
-                            android:textColor="@color/text_color_new"
+                            android:textColor="#358ED3"
                             android:textSize="35px"
                             />
 
@@ -159,9 +159,8 @@
                                 android:paddingLeft="1px"
                                 android:paddingRight="1px"
                                 android:tag="35"
-                                android:textStyle="bold"
                                 android:text="zdczxv"
-                                android:textColor="@color/hint_text_color_new"
+                                android:textColor="#358ED3"
                                 android:textSize="35px"
                                 />
 
@@ -174,8 +173,7 @@
                                 android:paddingRight="1px"
                                 android:text="zdczxv"
                                 android:tag="35"
-                                android:textStyle="bold"
-                                android:textColor="@color/hint_text_color_new"
+                                android:textColor="#358ED3"
                                 android:textSize="35px"
                                 />
                         </LinearLayout>
@@ -191,9 +189,9 @@
                             android:paddingRight="1px"
                             android:tag="35"
                             android:text="zdczxv"
-                            android:textColor="@color/hint_text_color_new"
+                            android:textColor="#358ED3"
                             android:textSize="35px"
-                            android:textStyle="bold" />
+                            />
                         <TextView
                             android:id="@+id/text_total"
                             android:layout_width="match_parent"
@@ -206,8 +204,7 @@
 
                             android:tag="35"
                             android:text="zdczxv"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"
+                            android:textColor="#358ED3"
                             android:textSize="35px"
                             />
 

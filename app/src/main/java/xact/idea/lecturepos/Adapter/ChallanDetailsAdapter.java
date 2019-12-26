@@ -50,28 +50,30 @@ public class ChallanDetailsAdapter extends RecyclerView.Adapter<ChallanDetailsAd
 
     @Override
     public void onBindViewHolder(final ChallanDetailsAdapter.PlaceTagListiewHolder holder, final int position) {
-        String challan_no = "<b><font color=#000 >Book Name :  </font></b> <font color=#358ED3>"+messageEntities.get(position).BookName+"</font>";
-        String challan_packet = "<b><font color=#000 >Total Packet :  </font></b> <font color=#358ED3>"+messageEntities.get(position).BOOK_NET_PRICE+"</font>";
-        String challan_date = "<b><font color=#000 >Quantity :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_BOOK_QTY+"</font>";
-        String challan_quantity = "<b><font color=#000 >Book No :  </font></b> <font color=#358ED3>"+messageEntities.get(position).F_BOOK_NO+"</font>";
-        String challan_value = "<b><font color=#000 >Total Price :  </font></b> <font color=#358ED3>"+messageEntities.get(position).BOOK_NET_PRICE+"</font>";
+        String challan_no =messageEntities.get(position).BookName+"</font>";
+        String challan_packet = "<b><font color=#000 >Total Packet :  </font></b> <font color=#358ED3>"+messageEntities.get(position).BOOK_NET_PRICE;
+        String challan_date = messageEntities.get(position).CHALLAN_BOOK_QTY;
+        String challan_quantity = messageEntities.get(position).BOOK_NET_PRICE;
+        String challan_value = messageEntities.get(position).BOOK_NET_PRICE;
+
+        double value=Double.parseDouble(messageEntities.get(position).BOOK_NET_PRICE)*Double.parseDouble(messageEntities.get(position).CHALLAN_BOOK_QTY);
         holder.text_challan_no.setText(Html.fromHtml(challan_no));
         holder.text_challan_date.setText(Html.fromHtml(challan_date));
        // holder.text_challan_packet.setText(Html.fromHtml(challan_packet));
-        holder.text_total_value.setText(Html.fromHtml(challan_value));
+        holder.text_total_value.setText(Html.fromHtml(String.valueOf(value)));
         holder.text_challan_quantity.setText(Html.fromHtml(challan_quantity));
         //     holder.btn_receive.setVisibility(View.GONE);
         //   int row_index;
 
-        if (row_index){
-
-            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.accept));
-            row_index=false;
-        }
-        else {
-            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.colorPrimary));
-            row_index=true;
-        }
+//        if (row_index){
+//
+//            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.accept));
+//            row_index=false;
+//        }
+//        else {
+//            holder.view_color.setBackgroundColor(mActivity.getResources().getColor(R.color.colorPrimary));
+//            row_index=true;
+//        }
 
     }
 
@@ -105,7 +107,7 @@ public class ChallanDetailsAdapter extends RecyclerView.Adapter<ChallanDetailsAd
             text_total_value = itemView.findViewById(R.id.text_total_value);
             // btn_receive = itemView.findViewById(R.id.btn_receive);
 
-            view_color = itemView.findViewById(R.id.view_color);
+          //  view_color = itemView.findViewById(R.id.view_color);
 
 
         }

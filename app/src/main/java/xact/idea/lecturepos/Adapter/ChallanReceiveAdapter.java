@@ -134,7 +134,7 @@ public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAd
 
         final CustomDialog infoDialog = new CustomDialog(mContext, R.style.CustomDialogTheme);
         LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.layout_pop_up_challan_details, null);
+        View v = inflator.inflate(R.layout.layout_challlan_receive, null);
 
         infoDialog.setContentView(v);
         infoDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -144,7 +144,7 @@ public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAd
         Button btn_no = infoDialog.findViewById(R.id.btn_cancel);
         Button btn_now = infoDialog.findViewById(R.id.btn_now);
         LinearLayout linear = infoDialog.findViewById(R.id.linear);
-
+        TextView tv_total = infoDialog.findViewById(R.id.tv_total);
         TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
         RecyclerView rcl_this_customer_list = infoDialog.findViewById(R.id.rcl_this_customer_list);
         tv_info.setText("Are you want to receive ??");
@@ -160,9 +160,16 @@ public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAd
             @Override
             public void accept(List<ChallanDetailsModelFor> units) throws Exception {
                 Log.e("data","data"+new Gson().toJson(units));
+                int price = 0;
+
+                for (ChallanDetailsModelFor challanDetailsModelFor: units){
+                    Log.e("Dxfxf","xf"+challanDetailsModelFor.BOOK_NET_PRICE);
+                    price+=Integer.parseInt(challanDetailsModelFor.BOOK_NET_PRICE)*Integer.parseInt(challanDetailsModelFor.CHALLAN_BOOK_QTY);
+                    // price+=d;
+                }
+                tv_total.setText("Total Price: "+String.valueOf(price));
                 mAdapters = new ChallanDetailsAdapter(mActivity, units);
                 rcl_this_customer_list.setAdapter(mAdapters);
-
             }
         }));
 

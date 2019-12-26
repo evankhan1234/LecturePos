@@ -199,6 +199,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        initDB();
+
+        if (Common.challanDetailsRepository.size() > 0) {
+            // loadChalanDetails();
+        } else {
+            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+                loadChalanDetails();
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+        }
+
         linear_sync.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -288,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         if (SharedPreferenceUtil.getSync(MainActivity.this).equals("gray")) {
             linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.back));
         } else {
-            linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.green));
+            linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.back_green));
 
 
         }
@@ -301,6 +316,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("SDfd", "Dgd" + new Gson().toJson(customers));
                 Constant.sizes = customers.size();
                 text_publisher_chalan.setText("Publishers Chalan (" + String.valueOf(customers.size()) + ")");
+                if (customers.size()>0){
+                    linear_challan.setBackgroundTintList(getResources().getColorStateList(R.color.back_green));
+                }
 
             }
         }));
@@ -312,6 +330,30 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }));
+        if (Common.bookRepository.size() > 0) {
+            loadBookItemsFor();
+        } else {
+            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+                loadBookItems();
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+        }
+        if (Common.bookStockRepository.size() > 0) {
+            // loadChalanDetails();
+        } else {
+            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+                downBookStockDetails();
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+        }
 //        if (Common.customerRepository.size() > 0) {
 //
 //            loadDepartmentItems();
@@ -341,11 +383,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        }
-        if (Common.bookRepository.size() > 0) {
-            loadBookItemsFor();
+        if (Common.challanRepositoy.size() > 0) {
+            loadChalanItemsFor();
         } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-                loadBookItems();
+                loadChalanItems();
             } else {
                 Snackbar snackbar = Snackbar
                         .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
@@ -353,6 +395,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
+
         if (Common.customerRepository.size() > 0) {
 
         } else {
@@ -377,36 +421,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        if (Common.challanRepositoy.size() > 0) {
-            loadChalanItemsFor();
-        } else {
-            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-                loadChalanItems();
-            } else {
-                Snackbar snackbar = Snackbar
-                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
 
-        }
-        if (Common.challanDetailsRepository.size() > 0) {
-            // loadChalanDetails();
-        } else {
-            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-                loadChalanDetails();
-            } else {
-                Snackbar snackbar = Snackbar
-                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-
-        }
 
         if (Common.salesMasterRepository.size() > 0) {
             // loadChalanDetails();
         } else {
             if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-                loadCustomer();
+                loadSalesMaster();
 
             } else {
                 Snackbar snackbar = Snackbar
@@ -416,18 +437,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if (Common.bookStockRepository.size() > 0) {
-            // loadChalanDetails();
-        } else {
-            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-                downBookStockDetails();
-            } else {
-                Snackbar snackbar = Snackbar
-                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
 
-        }
     }
 
 
@@ -611,11 +621,14 @@ public class MainActivity extends AppCompatActivity {
                     book.BARCODE_NUMBER = books.BARCODE_NUMBER;
                     book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
                     book.BookNameBangla = books.BOOK_NAME_B;
+                    book.BOOK_FACE_VALUE = books.BOOK_FACE_VALUE;
                     book.F_BOOK_EDITION_NO = books.F_BOOK_EDITION_NO;
                     Common.bookRepository.insertToBook(book);
 
                 }
 
+                downBookStockDetails();
+                loadSalesMaster();
                 dismissLoadingProgress();
             }
         }, new Consumer<Throwable>() {
@@ -669,6 +682,7 @@ public class MainActivity extends AppCompatActivity {
             public void accept(StockResponse challanDetailsModel) throws Exception {
                 Log.e("StockResponse", "challanDetailsModel" + new Gson().toJson(challanDetailsModel));
 
+
                 for (StockResponse.Data stock : challanDetailsModel.data) {
 
 
@@ -677,8 +691,8 @@ public class MainActivity extends AppCompatActivity {
                     if (bookStocks != null) {
                         BookStock bookStock = new BookStock();
                         bookStock.BOOK_ID = stock.BOOK_ID;
-                        bookStock.LAST_UPDATE_DATE_APP = bookStocks.LAST_UPDATE_DATE_APP;
-                        bookStock.LAST_UPDATE_DATE = bookStocks.LAST_UPDATE_DATE;
+                      //  bookStock.LAST_UPDATE_DATE_APP = bookStocks.LAST_UPDATE_DATE_APP;
+                     //   bookStock.LAST_UPDATE_DATE = bookStocks.LAST_UPDATE_DATE;
                         bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
                         bookStock.id = bookStocks.id;
                         bookStock.BOOK_NET_MRP = bookStocks.BOOK_NET_PRICES;
@@ -690,15 +704,18 @@ public class MainActivity extends AppCompatActivity {
                         Common.bookStockRepository.updateBookStock(bookStock);
                     } else {
                         Book book = Common.bookRepository.getBookNo(stock.BOOK_ID);
-                        BookStock bookStock = new BookStock();
-                        bookStock.BOOK_ID = stock.BOOK_ID;
-                        assert bookStocks != null;
-                        bookStock.BOOK_NET_MRP = Double.parseDouble(book.BOOK_NET_PRICE);
-                        bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
-                        bookStock.QTY_NUMBER = Integer.parseInt(stock.QTY);
-                        bookStock.BOOK_NET_PRICES = Double.parseDouble(book.BOOK_NET_PRICE) * Integer.parseInt(stock.QTY);
+                        if (book!=null){
+                            BookStock bookStock = new BookStock();
+                            bookStock.BOOK_ID = stock.BOOK_ID;
+                            bookStock.BOOK_NET_MRP = Double.parseDouble(book.BOOK_NET_PRICE);
+                            bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
+                            bookStock.QTY_NUMBER = Integer.parseInt(stock.QTY);
+                            bookStock.BOOK_NET_PRICES = Double.parseDouble(book.BOOK_NET_PRICE) * Integer.parseInt(stock.QTY);
+                            // bookStock.LAST_UPDATE_DATE_APP = "";
+                            // bookStock.LAST_UPDATE_DATE = bookStocks.LAST_UPDATE_DATE;
+                            Common.bookStockRepository.insertToBookStock(bookStock);
+                        }
 
-                        Common.bookStockRepository.insertToBookStock(bookStock);
                     }
 
                 }
@@ -1109,6 +1126,15 @@ public class MainActivity extends AppCompatActivity {
                             salesMaster1.PhoneNumber = "011111111";
                         }
 
+                        Customer customer1=Common.customerRepository.getCustomeRetailCode(customer.RETAILER_CODE);
+                        if (customer1!=null){
+                            salesMaster1.CustomerName = customer1.Name;
+
+                        }
+                        else {
+                            salesMaster1.CustomerName = "N/A";
+
+                        }
                         salesMaster1.StoreId = customer.STORE_ID;
                         salesMaster1.Discount = Double.parseDouble(customer.DISCOUNT);
                         salesMaster1.StoreId = customer.STORE_ID;
@@ -1159,6 +1185,7 @@ public class MainActivity extends AppCompatActivity {
                     int values = Common.salesMasterRepository.maxValue();
                     salesDetails1.InvoiceId = values;
                     salesDetails1.InvoiceIdNew = invoiceId;
+                    int size= Common.bookRepository.size();
                     Book book = Common.bookRepository.getBookNo(customer.ITEM_ID);
                     if (book != null) {
                         salesDetails1.BookName = book.BookName;
@@ -1221,7 +1248,13 @@ public class MainActivity extends AppCompatActivity {
         return salesDetails;
 
     }
-//    List<SalesModel.SalesMaster.SalesDetails> salesDetails = new ArrayList<>();
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
+    //    List<SalesModel.SalesMaster.SalesDetails> salesDetails = new ArrayList<>();
 //    private List<SalesModel.SalesMaster.SalesDetails> display(List<SalesDetails> units) {
 //
 //        return salesDetails;

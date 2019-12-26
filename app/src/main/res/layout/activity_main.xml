@@ -125,7 +125,7 @@
                         android:orientation="horizontal"
                         android:weightSum="3">
                         <LinearLayout
-                            android:backgroundTint="#FFC107"
+                            android:backgroundTint="@color/colorPrimary"
                             android:id="@+id/linear_invoice"
                             android:layout_width="0px"
                             android:layout_height="395px"
@@ -160,7 +160,7 @@
 
                         </LinearLayout>
                         <LinearLayout
-                            android:backgroundTint="#FFC107"
+                            android:backgroundTint="@color/colorPrimary"
                             android:id="@+id/linear_notes"
                             android:layout_width="0px"
                             android:layout_height="395px"
@@ -196,7 +196,7 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:backgroundTint="#FFC107"
+                            android:backgroundTint="@color/colorPrimary"
                             android:id="@+id/linear_customers"
                             android:layout_width="0px"
                             android:layout_height="395px"
@@ -260,9 +260,9 @@
                             android:layout_marginTop="0px"
                             android:orientation="horizontal"
                             android:weightSum="3">
-                          
+
+
                             <LinearLayout
-                                android:backgroundTint="#FFC107"
                                 android:id="@+id/linear_challan"
                                 android:layout_width="0px"
                                 android:layout_height="395px"
@@ -270,10 +270,12 @@
                                 android:layout_marginRight="5px"
                                 android:layout_weight="1"
                                 android:background="@drawable/white_bx"
+                                android:backgroundTint="@color/colorPrimary"
 
                                 android:orientation="vertical"
 
                                 >
+
                                 <ImageView
                                     android:layout_width="150px"
                                     android:layout_height="150px"
@@ -284,20 +286,19 @@
 
                                 <TextView
                                     android:id="@+id/text_publisher_chalan"
-                                    android:textStyle="bold"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="1px"
                                     android:gravity="center_horizontal"
-                                    android:tag="40"
                                     android:padding="20px"
+                                    android:tag="40"
                                     android:text="Publishers Challan"
                                     android:textColor="@color/white"
-                                    android:textSize="40px" />
+                                    android:textSize="40px"
+                                    android:textStyle="bold" />
 
 
                             </LinearLayout>
-
 
                             <LinearLayout
                                 android:id="@+id/linear_stock"
@@ -307,7 +308,7 @@
                                 android:layout_marginRight="5px"
                                 android:layout_weight="1"
                                 android:background="@drawable/white_bx"
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
 
                                 android:orientation="vertical"
 
@@ -336,7 +337,7 @@
 
                             </LinearLayout>
                             <LinearLayout
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
                                 android:id="@+id/linear_order"
                                 android:layout_width="0px"
                                 android:layout_height="395px"
@@ -404,7 +405,7 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
                             <LinearLayout
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
                                 android:id="@+id/linear_sales_return"
                                 android:layout_width="0px"
                                 android:layout_height="395px"
@@ -446,7 +447,7 @@
                                 android:layout_marginRight="5px"
                                 android:layout_weight="1"
                                 android:background="@drawable/white_bx"
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
 
                                 android:orientation="vertical"
 
@@ -475,7 +476,7 @@
 
                             </LinearLayout>
                             <LinearLayout
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
                                 android:id="@+id/linear_logout"
                                 android:layout_width="0px"
                                 android:layout_height="395px"
@@ -528,7 +529,7 @@
                                 android:layout_marginRight="5px"
                                 android:layout_weight="1"
                                 android:background="@drawable/white_bx"
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
 
                                 android:orientation="vertical"
 
@@ -578,7 +579,7 @@
                                 android:layout_marginRight="5px"
                                 android:layout_weight="1"
                                 android:background="@drawable/white_bx"
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
 
                                 android:orientation="vertical"
 
@@ -613,7 +614,7 @@
                                 android:layout_marginRight="5px"
                                 android:layout_weight="1"
                                 android:background="@drawable/white_bx"
-                                android:backgroundTint="#FFC107"
+                                android:backgroundTint="@color/colorPrimary"
 
                                 android:orientation="vertical"
 

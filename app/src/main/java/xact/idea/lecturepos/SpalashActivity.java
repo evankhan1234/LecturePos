@@ -1,10 +1,18 @@
 package xact.idea.lecturepos;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -22,6 +30,7 @@ import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 
 public class SpalashActivity extends AppCompatActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,11 +38,13 @@ public class SpalashActivity extends AppCompatActivity {
         Date datess = null;
         SimpleDateFormat formatterss = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
         try {
-            datess= formatterss.parse("09-12-2019 09:30:27 AM");
-            Log.e("currentTime","currentTime"+datess);
+            datess = formatterss.parse("09-12-2019 09:30:27 AM");
+            Log.e("currentTime", "currentTime" + datess);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
 
 
 
