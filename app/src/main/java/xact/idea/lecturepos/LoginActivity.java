@@ -141,22 +141,24 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void accept(LoginEntity loginEntity) throws Exception {
                                     Log.e("ff", "dgg" + new Gson().toJson(loginEntity));
-                                    if (loginEntity.data.USER_ID == null) {
-                                        Toast.makeText(LoginActivity.this, "Username and Password Incorrect", Toast.LENGTH_SHORT).show();
+                                    if (loginEntity.message.equals("Device approval request has been sent!")) {
+                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
                                         dismissLoadingProgress();
-                                    } else {
-//                                        if (Common.bookRepository.size() > 0) {
-//
-//                                        } else {
-//                                            if (Utils.broadcastIntent(LoginActivity.this, rlt_root)) {
-//                                                loadBookItems();
-//                                            } else {
-//                                                Snackbar snackbar = Snackbar
-//                                                        .make(rlt_root, "No Internet", Snackbar.LENGTH_LONG);
-//                                                snackbar.show();
-//                                            }
-//
-//                                        }
+                                    }
+                                    else  if (loginEntity.message.equals("UserID/Password is not correct!")) {
+                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                        dismissLoadingProgress();
+                                    }
+                                    else  if (loginEntity.message.equals("Device approval request has been sent!")) {
+                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                        dismissLoadingProgress();
+                                    }
+                                    else  if (loginEntity.message.equals("Device approval request is pending!")) {
+                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                        dismissLoadingProgress();
+                                    }
+                                    else  if (loginEntity.message.equals("API Request Succeed")) {
+
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, loginEntity.user_id + "");
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, loginEntity.data.CUSTOMER_NAME + "");
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_ADDRESS, loginEntity.data.CUSTOMER_ADDRESS + "");
@@ -179,6 +181,10 @@ public class LoginActivity extends AppCompatActivity {
                                         Common.loginRepository.insertToLogin(login);
                                         startActivity(new Intent(LoginActivity.this, OnBoardingActivity.class));
                                         finish();
+                                        dismissLoadingProgress();
+                                    }
+                                    else {
+                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
                                         dismissLoadingProgress();
                                     }
 

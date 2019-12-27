@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -35,16 +36,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import xact.idea.lecturepos.Adapter.CustomerAdapter;
 import xact.idea.lecturepos.Adapter.InvoiceAdapter;
-import xact.idea.lecturepos.Database.Model.Challan;
-import xact.idea.lecturepos.Database.Model.Customer;
+import xact.idea.lecturepos.Adapter.SalesDetailsAdapter;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.Utils;
 
-public class InvoiceListActivity extends AppCompatActivity {
+public class CustomerDetailsActivity extends AppCompatActivity {
     RecyclerView rcl_this_customer_list;
     InvoiceAdapter mAdapters;
     Activity mActivity;
@@ -52,29 +52,58 @@ public class InvoiceListActivity extends AppCompatActivity {
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     ImageView btn_header_application;
     ImageView btn_header_back;
-    static   EditText edit_start_date;
-     static  EditText edit_end_date;
-     Button btn_yes;
-     ProgressBar progress_bar;
-     EditText edit_content;
+    static EditText edit_start_date;
+    static  EditText edit_end_date;
+    Button btn_yes;
+    ProgressBar progress_bar;
+    TextView title;
+    TextView text_book;
+    TextView text_net_price;
+    TextView text_cash;
+    TextView text_credit;
+    EditText edit_content;
+    String shopName;
+    String Name;
+    double value;
+    int cash;
+    int credit;
+    int book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invoice_list);
+        setContentView(R.layout.activity_customer_details);
         CorrectSizeUtil.getInstance(this).correctSize();
         mActivity=this;
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
+        shopName = getIntent().getStringExtra("ShopName");
+
+           Name = getIntent().getStringExtra("Name");
+
+
+        text_book = findViewById(R.id.text_book);
+        text_cash = findViewById(R.id.text_cash);
+        text_credit = findViewById(R.id.text_credit);
+        text_net_price = findViewById(R.id.text_net_price);
         edit_start_date = findViewById(R.id.edit_start_date);
-        edit_content = findViewById(R.id.edit_content);
+        title = findViewById(R.id.title);
+        title.setText(shopName);
         progress_bar = findViewById(R.id.progress_bar);
         edit_end_date = findViewById(R.id.edit_end_date);
-        rcl_this_customer_list = findViewById(R.id.rcl_this_customer_list);
-        btn_header_application = findViewById(R.id.btn_header_application);
+        rcl_this_customer_list = findViewById(R.id.rcl_approval_in_list);
+     //   btn_header_application = findViewById(R.id.btn_header_application);
+        edit_content = findViewById(R.id.edit_content);
         btn_header_back = findViewById(R.id.btn_header_back);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         rcl_this_customer_list.setLayoutManager(lm);
+        loadCustomer();
+        onTotal();
+        text_book.setText(String.valueOf(book));
+        text_cash.setText(String.valueOf(cash));
+        text_credit.setText(String.valueOf(credit));
+        text_net_price.setText(String.valueOf(value));
+
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -93,17 +122,17 @@ public class InvoiceListActivity extends AppCompatActivity {
                 mAdapters.getFilter().filter(edit_content.getText().toString());
             }
         });
-        btn_header_application.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(InvoiceListActivity.this,InvoiceActivity.class));
-                finish();
-            }
-        });
+//        btn_header_application.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(CustomerDetailsActivity.this,InvoiceActivity.class));
+//                finish();
+//            }
+//        });
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(InvoiceListActivity.this,MainActivity.class));
+                startActivity(new Intent(CustomerDetailsActivity.this,CustomerActivity.class));
                 finish();
             }
         });
@@ -166,7 +195,7 @@ public class InvoiceListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDate(date1,date2).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date2,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 displayCustomerItems(userActivities);
@@ -179,8 +208,8 @@ public class InvoiceListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadCustomer();
-        load();
+
+
     }
 
     private  void loadCustomer() {
@@ -197,30 +226,111 @@ public class InvoiceListActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDate(date1,date1).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date1,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
+                if (userActivities.size()==0){
+
+                }
                 displayCustomerItems(userActivities);
                 Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
-               // Log.e("fsd","dfsdf"+date);
+                // Log.e("fsd","dfsdf"+date);
+                for (SalesMaster salesMaster:userActivities){
+                    if (salesMaster.PayMode.equals("Cash")){
+                        cash+=1;
+                    }
+                    if (salesMaster.PayMode.equals("Credit")){
+                        credit+=1;
+                    }
+                    loadSub(salesMaster.InvoiceId);
+                }
+
                 progress_bar.setVisibility(View.GONE);
 
             }
         }));
 
     }
+    private  void loadCustomerAgain() {
 
-    private  void load() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date(System.currentTimeMillis());
+        String currentDate = formatter.format(date);
+        progress_bar.setVisibility(View.VISIBLE);
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1=new SimpleDateFormat("dd-MM-yyyy").parse(currentDate);
 
-        compositeDisposable.add(Common.salesMasterRepository.getSalesMasterItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date1,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
-            public void accept(List<SalesMaster> customers) throws Exception {
-                Log.e("fsd","dfsdf"+new Gson().toJson(customers));
-               // displayCustomerItems(customers);
+            public void accept(List<SalesMaster> userActivities) throws Exception {
+
+                displayCustomerItems(userActivities);
+                Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
+                // Log.e("fsd","dfsdf"+date);
+                for (SalesMaster salesMaster:userActivities){
+                    if (salesMaster.PayMode.equals("Cash")){
+                        cash+=1;
+                    }
+                    if (salesMaster.PayMode.equals("Credit")){
+                        credit+=1;
+                    }
+                    loadSub(salesMaster.InvoiceId);
+                }
+
+                progress_bar.setVisibility(View.GONE);
+
             }
         }));
 
     }
+    private void loadSub(String invoice){
+        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(invoice).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+            @Override
+            public void accept(List<SalesDetails> units) throws Exception {
+                Log.e("data","data"+new Gson().toJson(units));
+
+                for (SalesDetails salesDetails:units){
+                    // value+=salesDetails.MRP;
+                    //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+                    book+=1;
+
+                    value +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
+                }
+                text_book.setText(String.valueOf(book)+" Pcs");
+                text_net_price.setText(String.valueOf(Utils.getCommaSeperatorValue(value)));
+
+            }
+        }));
+    }
+
+
+  private   void onTotal(){
+      compositeDisposable.add(Common.salesMasterRepository.getSalesMasterList(shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+          @Override
+          public void accept(List<SalesMaster> userActivities) throws Exception {
+            //  displayCustomerItems(userActivities);
+              Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
+              // Log.e("fsd","dfsdf"+date);
+              for (SalesMaster salesMaster:userActivities){
+                  if (salesMaster.PayMode.equals("Cash")){
+                      cash+=1;
+                  }
+                  if (salesMaster.PayMode.equals("Credit")){
+                      credit+=1;
+                  }
+                  loadSub(salesMaster.InvoiceId);
+              }
+              text_cash.setText(String.valueOf(cash));
+              text_credit.setText(String.valueOf(credit));
+              progress_bar.setVisibility(View.GONE);
+          }
+      }));
+  }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -298,5 +408,5 @@ public class InvoiceListActivity extends AppCompatActivity {
             }
 
         }
-        }
+    }
 }

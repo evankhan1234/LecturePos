@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import xact.idea.lecturepos.CustomerDetailsActivity;
 import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.R;
@@ -62,6 +63,18 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
                 Constant.name=messageEntities.get(position).ShopName;
             }
         });
+        holder.text_view_details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(new Intent(mActivity, CustomerDetailsActivity.class));
+                intent.putExtra("ShopName",messageEntities.get(position).ShopName);
+                intent.putExtra("Name",messageEntities.get(position).Name);
+                mActivity.startActivity(intent);
+               // mActivity.finish();
+              //  Constant.name=messageEntities.get(position).ShopName;
+            }
+        });
+
 
 
 
@@ -80,6 +93,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         private TextView text_code;
         private TextView text_name;
         private TextView text_create_invoice;
+        private TextView text_view_details;
 
 
 
@@ -93,6 +107,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             text_code = itemView.findViewById(R.id.text_code);
             text_name = itemView.findViewById(R.id.text_name);
             text_create_invoice = itemView.findViewById(R.id.text_create_invoice);
+            text_view_details = itemView.findViewById(R.id.text_view_details);
 
 
 

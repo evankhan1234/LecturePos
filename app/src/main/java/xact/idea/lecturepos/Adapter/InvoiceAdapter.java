@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,19 +44,21 @@ import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.Utils.CustomDialog;
+import xact.idea.lecturepos.Utils.InvoiceFilter;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
-public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMasterListiewHolder> {
+public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMasterListiewHolder> implements Filterable {
 
     static CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Activity mActivity = null;
-    private List<SalesMaster> messageEntities;
+    public List<SalesMaster> messageEntities;
     private SalesDetailsAdapter mAdapters;
     boolean row_index=true;
     double value;
     double value2;
+    InvoiceFilter filter;
     //    SalesMasterClickInterface SalesMasterClickInterface;
     public InvoiceAdapter(Activity activity, List<SalesMaster> messageEntitie) {
         mActivity = activity;
@@ -143,7 +147,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
                         }
                         //tv_total.setText("Total Price: "+String.valueOf(price));
 
-                        Customer customer=Common.customerRepository.getCustomeName(messageEntities.get(position).CustomerName);
+                        Customer customer=Common.customerRepository.getCustomerss(messageEntities.get(position).CustomerName);
                         if (customer!=null){
                             Intent intent = new Intent(mActivity, InvoicePrintActivity.class);
 
@@ -198,7 +202,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
        // TextView tv_total = infoDialog.findViewById(R.id.tv_total);
         TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
         RecyclerView rcl_this_customer_list = infoDialog.findViewById(R.id.rcl_this_customer_list);
-        tv_info.setText("Are you want to receive ??");
+
 //        linear.setVisibility(View.GONE);
      //   tv_info.setVisibility(View.GONE);
 
@@ -239,7 +243,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Customer customer=Common.customerRepository.getCustomeName(messageEntities.get(position).CustomerName);
+                Customer customer=Common.customerRepository.getCustomerss(messageEntities.get(position).CustomerName);
                 if (customer!=null){
                     Intent intent = new Intent(mActivity, InvoicePrintActivity.class);
 
@@ -269,6 +273,15 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         Log.e("evan", "sd" + messageEntities.size());
         return messageEntities.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new InvoiceFilter(messageEntities, this);
+        }
+        return filter;
+    }
+
     public class SalesMasterListiewHolder extends RecyclerView.ViewHolder {
 
         private TextView text_name;
