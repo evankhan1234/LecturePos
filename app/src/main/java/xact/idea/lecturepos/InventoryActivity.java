@@ -8,14 +8,21 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -27,6 +34,7 @@ import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Model.StockModel;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.Utils;
 
 public class InventoryActivity extends AppCompatActivity {
 
@@ -36,6 +44,7 @@ public class InventoryActivity extends AppCompatActivity {
     ImageView btn_header_back;
     TextView text_quantity;
     TextView text_net_price;
+    EditText edit_content;
     static CompositeDisposable compositeDisposable = new CompositeDisposable();
     int quantity;
     double price;
@@ -46,6 +55,7 @@ public class InventoryActivity extends AppCompatActivity {
         mActivity=this;
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
+        edit_content=findViewById(R.id.edit_content);
         text_quantity=findViewById(R.id.text_quantity);
         text_net_price=findViewById(R.id.text_net_price);
         btn_header_back=findViewById(R.id.btn_header_back);
@@ -59,6 +69,24 @@ public class InventoryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 startActivity(new Intent(InventoryActivity.this,MainActivity.class));
                 finish();
+            }
+        });
+        edit_content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+                mAdapters.getFilter().filter(edit_content.getText().toString());
             }
         });
 
@@ -91,7 +119,13 @@ public class InventoryActivity extends AppCompatActivity {
                 quantity=Common.bookStockRepository.TotalQuantity();
                 text_quantity.setText(String.valueOf(quantity)+" Pcs");
                 price=Common.bookStockRepository.TotalPrice();
-                text_net_price.setText(String.valueOf(price)+" Tk");
+                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+
+                symbols.setGroupingSeparator(',');
+                formatter.setDecimalFormatSymbols(symbols);
+              //  System.out.println(formatter.format(price));
+                text_net_price.setText(Utils.getCommaSeperatorValue(price));
                 loadStockItems();
             }
         }, 300);

@@ -129,7 +129,14 @@ public class InvoicePrintActivity extends AppCompatActivity {
                     text_store.setText(salesMaster.StoreId);
                     text_sub_total_value.setText(sub);
                     text_total_value.setText(String.valueOf(salesMaster.NetValue));
-                    text_return.setText(String.valueOf(salesMaster.Return));
+                    if (salesMaster.Return!=null){
+                        text_return.setText(String.valueOf(salesMaster.Return));
+
+                    }
+                    else {
+                        text_return.setText("0");
+
+                    }
                     text_discount.setText(String.valueOf(salesMaster.Discount));
 
                     rcl_approval_in_list = findViewById(R.id.rcl_approval_in_list);

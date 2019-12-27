@@ -360,7 +360,7 @@ public class InvoiceActivity extends AppCompatActivity {
                         }
 
                         Customer customer =Common.customerRepository.getCustomerss(Name);
-                        salesMaster.CustomerName = customer.Name;
+                        salesMaster.CustomerName = customer.ShopName;
                         salesMaster.Discount = discount;
                         salesMaster.InvoiceId = "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
                         salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);

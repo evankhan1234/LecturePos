@@ -16,6 +16,11 @@ import androidx.annotation.RequiresApi;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import xact.idea.lecturepos.LoginActivity;
 import xact.idea.lecturepos.R;
 
@@ -121,6 +126,16 @@ public  class Utils {
             CustomProgressDialog.sPdCount++;
         }
 
+
+    }
+    public static String getCommaSeperatorValue(double price){
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+
+        symbols.setGroupingSeparator(',');
+        formatter.setDecimalFormatSymbols(symbols);
+        //  System.out.println(formatter.format(price));
+        return formatter.format(price)+" Tk";
 
     }
 

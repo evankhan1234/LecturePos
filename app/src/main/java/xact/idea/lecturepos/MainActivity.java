@@ -223,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 loadCustomer();
                 loadCustomerSync();
                 downBookStockDetails();
+                 loadBookItems();
                 SharedPreferenceUtil.saveShared(MainActivity.this, SharedPreferenceUtil.USER_SYNC, "gray");
                 linear_sync.setBackgroundTintList(getResources().getColorStateList(R.color.back));
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -611,19 +612,40 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("size", "size" + new Gson().toJson(bookResponseEntity));
 
                 for (BookResponseEntity.Data books : bookResponseEntity.data) {
-                    Book book = new Book();
-                    book.BookPrice = books.BOOK_NET_PRICE;
-                    book.BookName = books.BOOK_NAME;
-                    book.BookCode = books.BOOK_CODE;
-                    book.BookNo = books.BOOK_NO;
-                    book.BOOK_SPECIMEN_CODE = books.BOOK_SPECIMEN_CODE;
-                    book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
-                    book.BARCODE_NUMBER = books.BARCODE_NUMBER;
-                    book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
-                    book.BookNameBangla = books.BOOK_NAME_B;
-                    book.BOOK_FACE_VALUE = books.BOOK_FACE_VALUE;
-                    book.F_BOOK_EDITION_NO = books.F_BOOK_EDITION_NO;
-                    Common.bookRepository.insertToBook(book);
+
+                    Book books1=Common.bookRepository.getBookNo(books.BOOK_NO);
+                    if (books1!=null){
+                        Book book = new Book();
+                        book.BookPrice = books.BOOK_NET_PRICE;
+                        book.id = books1.id;
+                        book.BookName = books.BOOK_NAME;
+                        book.BookCode = books.BOOK_CODE;
+                        book.BookNo = books.BOOK_NO;
+                        book.BOOK_SPECIMEN_CODE = books.BOOK_SPECIMEN_CODE;
+                        book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
+                        book.BARCODE_NUMBER = books.BARCODE_NUMBER;
+                        book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
+                        book.BookNameBangla = books.BOOK_NAME_B;
+                        book.BOOK_FACE_VALUE = books.BOOK_FACE_VALUE;
+                        book.F_BOOK_EDITION_NO = books.F_BOOK_EDITION_NO;
+                        Common.bookRepository.updateBook(book);
+                    }
+                    else {
+                        Book book = new Book();
+                        book.BookPrice = books.BOOK_NET_PRICE;
+                        book.BookName = books.BOOK_NAME;
+                        book.BookCode = books.BOOK_CODE;
+                        book.BookNo = books.BOOK_NO;
+                        book.BOOK_SPECIMEN_CODE = books.BOOK_SPECIMEN_CODE;
+                        book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
+                        book.BARCODE_NUMBER = books.BARCODE_NUMBER;
+                        book.BOOK_SELLING_CODE = books.BOOK_SELLING_CODE;
+                        book.BookNameBangla = books.BOOK_NAME_B;
+                        book.BOOK_FACE_VALUE = books.BOOK_FACE_VALUE;
+                        book.F_BOOK_EDITION_NO = books.F_BOOK_EDITION_NO;
+                        Common.bookRepository.insertToBook(book);
+                    }
+
 
                 }
 
@@ -683,25 +705,26 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("StockResponse", "challanDetailsModel" + new Gson().toJson(challanDetailsModel));
 
 
+                Common.bookStockRepository.emptyBookStock();
                 for (StockResponse.Data stock : challanDetailsModel.data) {
 
 
                     BookStock bookStocks = Common.bookStockRepository.getBookStock(stock.BOOK_ID);
                     // int qty =Common.bookStockRepository.maxValue(stock.BOOK_ID);
                     if (bookStocks != null) {
-                        BookStock bookStock = new BookStock();
-                        bookStock.BOOK_ID = stock.BOOK_ID;
-                      //  bookStock.LAST_UPDATE_DATE_APP = bookStocks.LAST_UPDATE_DATE_APP;
-                     //   bookStock.LAST_UPDATE_DATE = bookStocks.LAST_UPDATE_DATE;
-                        bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
-                        bookStock.id = bookStocks.id;
-                        bookStock.BOOK_NET_MRP = bookStocks.BOOK_NET_PRICES;
-                        bookStock.QTY_NUMBER = Integer.parseInt(stock.QTY);
-
-                        int total = Integer.parseInt(stock.QTY);
-                        bookStock.BOOK_NET_PRICES = bookStocks.BOOK_NET_PRICES * total;
-
-                        Common.bookStockRepository.updateBookStock(bookStock);
+//                        BookStock bookStock = new BookStock();
+//                        bookStock.BOOK_ID = stock.BOOK_ID;
+//                      //  bookStock.LAST_UPDATE_DATE_APP = bookStocks.LAST_UPDATE_DATE_APP;
+//                     //   bookStock.LAST_UPDATE_DATE = bookStocks.LAST_UPDATE_DATE;
+//                        bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
+//                        bookStock.id = bookStocks.id;
+//                        bookStock.BOOK_NET_MRP = bookStocks.BOOK_NET_PRICES;
+//                        bookStock.QTY_NUMBER = Integer.parseInt(stock.QTY);
+//
+//                        int total = Integer.parseInt(stock.QTY);
+//                        bookStock.BOOK_NET_PRICES = bookStocks.BOOK_NET_PRICES * total;
+//
+//                        Common.bookStockRepository.updateBookStock(bookStock);
                     } else {
                         Book book = Common.bookRepository.getBookNo(stock.BOOK_ID);
                         if (book!=null){
@@ -1128,7 +1151,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Customer customer1=Common.customerRepository.getCustomeRetailCode(customer.RETAILER_CODE);
                         if (customer1!=null){
-                            salesMaster1.CustomerName = customer1.Name;
+                            salesMaster1.CustomerName = customer1.ShopName;
 
                         }
                         else {

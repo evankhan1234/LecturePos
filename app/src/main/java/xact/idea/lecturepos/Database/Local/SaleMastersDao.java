@@ -23,6 +23,8 @@ public interface SaleMastersDao {
     Flowable<List<SalesMaster>> getSalesDetailsItemById(int SalesDetailsItemId);
     @Query("SELECT * FROM sales_mst WHERE InvoiceId=:SalesDetailsItemId")
     SalesMaster getSalesMaster(String SalesDetailsItemId);
+    @Query("SELECT * FROM sales_mst WHERE CustomerName=:SalesDetailsItemId")
+    Flowable<List<SalesMaster>> getSalesMasterList(String SalesDetailsItemId);
     @Query("Select Count(id)  FROM sales_mst")
     int value();
     @Query("Select MAX(id)  FROM sales_mst")
@@ -32,6 +34,8 @@ public interface SaleMastersDao {
 
     @Query("SELECT * FROM sales_mst WHERE InvoiceDate BETWEEN :from AND :to")
     Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to);
+    @Query("SELECT * FROM sales_mst WHERE InvoiceDate BETWEEN :from AND :to AND CustomerName=:Name")
+    Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to,String Name);
     @Query("DELETE  FROM sales_mst")
     void emptySalesDetails();
 

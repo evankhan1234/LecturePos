@@ -20,8 +20,8 @@ public interface ISalesMasterDataSource {
     SalesMaster invoice(int id);
     Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to);
     void insertToSalesMaster(SalesMaster... SalesMasters);
-
-
+    Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to,String Name);
+    Flowable<List<SalesMaster>> getSalesMasterList(String SalesDetailsItemId);
     void updateSalesMaster(SalesMaster... SalesMasters);
 
 

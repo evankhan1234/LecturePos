@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="xact.idea.lecturepos">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -16,10 +17,10 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <application
         android:name=".Utils.ApplicationClass"
         android:allowBackup="false"
@@ -31,45 +32,46 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <activity android:name=".InvoicePrintActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity android:name=".CustomerDetailsActivity"></activity>
         <activity
-            android:screenOrientation="portrait"
-            android:name=".InventoryActivity" />
-        <activity android:name=".ChallanActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".InvoiceListActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".BarcodeActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ItemActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".QRCodeActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".InvoiceActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".CustomerCreateActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".CustomerActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".OnBoardingActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            />
+            android:name=".InvoicePrintActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InventoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChallanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InvoiceListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BarcodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ItemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".QRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InvoiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CustomerCreateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CustomerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OnBoardingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Portait"
             android:screenOrientation="fullSensor"
@@ -83,6 +85,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

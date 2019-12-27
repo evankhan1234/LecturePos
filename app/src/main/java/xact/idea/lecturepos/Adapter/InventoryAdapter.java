@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +18,14 @@ import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Model.StockModel;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.InventoryFilter;
 
-public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.CCDashboardListiewHolder> {
+public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.CCDashboardListiewHolder> implements Filterable {
 
 
     private Activity mActivity = null;
-    private List<StockModel> messageEntities;
+    public List<StockModel> messageEntities;
+    InventoryFilter filter;
     int row_index = 0;
 
     public InventoryAdapter(Activity activity, List<StockModel> messageEntitie) {
@@ -62,6 +66,14 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.CCDa
     public int getItemCount() {
         // Log.e("evan", "sd" + messageEntities.size());
         return messageEntities.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new InventoryFilter(messageEntities, this);
+        }
+        return filter;
     }
 
     public class CCDashboardListiewHolder extends RecyclerView.ViewHolder {
