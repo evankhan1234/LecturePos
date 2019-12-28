@@ -21,6 +21,7 @@ import xact.idea.lecturepos.Model.ChallanDetailsModelFor;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.Utils.SpinnerFilterForCustomer;
+import xact.idea.lecturepos.Utils.Utils;
 
 public class ChallanDetailsAdapter extends RecyclerView.Adapter<ChallanDetailsAdapter.PlaceTagListiewHolder>  {
 
@@ -50,7 +51,7 @@ public class ChallanDetailsAdapter extends RecyclerView.Adapter<ChallanDetailsAd
 
     @Override
     public void onBindViewHolder(final ChallanDetailsAdapter.PlaceTagListiewHolder holder, final int position) {
-        String challan_no =messageEntities.get(position).BookName+"</font>";
+        String challan_no =messageEntities.get(position).BookNameBangla+"</font>";
         String challan_packet = "<b><font color=#000 >Total Packet :  </font></b> <font color=#358ED3>"+messageEntities.get(position).BOOK_NET_PRICE;
         String challan_date = messageEntities.get(position).CHALLAN_BOOK_QTY;
         String challan_quantity = messageEntities.get(position).BOOK_NET_PRICE;
@@ -60,7 +61,7 @@ public class ChallanDetailsAdapter extends RecyclerView.Adapter<ChallanDetailsAd
         holder.text_challan_no.setText(Html.fromHtml(challan_no));
         holder.text_challan_date.setText(Html.fromHtml(challan_date));
        // holder.text_challan_packet.setText(Html.fromHtml(challan_packet));
-        holder.text_total_value.setText(Html.fromHtml(String.valueOf(value)));
+        holder.text_total_value.setText(Html.fromHtml(String.valueOf(Utils.getCommaValue(value))));
         holder.text_challan_quantity.setText(Html.fromHtml(challan_quantity));
         //     holder.btn_receive.setVisibility(View.GONE);
         //   int row_index;

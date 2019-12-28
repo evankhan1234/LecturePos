@@ -75,7 +75,7 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
 //        String text4 = "<b><font color=#000 >Total =  </font></b> <font color=#358ED3>"+messageEntities.get(position).TotalAmount+"</font> <b><font color=#FFC107 > Tk </font></b>";
 //        String text2 = "<font color=#358ED3>"+messageEntities.get(position).Quantity+"</font>";
 //        String text3 = " <b><font color=#000> *  </font></b><font color=#358ED3>"+messageEntities.get(position).MRP+ "</font> <b><font color=#000 > =  </font> </b><font color=#358ED3>"+rounded(total,2)+" </font>  <b><font color=#FFC107 > Tk </font></b>";
-        holder.text_name.setText(book.BookName);
+        holder.text_name.setText(book.BookNameBangla);
      //   holder.text_book_code.setText(Html.fromHtml(textId));
         holder.text_quantity.setText(String.valueOf(messageEntities.get(position).Quantity));
         holder.text_mrp.setText(String.valueOf(rounded(ss,2)));

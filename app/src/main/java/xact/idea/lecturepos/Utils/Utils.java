@@ -129,14 +129,19 @@ public  class Utils {
 
     }
     public static String getCommaSeperatorValue(double price){
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-
-        symbols.setGroupingSeparator(',');
-        formatter.setDecimalFormatSymbols(symbols);
-        //  System.out.println(formatter.format(price));
-        return formatter.format(price)+" Tk";
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        DecimalFormat df = (DecimalFormat)nf;
+        df.applyPattern("#,##,##,###.00");
+        String output = df.format(price);
+        return output+" Tk";
 
     }
+    public static String getCommaValue(double price){
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        DecimalFormat df = (DecimalFormat)nf;
+        df.applyPattern("#,##,##,###.00");
+        String output = df.format(price);
+        return output+" Tk";
 
+    }
 }

@@ -167,8 +167,8 @@ public class ItemActivity extends AppCompatActivity {
                     final double prices;
 
                     final double d;
-                    if (!price.getText().toString().equals("")) {
-                        prices = Double.parseDouble(price.getText().toString());
+                    if (!bookMRP.getText().toString().equals("")) {
+                        prices = Double.parseDouble(bookMRP.getText().toString());
                     } else {
                         prices = 0.0;
                     }
@@ -224,8 +224,8 @@ public class ItemActivity extends AppCompatActivity {
                     final double prices;
                     final double quantitys;
                     final double d;
-                    if (!price.getText().toString().equals("")) {
-                        prices = Double.parseDouble(price.getText().toString());
+                    if (!bookMRP.getText().toString().equals("")) {
+                        prices = Double.parseDouble(bookMRP.getText().toString());
                     } else {
                         prices = 0.0;
                     }
@@ -258,7 +258,7 @@ public class ItemActivity extends AppCompatActivity {
                         if (!quantity.getText().toString().equals("")&& !amount.getText().toString().equals("")) {
                             double quan= Double.parseDouble(quantity.getText().toString());
                             if (quan>0){
-                                double pricesfor = Double.parseDouble(price.getText().toString());
+                                double pricesfor = Double.parseDouble(bookMRP.getText().toString());
                                 int quantityfor = Integer.parseInt(quantity.getText().toString());
                                 double discountfor;
                                 if (!discount.getText().toString().equals("")) {
@@ -317,7 +317,7 @@ public class ItemActivity extends AppCompatActivity {
                             if (quan>0){
                                 Items getItems =Common.itemRepository.getItems(bookname.getText().toString());
                                 if (getItems==null){
-                                    double pricesfor = Double.parseDouble(price.getText().toString());
+                                    double pricesfor = Double.parseDouble(bookMRP.getText().toString());
                                     int quantityfor = Integer.parseInt(quantity.getText().toString());
                                     double discountfor;
                                     if (!discount.getText().toString().equals("")) {
@@ -364,7 +364,7 @@ public class ItemActivity extends AppCompatActivity {
                                     finish();
                                 }
                                 else{
-                                    double pricesfor = Double.parseDouble(price.getText().toString());
+                                    double pricesfor = Double.parseDouble(bookMRP.getText().toString());
                                     int quantityfor = Integer.parseInt(quantity.getText().toString());
                                     double discountfor;
                                     if (!discount.getText().toString().equals("")) {
@@ -426,7 +426,7 @@ public class ItemActivity extends AppCompatActivity {
                             if (quan>0){
                                 Items getItems =Common.itemRepository.getItems(bookname.getText().toString());
                                 if (getItems==null){
-                                    double pricesfor = Double.parseDouble(price.getText().toString());
+                                    double pricesfor = Double.parseDouble(bookMRP.getText().toString());
                                     int quantityfor = Integer.parseInt(quantity.getText().toString());
                                     double discountfor;
                                     if (!discount.getText().toString().equals("")) {
@@ -496,7 +496,7 @@ public class ItemActivity extends AppCompatActivity {
                                     finish();
                                 }
                                 else {
-                                    double pricesfor = Double.parseDouble(price.getText().toString());
+                                    double pricesfor = Double.parseDouble(bookMRP.getText().toString());
                                     int quantityfor = Integer.parseInt(quantity.getText().toString());
                                     double discountfor;
                                     if (!discount.getText().toString().equals("")) {

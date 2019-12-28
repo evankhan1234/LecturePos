@@ -148,9 +148,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcl_this_customer_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="550px"
             android:layout_marginBottom="0px"
-            android:minHeight="350px"
+
 
 
             android:nestedScrollingEnabled="false"

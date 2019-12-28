@@ -186,7 +186,7 @@
                 android:layout_marginRight="0px"
                 android:gravity="center"
                 android:tag="45"
-                android:text="Are You Want To Log Out?"
+                android:text="Do You Want To Log Out?"
                 android:textColor="@color/gray_black"
                 android:textSize="45px" />
         </RelativeLayout>

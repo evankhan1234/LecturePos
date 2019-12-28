@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (login != null) {
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, login.USER_ID + "");
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, login.CUSTOMER_NAME + "");
-                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, login.CUSTOMER_ADDRESS + "");
+                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_ADDRESS, login.CUSTOMER_ADDRESS + "");
                                 if (SharedPreferenceUtil.getSync(LoginActivity.this).equals("green")) {
                                     SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
                                 } else {

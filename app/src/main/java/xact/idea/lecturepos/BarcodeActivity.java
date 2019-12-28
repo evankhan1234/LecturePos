@@ -48,9 +48,22 @@ public class BarcodeActivity extends AppCompatActivity {
             else {
                // Constant.code=intentResult.getContents();
 
-                Book book= Common.bookRepository.getBook( intentResult.getContents());
+                 Book book= Common.bookRepository.getBook( intentResult.getContents());
                 if (book!=null){
+
                     BookStock bookStocks =Common.bookStockRepository.getBookStock(book.BookNo);
+                    if (bookStocks!=null){
+                        Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
+                        intent.putExtra("EXTRA_SESSION", intentResult.getContents());
+                        startActivity(intent);
+                        finish();
+                    }
+                    else {
+                        Toast.makeText(this, "No Books Found", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BarcodeActivity.this, InvoiceActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 //                    if (bookStocks!=null){
 //                        Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
 //                        intent.putExtra("EXTRA_SESSION", intentResult.getContents());
@@ -63,14 +76,11 @@ public class BarcodeActivity extends AppCompatActivity {
 //                        startActivity(intent);
 //                        finish();
 //                    }
-                    Intent intent = new Intent(BarcodeActivity.this, ItemActivity.class);
-                    intent.putExtra("EXTRA_SESSION", intentResult.getContents());
-                    startActivity(intent);
-                    finish();
+
                 }
                 else {
 
-                    Toast.makeText(this, "Not Books Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "No Books Found", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(BarcodeActivity.this, InvoiceActivity.class);
                     startActivity(intent);
                     finish();

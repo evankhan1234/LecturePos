@@ -175,7 +175,7 @@
                     android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ship To"
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="30px" />
 
@@ -184,7 +184,7 @@
                     android:tag="25"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Brandon Inc."
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="25px"
                     android:textStyle="bold" />
@@ -194,7 +194,7 @@
                     android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1, 5th avenue, 7th cross,NYC"
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="30px" />
 
@@ -203,7 +203,7 @@
                     android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="a 5486-4604"
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="30px" />
 
@@ -212,7 +212,7 @@
                     android:tag="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="jack@brandonic.com"
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="30px" />
             </LinearLayout>
