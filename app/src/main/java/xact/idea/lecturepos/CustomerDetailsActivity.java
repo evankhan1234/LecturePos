@@ -65,8 +65,8 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     String shopName;
     String Name;
     double value;
-    int cash;
-    int credit;
+    double cash;
+    double credit;
     int book;
 
     @Override
@@ -99,10 +99,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         rcl_this_customer_list.setLayoutManager(lm);
         loadCustomer();
         onTotal();
-        text_book.setText(String.valueOf(book));
-        text_cash.setText(String.valueOf(cash));
-        text_credit.setText(String.valueOf(credit));
-        text_net_price.setText(String.valueOf(value));
+//        text_book.setText(String.valueOf(book));
+//        text_cash.setText(String.valueOf(cash));
+//        text_credit.setText(String.valueOf(credit));
+//        text_net_price.setText(String.valueOf(value));
 
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -235,15 +235,15 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                 displayCustomerItems(userActivities);
                 Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
                 // Log.e("fsd","dfsdf"+date);
-                for (SalesMaster salesMaster:userActivities){
-                    if (salesMaster.PayMode.equals("Cash")){
-                        cash+=1;
-                    }
-                    if (salesMaster.PayMode.equals("Credit")){
-                        credit+=1;
-                    }
-                    loadSub(salesMaster.InvoiceId);
-                }
+//                for (SalesMaster salesMaster:userActivities){
+//                    if (salesMaster.PayMode.equals("Cash")){
+//                        cash+=salesMaster.NetValue;
+//                    }
+//                    if (salesMaster.PayMode.equals("Credit")){
+//                        credit+=salesMaster.NetValue;
+//                    }
+//                    loadSub(salesMaster.InvoiceId);
+//                }
 
                 progress_bar.setVisibility(View.GONE);
 
@@ -251,43 +251,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         }));
 
     }
-    private  void loadCustomerAgain() {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = new Date(System.currentTimeMillis());
-        String currentDate = formatter.format(date);
-        progress_bar.setVisibility(View.VISIBLE);
-        Date date1 = null;
-        Date date2 = null;
-        try {
-            date1=new SimpleDateFormat("dd-MM-yyyy").parse(currentDate);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date1,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
-            @Override
-            public void accept(List<SalesMaster> userActivities) throws Exception {
-
-                displayCustomerItems(userActivities);
-                Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
-                // Log.e("fsd","dfsdf"+date);
-                for (SalesMaster salesMaster:userActivities){
-                    if (salesMaster.PayMode.equals("Cash")){
-                        cash+=1;
-                    }
-                    if (salesMaster.PayMode.equals("Credit")){
-                        credit+=1;
-                    }
-                    loadSub(salesMaster.InvoiceId);
-                }
-
-                progress_bar.setVisibility(View.GONE);
-
-            }
-        }));
-
-    }
     private void loadSub(String invoice){
         compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(invoice).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
             @Override
@@ -299,10 +263,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                     //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
                     book+=1;
 
-                    value +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
+                    //value +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
                 }
                 text_book.setText(String.valueOf(book)+" Pcs");
-                text_net_price.setText(String.valueOf(Utils.getCommaSeperatorValue(value)));
+
 
             }
         }));
@@ -317,15 +281,18 @@ public class CustomerDetailsActivity extends AppCompatActivity {
               Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
               // Log.e("fsd","dfsdf"+date);
               for (SalesMaster salesMaster:userActivities){
+                  value+=salesMaster.NetValue;
                   if (salesMaster.PayMode.equals("Cash")){
-                      cash+=1;
+                      Log.e("NetValue","NetValue"+salesMaster.NetValue);
+                      cash+=salesMaster.NetValue;
                   }
                   if (salesMaster.PayMode.equals("Credit")){
-                      credit+=1;
+                      credit+=salesMaster.NetValue;
                   }
                   loadSub(salesMaster.InvoiceId);
               }
-              text_cash.setText(String.valueOf(cash));
+              text_cash.setText(String.valueOf(Utils.getCommaValue(cash)));
+              text_net_price.setText(String.valueOf(Utils.getCommaValue(value)));
               text_credit.setText(String.valueOf(credit));
               progress_bar.setVisibility(View.GONE);
           }

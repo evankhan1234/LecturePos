@@ -15,4 +15,6 @@ public class ChallanDetailsModelFor {
     public String  F_CHALLAN_NO;
     @SerializedName("BookName")
     public String  BookName;
+    @SerializedName("BookNameBangla")
+    public String  BookNameBangla;
 }

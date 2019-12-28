@@ -120,10 +120,10 @@ public class InvoicePrintActivity extends AppCompatActivity {
                     text_bill_address.setText(customer.Address);
                     text_bill_phone_number.setText(customer.MobileNumber);
                     text_bill_retail_code.setText(customer.RetailerCode);
-                    text_ship_shop_name.setText(customer.ShopName);
-                    text_ship_shop_address.setText(customer.Address);
-                    text_ship_shop_number.setText(customer.MobileNumber);
-                    text_ship_retail_code.setText(customer.RetailerCode);
+//                    text_ship_shop_name.setText(customer.ShopName);
+//                    text_ship_shop_address.setText(customer.Address);
+//                    text_ship_shop_number.setText(customer.MobileNumber);
+//                    text_ship_retail_code.setText(customer.RetailerCode);
                     text_invoice_number.setText(salesMaster.InvoiceId);
                     text_invoice_date.setText(salesMaster.InvoiceDates);
                     text_store.setText(salesMaster.StoreId);

@@ -91,10 +91,10 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //        String text2 = "<font color=#358ED3>"+messageEntities.get(position).Quantity+"</font> <b><font color=#000 > * BDT </font></b>";
 //        String text3 = "<font color=#358ED3>"+messageEntities.get(position).Price+"</font> ";
         holder.text_name.setText(Html.fromHtml(name));
-        holder.text_contact_number.setText(Html.fromHtml(store));
+        holder.text_contact_number.setText(Html.fromHtml(invoice_date));
         holder.text_invoice.setText(Html.fromHtml(invoice_number));
         holder.text_code.setText(Html.fromHtml(retail_code));
-        holder.text_invoice_date.setText(Html.fromHtml(invoice_date));
+    //    holder.text_invoice_date.setText(Html.fromHtml(invoice_date));
        // holder.text_discount.setText(String.valueOf(messageEntities.get(position).Discount));
         holder.text_total.setText(String.valueOf(Html.fromHtml(invoice_total)));
 

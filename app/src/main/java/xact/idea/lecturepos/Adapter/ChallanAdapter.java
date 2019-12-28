@@ -42,6 +42,7 @@ import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.Utils.CustomDialog;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
+import xact.idea.lecturepos.Utils.Utils;
 
 public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanListiewHolder> {
 
@@ -71,11 +72,13 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
 
     @Override
     public void onBindViewHolder(final ChallanAdapter.ChallanListiewHolder holder, final int position) {
+
+        double total=Double.parseDouble(messageEntities.get(position).TOTAL_VALUE);
         String challan_no = "<b><font color=#000 >Challan No :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_CODE+"</font>";
         String challan_packet = "<b><font color=#000 >Total Packet :  </font></b> <font color=#358ED3>"+messageEntities.get(position).NO_OF_PACKATE+"</font>";
         String challan_date = "<b><font color=#000 >Date :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_DATE+"</font>";
         String challan_quantity = "<b><font color=#000 >Quantity :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_QTY+"</font>";
-        String challan_value = "<b><font color=#000 >Total Price :  </font></b> <font color=#358ED3>"+messageEntities.get(position).TOTAL_VALUE+"</font>";
+        String challan_value = "<b><font color=#000 >Total Price :  </font></b> <font color=#358ED3>"+ Utils.getCommaValue(total)+"</font>";
         holder.text_challan_no.setText(Html.fromHtml(challan_no));
         holder.text_challan_date.setText(Html.fromHtml(challan_date));
         holder.text_challan_packet.setText(Html.fromHtml(challan_packet));
@@ -245,16 +248,17 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
         Button btn_no = infoDialog.findViewById(R.id.btn_cancel);
         TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
         RecyclerView rcl_this_customer_list = infoDialog.findViewById(R.id.rcl_this_customer_list);
-        tv_info.setText("Are you want to receive ??");
+        tv_info.setText("Do you want to receive ??");
         spinerTitle.setText(" Challan No: "+messageEntities.get(position).CHALLAN_NO);
         CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         rcl_this_customer_list.setLayoutManager(lm);
+        Log.e("CHALLAN_NO","CHALLAN_NO"+messageEntities.get(position).CHALLAN_NO);
         compositeDisposable.add(Common.challanDetailsRepository.getChallanDetailsFor(messageEntities.get(position).CHALLAN_NO).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<ChallanDetailsModelFor>>() {
             @Override
             public void accept(List<ChallanDetailsModelFor> units) throws Exception {
-                Log.e("data","data"+new Gson().toJson(units));
+                Log.e("CHALLAN_NO","CHALLAN_NO"+new Gson().toJson(units));
                 int price = 0;
 
                 for (ChallanDetailsModelFor challanDetailsModelFor: units){
@@ -262,7 +266,7 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
                     price+=Integer.parseInt(challanDetailsModelFor.BOOK_NET_PRICE)*Integer.parseInt(challanDetailsModelFor.CHALLAN_BOOK_QTY);
                    // price+=d;
                 }
-                tv_total.setText("Total Price: "+String.valueOf(price));
+                tv_total.setText("Total Price: "+String.valueOf(Utils.getCommaValue(price)));
                 mAdapters = new ChallanDetailsAdapter(mActivity, units);
                 rcl_this_customer_list.setAdapter(mAdapters);
 

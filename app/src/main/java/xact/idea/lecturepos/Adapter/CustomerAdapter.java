@@ -47,6 +47,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     public void onBindViewHolder(final CustomerAdapter.CustomerListiewHolder holder, final int position) {
 
         //   int row_index;
+        holder.text_store_id.setVisibility(View.GONE);
         Log.e("SDFsf","SDfs"+messageEntities.get(position).Name);
         holder.text_code.setText(messageEntities.get(position).RetailerCode);
         holder.text_customer.setText(messageEntities.get(position).Name);
