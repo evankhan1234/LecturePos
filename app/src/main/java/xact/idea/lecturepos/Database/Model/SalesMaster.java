@@ -43,6 +43,8 @@ public class SalesMaster {
     public String InvoiceDates;
     @ColumnInfo(name = "PhoneNumber")
     public String PhoneNumber;
+    @ColumnInfo(name = "SubTotal")
+    public String SubTotal;
     @ColumnInfo(name = "Return")
     public String Return;
     @ColumnInfo(name = "Date")

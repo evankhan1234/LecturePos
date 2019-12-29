@@ -3,6 +3,7 @@ package xact.idea.lecturepos.Database.Local;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -30,7 +31,7 @@ public interface SaleDetailsDao {
     @Query("DELETE  FROM sales_dtl")
     void emptySalesDetails();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertToSalesDetails(SalesDetails...sales_dtl);
 
     @Update

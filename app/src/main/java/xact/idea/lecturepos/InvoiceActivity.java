@@ -71,6 +71,7 @@ import xact.idea.lecturepos.Utils.CustomDialog;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 import xact.idea.lecturepos.Utils.SpinnerDialogCustomer;
 import xact.idea.lecturepos.Utils.SpinnerDialogFor;
+import xact.idea.lecturepos.Utils.Utils;
 
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
@@ -80,6 +81,7 @@ public class InvoiceActivity extends AppCompatActivity {
     Button btn_scan;
     Button btn_input;
     Button save;
+    Button saves;
     EditText editShippingChargesValue;
     static EditText edit_retail_code;
     static EditText edit_contact_number;
@@ -91,7 +93,7 @@ public class InvoiceActivity extends AppCompatActivity {
     TextView text_net_amounts;
     static TextView text_customer_spinner;
     ItemAdapter mAdapters;
-    static CompositeDisposable compositeDisposable = new CompositeDisposable();
+     CompositeDisposable compositeDisposable = new CompositeDisposable();
     RecyclerView rcl_this_customer_list;
     ImageView btn_header_back;
     private List<Customer> customerArrayList = new ArrayList<>();
@@ -102,7 +104,7 @@ public class InvoiceActivity extends AppCompatActivity {
     ArrayAdapter<Customer> customerListEntityArrayAdapter;
     ArrayAdapter<String> bookListEntityArrayAdapter;
     Spinner spinner_customer;
-    static String Name;
+     String Name;
     RadioButton radioCash;
     RadioButton radioCredit;
     RadioGroup radioLogin;
@@ -124,6 +126,7 @@ public class InvoiceActivity extends AppCompatActivity {
         radioCredit = findViewById(R.id.radioCredit);
         edit_date = findViewById(R.id.edit_date);
         save = findViewById(R.id.save);
+        saves = findViewById(R.id.saves);
         btn_scan = findViewById(R.id.btn_scan);
         edit_retail_code = findViewById(R.id.edit_retail_code);
         spinner_customer = findViewById(R.id.spinner_customer);
@@ -184,7 +187,8 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void accept(List<StockModel> books) throws Exception {
                 for (StockModel book : books) {
-                    bookArrayList.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+book.BARCODE_NUMBER );
+                    String data= Utils.getValue("20"+book.F_BOOK_EDITION_NO);
+                    bookArrayList.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+"("+data+")"+book.BARCODE_NUMBER );
                     //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
                     //ArrayList.add(customer.ShopName);
                 }
@@ -239,8 +243,8 @@ public class InvoiceActivity extends AppCompatActivity {
                 @Override
                 public void accept(List<StockModel> books) throws Exception {
                     for (StockModel book : books) {
-                        bookArrayListAgain.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+book.BARCODE_NUMBER );
-                        //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
+                        String data= Utils.getValue("20"+book.F_BOOK_EDITION_NO);
+                        bookArrayListAgain.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+"("+data+")"+book.BARCODE_NUMBER );                        //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
                         //ArrayList.add(customer.ShopName);
                     }
 
@@ -306,7 +310,8 @@ public class InvoiceActivity extends AppCompatActivity {
         final Date date = new Date(System.currentTimeMillis());
         edit_date.setText(formatter.format(date));
 
-        save.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
                 String amounts = text_sub_total.getText().toString();
@@ -378,6 +383,9 @@ public class InvoiceActivity extends AppCompatActivity {
                         salesMaster.Device = str1 + " " + str;
                         salesMaster.update_date = date1;
                         salesMaster.PayMode = pay;
+                        String s1 = text_sub_total.getText().toString();
+                        s1 = s1.replace(" Tk", "");
+                        salesMaster.SubTotal = s1;
                         Date dates = new Date(System.currentTimeMillis());
                         salesMaster.Date = dates;
                         salesMaster.Note = edit_note.getText().toString();
@@ -387,7 +395,8 @@ public class InvoiceActivity extends AppCompatActivity {
                         Common.salesMasterRepository.insertToSalesMaster(salesMaster);
                         Flowable<List<Items>> units = Common.itemRepository.getItemItems();
 
-                        for (Items itemModel : units.blockingFirst()) {
+                        for (Items itemModel : units.blockingFirst())
+                        {
                             int values = Common.salesMasterRepository.maxValue();
                             SalesDetails salesDetails = new SalesDetails();
                             salesDetails.BookId = itemModel.BookId;
@@ -400,7 +409,7 @@ public class InvoiceActivity extends AppCompatActivity {
                             salesDetails.InvoiceId = values;
                             salesDetails.InvoiceIdNew = salesMasters.InvoiceId;
                             salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
-                            Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
+                             Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
 
 
                             BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
@@ -417,16 +426,20 @@ public class InvoiceActivity extends AppCompatActivity {
                         SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
                         Date dates11 = new Date(System.currentTimeMillis());
                         String currentTime1 = formatters1.format(dates11);
+                        SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_TEST ,"10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
+
                         SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
                         SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
 
                         Constant.arrayList.clear();
                         Constant.name="";
+                        Constant.rate="rate";
                         Common.itemRepository.emptyItem();
                         Intent intent = new Intent(InvoiceActivity.this, InvoicePrintActivity.class);
-                        String s1 = text_sub_total.getText().toString();
-                        s1 = s1.replace(" Tk", "");
-                        intent.putExtra("sub", s1);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                         intent.putExtra("customerName", Name);
                         intent.putExtra("invoiceId", "10" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
                         startActivity(intent);
@@ -444,6 +457,7 @@ public class InvoiceActivity extends AppCompatActivity {
 
             }
         });
+
         editReturn.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -15,4 +15,5 @@ public class Constant {
     public static int size=0;
     public static int sizes=0;
     public static String name="";
+    public static String rate="rate1";
 }
