@@ -30,8 +30,10 @@ import xact.idea.lecturepos.Model.ItemModel;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.Utils;
 
 import static java.lang.Math.round;
+import static xact.idea.lecturepos.Utils.Utils.getCommaValue;
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
 public class ItemActivity extends AppCompatActivity {
@@ -114,8 +116,11 @@ public class ItemActivity extends AppCompatActivity {
 
 
             if (book != null) {
-                bookname.setText(book.BookName+"(20"+book.F_BOOK_EDITION_NO+")");
-                booknameBangla.setText(book.BookNameBangla);
+                bookname.setText(book.BookName+" (20"+book.F_BOOK_EDITION_NO+")");
+
+                String data= Utils.getValue("20"+book.F_BOOK_EDITION_NO);
+                booknameBangla.setText(book.BookNameBangla+" ("+data+")");
+              //  booknameBangla.setText(book.BookNameBangla);
                 price.setText(String.valueOf(book.BOOK_NET_PRICE));
                 bookMRP.setText(String.valueOf(book.BOOK_FACE_VALUE));
             } else {

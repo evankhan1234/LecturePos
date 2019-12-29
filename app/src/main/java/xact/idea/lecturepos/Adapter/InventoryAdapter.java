@@ -19,6 +19,7 @@ import xact.idea.lecturepos.Model.StockModel;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.Utils.InventoryFilter;
+import xact.idea.lecturepos.Utils.Utils;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.CCDashboardListiewHolder> implements Filterable {
 
@@ -49,11 +50,12 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.CCDa
     public void onBindViewHolder(final InventoryAdapter.CCDashboardListiewHolder holder, final int position) {
 
 
-        Log.e("Evan", "SDfs" + messageEntities.get(position).BookName);
-       holder.text_name.setHint(String.valueOf(messageEntities.get(position).BookName));
+        Log.e("Evan", "SDfs" + messageEntities.get(position). BookNameBangla);
+       holder.text_name.setHint(String.valueOf(messageEntities.get(position).BookNameBangla));
        holder.text_quantity.setHint(String.valueOf(messageEntities.get(position).QTY_NUMBER));
        holder.text_mrp.setHint(String.valueOf(messageEntities.get(position).BOOK_NET_MRP));
-       holder.text_net_price.setHint(String.valueOf(messageEntities.get(position).BOOK_NET_PRICES));
+       double data=Double.parseDouble(messageEntities.get(position).BOOK_NET_PRICES);
+       holder.text_net_price.setHint(Utils.getCommaValue(data));
 
 
 

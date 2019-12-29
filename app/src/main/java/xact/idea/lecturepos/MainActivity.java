@@ -162,8 +162,14 @@ public class MainActivity extends AppCompatActivity {
         linear_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, InvoiceActivity.class));
 
+                Intent intent =new Intent(MainActivity.this, InvoiceActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
         linear_notes.setOnClickListener(new View.OnClickListener() {

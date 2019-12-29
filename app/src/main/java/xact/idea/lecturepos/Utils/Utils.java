@@ -57,6 +57,81 @@ public  class Utils {
         });
         infoDialog.show();
     }
+    public static String getValue(String value)
+    {
+        char[] chBookTotalPrice = new char[(String.valueOf(value).length())];
+//
+        // Copy character by character into array
+        for (int i = 0; i < (String.valueOf(value).length()); i++) {
+            chBookTotalPrice[i] = (String.valueOf(value).charAt(i));
+        }
+
+        StringBuilder stringBuilderBookTotalPrice = new StringBuilder();
+        // Printing content of array
+        for (char c2 : chBookTotalPrice) {
+            if (c2 == '1') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('1', '১');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '2') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('2', '২');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '3') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('3', '৩');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '4') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('4', '৪');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '5') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('5', '৫');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '6') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('6', '৬');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '7') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('7', '৭');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '8') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('8', '৮');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '9') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('9', '৯');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '0') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('0', '০');
+                stringBuilderBookTotalPrice.append(replaceString);
+            } else if (c2 == '.') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('.', '.');
+                stringBuilderBookTotalPrice.append(replaceString);
+            }
+
+
+        }
+        String prices = stringBuilderBookTotalPrice.toString();
+        return prices;
+    }
+
     public static double rounded(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 

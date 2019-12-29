@@ -33,8 +33,8 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="125px"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="65px"
                 android:layout_weight="0.8">
 
                 <ImageView
@@ -43,8 +43,21 @@
                     android:layout_height="40dp"
                     android:layout_alignParentLeft="true"
                     android:src="@drawable/lecture" />
-                
+
+                <TextView
+                    android:layout_marginTop="30px"
+                    android:tag="28"
+                    android:id="@+id/cx"
+                    android:layout_below="@+id/img_temp_one_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="Lecture Authorized Agent"
+                    android:textColor="@android:color/black"
+                    android:textSize="28px"
+                    />
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -115,17 +128,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Bill To"
+                    android:tag="30"
                     android:textColor="@android:color/black"
                     android:textSize="30px" />
 
                 <TextView
-                    android:tag="25"
+                    android:tag="30"
                     android:id="@+id/text_bill_shop_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Brandon Inc."
                     android:textColor="@android:color/black"
-                    android:textSize="25px"
+                    android:textSize="30px"
                     android:textStyle="bold" />
                 <TextView
                     android:tag="30"

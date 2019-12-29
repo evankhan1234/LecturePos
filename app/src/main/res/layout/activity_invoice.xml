@@ -757,6 +757,10 @@
             <Button
                 android:tag="35"
                 android:textSize="35px" android:textColor="#fff" android:id="@+id/save" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Create Invoice" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
+            <Button
+                android:visibility="gone"
+                android:tag="35"
+                android:textSize="35px" android:textColor="#fff" android:id="@+id/saves" android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Create Invoice" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
 
             <View
                 android:layout_below="@+id/cibact_RLDetail"

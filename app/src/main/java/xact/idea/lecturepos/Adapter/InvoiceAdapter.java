@@ -38,10 +38,13 @@ import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.InvoiceActivity;
+
 import xact.idea.lecturepos.InvoicePrintActivity;
+import xact.idea.lecturepos.InvoicePrintAgainActivity;
 import xact.idea.lecturepos.Model.ChallanDetailsModelFor;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Common;
+import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 import xact.idea.lecturepos.Utils.CustomDialog;
 import xact.idea.lecturepos.Utils.InvoiceFilter;
@@ -81,11 +84,11 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
     public void onBindViewHolder(final InvoiceAdapter.SalesMasterListiewHolder holder, final int position) {
 
         //   int row_index;
-       String name = "<b><font color=#000 >Customer Name :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CustomerName+"</font>";
+       String name = "<b><font color=#000 ></font></b> <font color=#358ED3>"+messageEntities.get(position).CustomerName+"</font>";
        String store = "<b><font color=#000 >Store Id :  </font></b> <font color=#358ED3>"+messageEntities.get(position).StoreId+"</font>";
-       String invoice_number = "<b><font color=#000 >Invoice Number :  </font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceNumber+"</font>";
+       String invoice_number = "<b><font color=#000 ></font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceNumber+"</font>";
        String retail_code = "<b><font color=#000 >Retail Code :  </font></b> <font color=#358ED3>"+messageEntities.get(position).RetailCode+"</font>";
-       String invoice_date = "<b><font color=#000 >Invoice Date :  </font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceDates+"</font>";
+       String invoice_date = "<b><font color=#000 ></font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceDates+"</font>";
        String invoice_total = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceAmount+"</font>";
 //        String text4 = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>"+messageEntities.get(position).Amount+"</font>";
 //        String text2 = "<font color=#358ED3>"+messageEntities.get(position).Quantity+"</font> <b><font color=#000 > * BDT </font></b>";
@@ -134,36 +137,46 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         holder.text_create_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
-                    @Override
-                    public void accept(List<SalesDetails> units) throws Exception {
-                        Log.e("data","data"+new Gson().toJson(units));
+                String d=Constant.rate;
+                if (Constant.rate.equals("rate1"))
+                {
+                    compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+                        @Override
+                        public void accept(List<SalesDetails> units) throws Exception {
+                            Log.e("data","data"+new Gson().toJson(units));
 
-                        for (SalesDetails salesDetails:units){
-                            // value+=salesDetails.MRP;
-                            //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+                            for (SalesDetails salesDetails:units){
+                                // value+=salesDetails.MRP;
+                                //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
 
-                            value2 +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
+                                value2 +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
+                            }
+                            //tv_total.setText("Total Price: "+String.valueOf(price));
+
+                            Customer customer=Common.customerRepository.getCustomerss(messageEntities.get(position).CustomerName);
+                            if (customer!=null){
+                                if (Constant.rate.equals("rate1"))
+                                {
+                                    Intent intent = new Intent(mActivity, InvoicePrintAgainActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    SharedPreferenceUtil.saveShared(mActivity, SharedPreferenceUtil.USER_TEST, messageEntities.get(position).InvoiceId);
+                                    intent.putExtra("sub",String.valueOf(rounded(value2,2)));
+                                    intent.putExtra("customerName", customer.ShopName);
+                                    intent.putExtra("invoiceId", messageEntities.get(position).InvoiceId);
+                                    mActivity.startActivity(intent);
+                                    mActivity.finish();
+                                }
+
+                            }
+                            else {
+                                Toast.makeText(mActivity, "Customer is not valid", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        //tv_total.setText("Total Price: "+String.valueOf(price));
+                    }));
 
-                        Customer customer=Common.customerRepository.getCustomerss(messageEntities.get(position).CustomerName);
-                        if (customer!=null){
-                            Intent intent = new Intent(mActivity, InvoicePrintActivity.class);
-
-                            intent.putExtra("sub",String.valueOf(rounded(value2,2)));
-
-
-                            intent.putExtra("customerName", customer.ShopName);
-                            intent.putExtra("invoiceId", messageEntities.get(position).InvoiceId);
-                            mActivity.startActivity(intent);
-                            mActivity.finish();
-                        }
-                        else {
-                            Toast.makeText(mActivity, "Customer is not valid", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }));
+                }
 
 
                 //infoDialog.dismiss();
@@ -245,7 +258,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
             public void onClick(View view) {
                 Customer customer=Common.customerRepository.getCustomerss(messageEntities.get(position).CustomerName);
                 if (customer!=null){
-                    Intent intent = new Intent(mActivity, InvoicePrintActivity.class);
+                    Intent intent = new Intent(mActivity, InvoicePrintAgainActivity.class);
 
                     intent.putExtra("sub",String.valueOf(rounded(value,2)));
 

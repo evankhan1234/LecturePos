@@ -25,7 +25,7 @@
         <View
             android:id="@+id/view_color"
             android:layout_width="10px"
-            android:layout_height="313px"
+            android:layout_height="273px"
             android:background="@color/colorPrimary" />
 
 
@@ -41,21 +41,49 @@
             android:padding="10px"
             android:visibility="visible">
 
-
-            <TextView
-                android:id="@+id/text_name"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/linLayoutAmountfs"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="1px"
-                android:layout_weight="1"
-                android:gravity="left|center_vertical|center_horizontal|center|start"
-                android:singleLine="true"
-                android:tag="35"
-                android:text="zdczxv"
-                android:textColor="@color/text_color_new"
-                android:textSize="35px" />
+                android:layout_marginTop="10px"
+
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1px"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical|center_horizontal|center|start"
+                    android:singleLine="true"
+                    android:tag="35"
+                    android:text="zdczxv"
+                    android:textColor="@color/text_color_new"
+                    android:textSize="35px" />
+
+                <TextView
+                    android:id="@+id/text_contact_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+
+                    android:layout_weight="1"
+                    android:gravity="bottom|right|center_vertical|center_horizontal|center|end"
+                    android:paddingLeft="1px"
+                    android:paddingRight="1px"
+
+                    android:tag="35"
+                    android:text="zdczxv"
+                    android:textColor="@color/black"
+                    android:textSize="35px"
+                     />
+
+            </RelativeLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/linLayoutAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,7 +94,7 @@
 
                 <TextView
 
-                    android:id="@+id/text_contact_number"
+                    android:id="@+id/text_contact_numbers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -172,6 +200,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/text_view_details"
                     android:layout_width="258px"
                     android:layout_height="88px"
@@ -205,7 +234,7 @@
                     android:paddingRight="5px"
                     android:paddingBottom="4px"
                     android:tag="34"
-                    android:text="Print"
+                    android:text="View Details"
                     android:textColor="@color/white"
                     android:textSize="34px" />
 
