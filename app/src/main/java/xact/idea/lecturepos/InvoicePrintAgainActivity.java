@@ -136,7 +136,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
                     text_invoice_date.setText(salesMaster.InvoiceDates);
                     text_store.setText("");
 
-                    text_sub_total_value.setText(salesMaster.SubTotal);
+                    text_sub_total_value.setText(String.valueOf(salesMaster.InvoiceAmount));
 
                     text_total_value.setText(String.valueOf(salesMaster.NetValue));
                     if (salesMaster.Return != null) {

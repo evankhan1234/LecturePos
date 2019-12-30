@@ -45,8 +45,8 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
-    public int maxValue() {
-        return SaleMastersDao.maxValue();
+    public int maxValue(Date date) {
+        return SaleMastersDao.maxValue(date);
     }
 
     @Override

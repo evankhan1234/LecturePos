@@ -1165,7 +1165,15 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                         salesMaster1.StoreId = customer.STORE_ID;
-                        salesMaster1.Discount = Double.parseDouble(customer.DISCOUNT);
+
+                            if (customer.DISCOUNT!=null){
+                                salesMaster1.Discount = Double.parseDouble(customer.DISCOUNT);
+                            }
+                            else {
+                                salesMaster1.Discount=0;
+                            }
+
+
                         salesMaster1.StoreId = customer.STORE_ID;
                         salesMaster1.InvoiceNumber = customer.INVOICE_NO;
                         salesMaster1.InvoiceDates = customer.INV_DATE;
@@ -1211,7 +1219,8 @@ public class MainActivity extends AppCompatActivity {
                 for (SalesDetailsForModel.Data customer : customerListResponse.data) {
 
                     SalesDetails salesDetails1 = new SalesDetails();
-                    int values = Common.salesMasterRepository.maxValue();
+                    Date dates = new Date(System.currentTimeMillis());
+                    int values = Common.salesMasterRepository.maxValue(dates);
                     salesDetails1.InvoiceId = values;
                     salesDetails1.InvoiceIdNew = invoiceId;
                     int size= Common.bookRepository.size();
