@@ -14,7 +14,7 @@ public interface ISalesMasterDataSource {
     SalesMaster getSalesMaster(String SalesDetailsItemId);
 
     Flowable<List<SalesMaster>> getSalesMaster(int favoriteid);
-    int maxValue();
+    int maxValue(Date date);
     void emptySalesMaster();
     int size();
     SalesMaster invoice(int id);

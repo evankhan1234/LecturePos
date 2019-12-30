@@ -339,7 +339,8 @@ public class InvoiceActivity extends AppCompatActivity {
                         }
 
                         SalesMaster salesMaster = new SalesMaster();
-                        int value = Common.salesMasterRepository.maxValue();
+                        Date datess = new Date(System.currentTimeMillis());
+                        int value = Common.salesMasterRepository.maxValue(datess);
                         String totalValue;
                         value = value + 1;
                         if (value < 9) {
@@ -376,7 +377,7 @@ public class InvoiceActivity extends AppCompatActivity {
                         salesMaster.InvoiceDates = edit_date.getText().toString() + " " + currentTime;
                         salesMaster.InvoiceDate = date1;
                         //salesMaster.Discount = discount;
-                        salesMaster.InvoiceAmount = amount;
+
                         salesMaster.NetValue = amount;
                         String str = android.os.Build.MODEL;
                         String str1 = Build.DEVICE;
@@ -386,6 +387,7 @@ public class InvoiceActivity extends AppCompatActivity {
                         String s1 = text_sub_total.getText().toString();
                         s1 = s1.replace(" Tk", "");
                         salesMaster.SubTotal = s1;
+                        salesMaster.InvoiceAmount = Double.parseDouble(s1);
                         Date dates = new Date(System.currentTimeMillis());
                         salesMaster.Date = dates;
                         salesMaster.Note = edit_note.getText().toString();
@@ -397,7 +399,8 @@ public class InvoiceActivity extends AppCompatActivity {
 
                         for (Items itemModel : units.blockingFirst())
                         {
-                            int values = Common.salesMasterRepository.maxValue();
+                            Date datess1 = new Date(System.currentTimeMillis());
+                            int values = Common.salesMasterRepository.maxValue(datess1);
                             SalesDetails salesDetails = new SalesDetails();
                             salesDetails.BookId = itemModel.BookId;
                             salesDetails.BookName = itemModel.BookName;
