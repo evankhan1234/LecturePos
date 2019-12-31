@@ -37,7 +37,8 @@ public class BookResponseEntity {
         public String BOOK_NAME_B;
         @SerializedName("F_BOOK_EDITION_NO")
         public String F_BOOK_EDITION_NO;
-
+        @ColumnInfo(name = "BOOK_GROUP_ID")
+        public String BOOK_GROUP_ID;
 
 
 

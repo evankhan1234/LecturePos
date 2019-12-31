@@ -34,6 +34,8 @@ public class Book {
     public String BOOK_SPECIMEN_CODE;
     @ColumnInfo(name = "F_BOOK_EDITION_NO")
     public String F_BOOK_EDITION_NO;
+    @ColumnInfo(name = "BOOK_GROUP_ID")
+    public String BOOK_GROUP_ID;
 
 
 }

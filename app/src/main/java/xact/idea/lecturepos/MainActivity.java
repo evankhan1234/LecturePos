@@ -627,6 +627,7 @@ public class MainActivity extends AppCompatActivity {
                         book.BookName = books.BOOK_NAME;
                         book.BookCode = books.BOOK_CODE;
                         book.BookNo = books.BOOK_NO;
+                        book.BOOK_GROUP_ID = books.BOOK_GROUP_ID;
                         book.BOOK_SPECIMEN_CODE = books.BOOK_SPECIMEN_CODE;
                         book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
                         book.BARCODE_NUMBER = books.BARCODE_NUMBER;
@@ -642,6 +643,7 @@ public class MainActivity extends AppCompatActivity {
                         book.BookName = books.BOOK_NAME;
                         book.BookCode = books.BOOK_CODE;
                         book.BookNo = books.BOOK_NO;
+                        book.BOOK_GROUP_ID = books.BOOK_GROUP_ID;
                         book.BOOK_SPECIMEN_CODE = books.BOOK_SPECIMEN_CODE;
                         book.BOOK_NET_PRICE = books.BOOK_NET_PRICE;
                         book.BARCODE_NUMBER = books.BARCODE_NUMBER;

@@ -68,6 +68,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
         holder.text_price.setText(Html.fromHtml(text3));
         holder.text_discount.setText(Html.fromHtml(text1));
         holder.text_total.setText(Html.fromHtml(text4));
+        if (messageEntities.get(position).Stock.equals("In")){
+            holder.text_stock.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.text_stock.setVisibility(View.GONE);
+        }
         holder.text_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +126,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
         private TextView text_total;
         private TextView text_update;
         private TextView text_delete;
+        private TextView text_stock;
         private View view_color;
 
 
@@ -136,6 +143,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListi
             text_update = itemView.findViewById(R.id.text_update);
             text_delete = itemView.findViewById(R.id.text_delete);
             view_color = itemView.findViewById(R.id.view_color);
+            text_stock = itemView.findViewById(R.id.text_stock);
 
 
 

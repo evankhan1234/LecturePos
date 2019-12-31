@@ -27,7 +27,8 @@ public interface ItemDao {
     @Query("Select Sum(Amount)  FROM item")
     int valueSum();
 
-
+    @Query("Select Count(id) FROM item where Stock=:stock")
+    int wrongItem(String stock);
     @Query("DELETE  FROM item")
     void emptyItems();
     @Query("DELETE  FROM item WHERE id=:id")
