@@ -6,6 +6,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.BookStock;
+import xact.idea.lecturepos.Model.GroupModel;
 import xact.idea.lecturepos.Model.StockModel;
 
 public interface IBookStockDataSources {
@@ -19,7 +20,7 @@ public interface IBookStockDataSources {
     int maxValue(String BookStockItem);
     void emptyBookStock();
     int size();
-
+    Flowable<List<GroupModel>> getGroup(String group);
     Flowable<List<StockModel>> getBookStockModel();
     void insertToBookStock(BookStock... BookStocks);
 

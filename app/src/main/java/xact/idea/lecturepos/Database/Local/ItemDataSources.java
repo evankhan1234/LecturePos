@@ -61,6 +61,11 @@ public class ItemDataSources implements IItemDataSources {
     }
 
     @Override
+    public int wrongItem(String stock) {
+        return ItemDao.wrongItem(stock);
+    }
+
+    @Override
     public void updateItem(Items... Items) {
         ItemDao.updateItems(Items);
     }

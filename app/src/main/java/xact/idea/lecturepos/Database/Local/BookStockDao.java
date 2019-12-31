@@ -10,6 +10,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Model.BookStock;
+import xact.idea.lecturepos.Model.GroupModel;
 import xact.idea.lecturepos.Model.StockModel;
 
 @Dao
@@ -48,4 +49,7 @@ public interface BookStockDao {
     @Query("SELECT * from book_stock as bookstock inner join books as book ON bookstock.BOOK_ID=book.BookNo")
         //@Query("SELECT * book_stock BookStock as c Inner  JOIN Favorite as f ON c.Id = f.id  WHERE f.id=:favoriteid")
     Flowable<List<StockModel>> getBookStockModel();
+    @Query("SELECT * from book_stock as bookstock inner join books as book ON bookstock.BOOK_ID=book.BookNo where book.BOOK_GROUP_ID=:group")
+        //@Query("SELECT * book_stock BookStock as c Inner  JOIN Favorite as f ON c.Id = f.id  WHERE f.id=:favoriteid")
+    Flowable<List<GroupModel>> getGroup(String group);
 }

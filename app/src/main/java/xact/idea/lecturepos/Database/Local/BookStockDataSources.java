@@ -5,6 +5,7 @@ import java.util.List;
 import io.reactivex.Flowable;
 import xact.idea.lecturepos.Database.Datasources.IBookStockDataSources;
 import xact.idea.lecturepos.Database.Model.BookStock;
+import xact.idea.lecturepos.Model.GroupModel;
 import xact.idea.lecturepos.Model.StockModel;
 
 public class BookStockDataSources implements IBookStockDataSources {
@@ -49,6 +50,11 @@ public class BookStockDataSources implements IBookStockDataSources {
     @Override
     public int size() {
         return BookStockDao.value();
+    }
+
+    @Override
+    public Flowable<List<GroupModel>> getGroup(String group) {
+        return BookStockDao.getGroup(group);
     }
 
     @Override

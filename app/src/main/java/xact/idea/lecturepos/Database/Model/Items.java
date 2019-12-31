@@ -27,5 +27,7 @@ public class Items {
     public String BookNameBangla;
     @ColumnInfo(name = "BookId")
     public String BookId;
+    @ColumnInfo(name = "Stock")
+    public String Stock;
 
 }

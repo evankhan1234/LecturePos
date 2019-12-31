@@ -19,7 +19,7 @@ public interface IItemDataSources {
     int valueSum();
     void insertToItem(Items... Items);
 
-
+    int wrongItem(String stock);
     void updateItem(Items... Items);
 
 
