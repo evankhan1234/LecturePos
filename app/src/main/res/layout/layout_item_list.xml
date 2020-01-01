@@ -133,28 +133,29 @@
                                 android:textColor="@color/white"
                                 android:textSize="34px"
                                 />
-                            <TextView
-                                android:visibility="gone"
-                                android:id="@+id/text_stock"
-                                android:backgroundTint="#E91E63"
-                                android:layout_width="228px"
-                                android:layout_height="58px"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="11px"
-                                android:layout_marginTop="7px"
-                                android:layout_marginRight="10px"
-                                android:background="@drawable/status_accepted"
-                                android:gravity="center_horizontal|center_vertical"
-                                android:paddingLeft="0px"
-                                android:paddingRight="5px"
-                                android:paddingBottom="4px"
-                                android:tag="34"
-                                android:text="Stock out"
-                                android:textColor="@color/white"
-                                android:textSize="34px"
-                                />
-                        </LinearLayout>
 
+                        </LinearLayout>
+                        <TextView
+
+                            android:visibility="gone"
+                            android:id="@+id/text_stock"
+                            android:backgroundTint="#E91E63"
+                            android:layout_width="228px"
+                            android:layout_height="58px"
+                            android:layout_gravity="right"
+                            android:layout_marginLeft="11px"
+                            android:layout_marginTop="7px"
+                            android:layout_marginRight="10px"
+                            android:background="@drawable/status_accepted"
+                            android:gravity="center"
+                            android:paddingLeft="0px"
+                            android:paddingRight="5px"
+                            android:paddingBottom="4px"
+                            android:tag="34"
+                            android:text="Stock out"
+                            android:textColor="@color/white"
+                            android:textSize="34px"
+                            />
                     </LinearLayout>
 
                     <LinearLayout

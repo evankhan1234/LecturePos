@@ -13,7 +13,8 @@ public class SalesDetailPrintModel {
     public int  Quantity;
     @SerializedName("BOOK_NET_MRP")
     public String  BOOK_NET_MRP;
-
+    @SerializedName("MRP")
+    public double MRP;
     @SerializedName("BOOK_SPECIMEN_CODE")
     public String  BOOK_SPECIMEN_CODE;
     @SerializedName("BARCODE_NUMBER")

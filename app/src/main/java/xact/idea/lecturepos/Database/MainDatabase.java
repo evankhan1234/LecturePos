@@ -16,6 +16,7 @@ import xact.idea.lecturepos.Database.Local.ChallanDao;
 import xact.idea.lecturepos.Database.Local.ChallanDetailsDao;
 import xact.idea.lecturepos.Database.Local.CustomerDao;
 import xact.idea.lecturepos.Database.Local.ItemDao;
+import xact.idea.lecturepos.Database.Local.ItemReturnDao;
 import xact.idea.lecturepos.Database.Local.LoginDao;
 import xact.idea.lecturepos.Database.Local.SaleDetailsDao;
 import xact.idea.lecturepos.Database.Local.SaleMastersDao;
@@ -25,13 +26,14 @@ import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Challan;
 import xact.idea.lecturepos.Database.Model.ChallanDetails;
 import xact.idea.lecturepos.Database.Model.Customer;
+import xact.idea.lecturepos.Database.Model.ItemReturn;
 import xact.idea.lecturepos.Database.Model.Items;
 import xact.idea.lecturepos.Database.Model.Login;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Database.Model.Sync;
 
-@Database(entities = {Customer.class, Book.class, SalesDetails.class, SalesMaster.class, Login.class, Challan.class, Sync.class, ChallanDetails.class, BookStock.class, Items.class}, version =3,exportSchema = false)
+@Database(entities = {Customer.class, Book.class, SalesDetails.class, SalesMaster.class, Login.class, Challan.class, Sync.class, ChallanDetails.class, BookStock.class, Items.class, ItemReturn.class}, version =3,exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class MainDatabase extends RoomDatabase {
 
@@ -48,6 +50,7 @@ public abstract class MainDatabase extends RoomDatabase {
     public abstract BookStockDao bookStockDao();
     public abstract ChallanDetailsDao challanDetailsDao();
     public abstract ItemDao itemDao();
+    public abstract ItemReturnDao itemReturnDao();
 
     //
     private static MainDatabase instance;

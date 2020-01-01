@@ -45,8 +45,8 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
-    public int maxValue(Date date) {
-        return SaleMastersDao.maxValue(date);
+    public int maxValue(String date,String trnType) {
+        return SaleMastersDao.maxValue(date,trnType);
     }
 
     @Override
@@ -65,8 +65,8 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
-    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to) {
-        return SaleMastersDao.getInvoiceActivityItemByDate(from, to);
+    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to,String Trn) {
+        return SaleMastersDao.getInvoiceActivityItemByDate(from, to,Trn);
     }
 
     @Override
@@ -76,8 +76,8 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
-    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to, String Name) {
-        return SaleMastersDao.getInvoiceActivityItemByDateByName(from, to, Name);
+    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to, String Name,String Trn) {
+        return SaleMastersDao.getInvoiceActivityItemByDateByName(from, to, Name,Trn);
     }
 
     @Override

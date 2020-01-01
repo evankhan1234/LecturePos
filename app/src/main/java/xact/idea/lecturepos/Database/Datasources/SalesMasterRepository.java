@@ -41,8 +41,8 @@ public class SalesMasterRepository implements ISalesMasterDataSource {
     }
 
     @Override
-    public int maxValue(Date date) {
-        return ISalesMasterDataSource.maxValue(date);
+    public int maxValue(String date,String trnType) {
+        return ISalesMasterDataSource.maxValue(date,trnType);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class SalesMasterRepository implements ISalesMasterDataSource {
     }
 
     @Override
-    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to) {
-        return ISalesMasterDataSource.getInvoiceActivityItemByDate(from, to);
+    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to,String Trn) {
+        return ISalesMasterDataSource.getInvoiceActivityItemByDate(from, to,Trn);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class SalesMasterRepository implements ISalesMasterDataSource {
     }
 
     @Override
-    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to, String Name) {
-        return ISalesMasterDataSource.getInvoiceActivityItemByDateByName(from, to, Name);
+    public Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to, String Name,String Trn) {
+        return ISalesMasterDataSource.getInvoiceActivityItemByDateByName(from, to, Name,Trn);
     }
 
     @Override

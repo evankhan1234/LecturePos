@@ -35,16 +35,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import xact.idea.lecturepos.Adapter.CustomerAdapter;
 import xact.idea.lecturepos.Adapter.InvoiceAdapter;
-import xact.idea.lecturepos.Database.Model.Challan;
-import xact.idea.lecturepos.Database.Model.Customer;
-import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
-public class InvoiceListActivity extends AppCompatActivity {
+public class SalesReturnListActivity extends AppCompatActivity {
     RecyclerView rcl_this_customer_list;
     InvoiceAdapter mAdapters;
     Activity mActivity;
@@ -52,16 +48,16 @@ public class InvoiceListActivity extends AppCompatActivity {
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     ImageView btn_header_application;
     ImageView btn_header_back;
-    static   EditText edit_start_date;
-     static  EditText edit_end_date;
-     Button btn_yes;
-     ProgressBar progress_bar;
-     EditText edit_content;
+    static EditText edit_start_date;
+    static  EditText edit_end_date;
+    Button btn_yes;
+    ProgressBar progress_bar;
+    EditText edit_content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invoice_list);
+        setContentView(R.layout.activity_sales_return_list);
         CorrectSizeUtil.getInstance(this).correctSize();
         mActivity=this;
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
@@ -96,14 +92,14 @@ public class InvoiceListActivity extends AppCompatActivity {
         btn_header_application.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(InvoiceListActivity.this,InvoiceActivity.class));
+                startActivity(new Intent(SalesReturnListActivity.this,SalesReturnActivity.class));
                 finish();
             }
         });
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(InvoiceListActivity.this,MainActivity.class));
+                startActivity(new Intent(SalesReturnListActivity.this,MainActivity.class));
                 finish();
             }
         });
@@ -132,7 +128,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         edit_start_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dFragment = new DatePickerFromFragment();
+                DialogFragment dFragment = new SalesReturnListActivity.DatePickerFromFragment();
 
                 dFragment.show(getSupportFragmentManager(), "Date Picker");
             }
@@ -140,7 +136,7 @@ public class InvoiceListActivity extends AppCompatActivity {
         edit_end_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dFragment = new DatePickerFromFragment.DatePickerFromFragments();
+                DialogFragment dFragment = new SalesReturnListActivity.DatePickerFromFragment.DatePickerFromFragments();
                 dFragment.show(getSupportFragmentManager(), "Date Picker");
             }
         });
@@ -166,7 +162,7 @@ public class InvoiceListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDate(date1,date2,"S").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDate(date1,date2,"R").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 displayCustomerItems(userActivities);
@@ -197,12 +193,12 @@ public class InvoiceListActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDate(date1,date1,"S").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDate(date1,date1,"R").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 displayCustomerItems(userActivities);
                 Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
-               // Log.e("fsd","dfsdf"+date);
+                // Log.e("fsd","dfsdf"+date);
                 progress_bar.setVisibility(View.GONE);
 
             }
@@ -216,7 +212,7 @@ public class InvoiceListActivity extends AppCompatActivity {
             @Override
             public void accept(List<SalesMaster> customers) throws Exception {
                 Log.e("fsd","dfsdf"+new Gson().toJson(customers));
-               // displayCustomerItems(customers);
+                // displayCustomerItems(customers);
             }
         }));
 
@@ -298,5 +294,5 @@ public class InvoiceListActivity extends AppCompatActivity {
             }
 
         }
-        }
+    }
 }

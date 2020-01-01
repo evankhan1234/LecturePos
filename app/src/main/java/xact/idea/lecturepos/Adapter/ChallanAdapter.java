@@ -74,7 +74,7 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
     public void onBindViewHolder(final ChallanAdapter.ChallanListiewHolder holder, final int position) {
 
         double total=Double.parseDouble(messageEntities.get(position).TOTAL_VALUE);
-        String challan_no = "<b><font color=#000 >Challan No :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_CODE+"</font>";
+        String challan_no = "<b><font color=#000 >Challan Code :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_CODE+"</font>";
         String challan_packet = "<b><font color=#000 >Total Packet :  </font></b> <font color=#358ED3>"+messageEntities.get(position).NO_OF_PACKATE+"</font>";
         String challan_date = "<b><font color=#000 >Date :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_DATE+"</font>";
         String challan_quantity = "<b><font color=#000 >Quantity :  </font></b> <font color=#358ED3>"+messageEntities.get(position).CHALLAN_QTY+"</font>";
@@ -249,7 +249,7 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
         TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
         RecyclerView rcl_this_customer_list = infoDialog.findViewById(R.id.rcl_this_customer_list);
         tv_info.setText("Do you want to receive ??");
-        spinerTitle.setText(" Challan No: "+messageEntities.get(position).CHALLAN_NO);
+        spinerTitle.setText(" Challan Code: "+messageEntities.get(position).CHALLAN_NO);
         CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.VERTICAL);

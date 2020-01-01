@@ -106,6 +106,13 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //                    LinearLayoutManager.HORIZONTAL,
 //                false
 //        );
+        if (messageEntities.get(position).TrnType.equals("S")){
+            holder.text_create_invoice.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.text_create_invoice.setVisibility(View.GONE);
+
+        }
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.rcl_this_customer_list.setLayoutManager(lm);
