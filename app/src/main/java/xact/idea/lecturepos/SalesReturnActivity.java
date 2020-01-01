@@ -795,7 +795,7 @@ public class SalesReturnActivity extends AppCompatActivity {
 
 
                 if (book != null) {
-                    Intent intent = new Intent(SalesReturnActivity.this, ItemActivity.class);
+                    Intent intent = new Intent(SalesReturnActivity.this, ItemReturnActivity.class);
                     intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
                     startActivity(intent);
                     finish();
@@ -817,7 +817,7 @@ public class SalesReturnActivity extends AppCompatActivity {
             public void onClick(View view) {
                 edit_book_code.setVisibility(View.GONE);
                 btn_done.setVisibility(View.GONE);
-                startActivity(new Intent(SalesReturnActivity.this, BarcodeActivity.class));
+                startActivity(new Intent(SalesReturnActivity.this, BarcodeReturnActivity.class));
                 finish();
                 infoDialog.dismiss();
 

@@ -153,7 +153,7 @@ public class ChallanReceiveAdapter extends RecyclerView.Adapter<ChallanReceiveAd
         linear.setVisibility(View.GONE);
         tv_info.setVisibility(View.GONE);
         btn_now.setVisibility(View.VISIBLE);
-        spinerTitle.setText(" Challan Code: "+messageEntities.get(position).CHALLAN_NO);
+        spinerTitle.setText(" Challan Code: "+messageEntities.get(position).CHALLAN_CODE);
         CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.VERTICAL);

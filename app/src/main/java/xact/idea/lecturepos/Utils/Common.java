@@ -6,6 +6,7 @@ import xact.idea.lecturepos.Database.Datasources.BookStockRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
+import xact.idea.lecturepos.Database.Datasources.ItemAdjustmentRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemReturnRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
@@ -30,6 +31,7 @@ public abstract class Common {
     public static BookStockRepository bookStockRepository;
     public static ChallanDetailsRepository challanDetailsRepository;
     public static ItemRepository itemRepository;
+    public static ItemAdjustmentRepository itemAdjustmentRepository;
 //    public static UserListRepository userListRepository;
 //    public static UserActivityRepository userActivityRepository;
 //    public static UnitRepository unitRepository;

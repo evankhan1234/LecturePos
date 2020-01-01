@@ -17,13 +17,13 @@ import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Utils.Common;
 
-public class BarcodeReturnActivity extends AppCompatActivity {
+public class BarcodeAdjustmentActivity extends AppCompatActivity {
 
     TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode_return);
+        setContentView(R.layout.activity_barcode_adjustment);
         text=findViewById(R.id.text);
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setCaptureActivity(Portait.class);
@@ -52,14 +52,14 @@ public class BarcodeReturnActivity extends AppCompatActivity {
 
                     BookStock bookStocks =Common.bookStockRepository.getBookStock(book.BookNo);
                     if (bookStocks!=null){
-                        Intent intent = new Intent(BarcodeReturnActivity.this, ItemReturnActivity.class);
+                        Intent intent = new Intent(BarcodeAdjustmentActivity.this, ItemAdjustmentActivity.class);
                         intent.putExtra("EXTRA_SESSION", intentResult.getContents());
                         startActivity(intent);
                         finish();
                     }
                     else {
                         Toast.makeText(this, "No Books Found", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(BarcodeReturnActivity.this, SalesReturnActivity.class);
+                        Intent intent = new Intent(BarcodeAdjustmentActivity.this, AdjustmentActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -80,7 +80,7 @@ public class BarcodeReturnActivity extends AppCompatActivity {
                 else {
 
                     Toast.makeText(this, "No Books Found", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(BarcodeReturnActivity.this, SalesReturnActivity.class);
+                    Intent intent = new Intent(BarcodeAdjustmentActivity.this, AdjustmentActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -100,7 +100,7 @@ public class BarcodeReturnActivity extends AppCompatActivity {
     public void onBackPressed() {
         Log.e("DSad","sf");
         super.onBackPressed();
-        Intent intent = new Intent(BarcodeReturnActivity.this, SalesReturnActivity.class);
+        Intent intent = new Intent(BarcodeAdjustmentActivity.this, AdjustmentActivity.class);
         startActivity(intent);
         finish();
     }

@@ -29,6 +29,7 @@ import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Interface.BookItemInterface;
 import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.ItemActivity;
+import xact.idea.lecturepos.ItemAdjustmentActivity;
 import xact.idea.lecturepos.ItemReturnActivity;
 import xact.idea.lecturepos.R;
 
@@ -45,12 +46,12 @@ public class SpinnerDialogFor implements Filterable {
     SpinnerFilter filter;
     ArrayAdapter adapter;
     BookListAdapter mAdapters;
-    String value;
+    String values;
     public SpinnerDialogFor(Activity activity, ArrayList<String> items, String dialogTitle,String value) {
         this.items = items;
         this.context = activity;
         this.dTitle = dialogTitle;
-        this.value = value;
+        this.values = value;
     }
 
 
@@ -140,7 +141,7 @@ public class SpinnerDialogFor implements Filterable {
     BookItemInterface bookItemInterface = new BookItemInterface() {
         @Override
         public void Id(String value) {
-            if (value.equals("S")){
+            if (values.equals("S")){
                 Book book = Common.bookRepository.getBook(value.substring(value.length() - 16));
 
 
@@ -154,7 +155,21 @@ public class SpinnerDialogFor implements Filterable {
                     ///  Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
                 }
             }
-            else {
+           else if (values.equals("A")){
+                Book book = Common.bookRepository.getBook(value.substring(value.length() - 16));
+
+
+                if (book != null) {
+                    Intent intent = new Intent(context, ItemAdjustmentActivity.class);
+                    intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
+                    context.startActivity(intent);
+                    context.finish();
+                    //infoDialog.dismiss();
+                } else {
+                    ///  Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if (values.equals("R")) {
                 Book book = Common.bookRepository.getBook(value.substring(value.length() - 16));
 
 

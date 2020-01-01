@@ -249,7 +249,7 @@ public class ChallanAdapter extends RecyclerView.Adapter<ChallanAdapter.ChallanL
         TextView spinerTitle = infoDialog.findViewById(R.id.spinerTitle);
         RecyclerView rcl_this_customer_list = infoDialog.findViewById(R.id.rcl_this_customer_list);
         tv_info.setText("Do you want to receive ??");
-        spinerTitle.setText(" Challan Code: "+messageEntities.get(position).CHALLAN_NO);
+        spinerTitle.setText(" Challan Code: "+messageEntities.get(position).CHALLAN_CODE);
         CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.VERTICAL);

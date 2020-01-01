@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.jaredrummler.android.device.DeviceName;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,6 +36,7 @@ import xact.idea.lecturepos.Database.Datasources.BookStockRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
+import xact.idea.lecturepos.Database.Datasources.ItemAdjustmentRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemReturnRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
@@ -46,6 +48,7 @@ import xact.idea.lecturepos.Database.Local.BookStockDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.CustomerDataSources;
+import xact.idea.lecturepos.Database.Local.ItemAdjustmentDataSources;
 import xact.idea.lecturepos.Database.Local.ItemDataSources;
 import xact.idea.lecturepos.Database.Local.ItemReturnDataSources;
 import xact.idea.lecturepos.Database.Local.LoginDataSource;
@@ -110,8 +113,9 @@ public class LoginActivity extends AppCompatActivity {
                                 Settings.Secure.ANDROID_ID);
                         String str = android.os.Build.MODEL;
                         String str1 = Build.DEVICE;
+                        String deviceName = DeviceName.getDeviceName();
                         loginPostEntity.device_id = androidId;
-                        loginPostEntity.device_info = str + " " + str1;
+                        loginPostEntity.device_info = deviceName;
                         loginPostEntity.login_time = currentDate + " " + currentTime;
                         loginPostEntity.device_ime = " ";
                         Log.e("ff", "dgg" + Common.loginRepository.size());
@@ -277,6 +281,7 @@ public class LoginActivity extends AppCompatActivity {
         Common.challanDetailsRepository = ChallanDetailsRepository.getInstance(ChallanDetailsDataSources.getInstance(Common.mainDatabase.challanDetailsDao()));
         Common.itemRepository = ItemRepository.getInstance(ItemDataSources.getInstance(Common.mainDatabase.itemDao()));
         Common.itemReturnRepository = ItemReturnRepository.getInstance(ItemReturnDataSources.getInstance(Common.mainDatabase.itemReturnDao()));
+        Common.itemAdjustmentRepository = ItemAdjustmentRepository.getInstance(ItemAdjustmentDataSources.getInstance(Common.mainDatabase.itemAdjustmentDao()));
     }
 
     @Override
