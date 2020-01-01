@@ -39,6 +39,7 @@ import xact.idea.lecturepos.Database.Datasources.BookStockRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
+import xact.idea.lecturepos.Database.Datasources.ItemAdjustmentRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemReturnRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
@@ -50,6 +51,7 @@ import xact.idea.lecturepos.Database.Local.BookStockDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.CustomerDataSources;
+import xact.idea.lecturepos.Database.Local.ItemAdjustmentDataSources;
 import xact.idea.lecturepos.Database.Local.ItemDataSources;
 import xact.idea.lecturepos.Database.Local.ItemReturnDataSources;
 import xact.idea.lecturepos.Database.Local.LoginDataSource;
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout linear_sync;
     LinearLayout linear_stock;
     LinearLayout linear_order;
+    LinearLayout linear_stock_adjustment;
     Activity mActivity;
     IRetrofitApi mService;
     RelativeLayout root_rlt_dashboard;
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         linear_sync = findViewById(R.id.linear_sync);
         linear_stock = findViewById(R.id.linear_stock);
         linear_order = findViewById(R.id.linear_order);
+        linear_stock_adjustment = findViewById(R.id.linear_stock_adjustment);
         tv_store = findViewById(R.id.tv_store);
         root_rlt_dashboard = findViewById(R.id.root_rlt_dashboard);
         tv_store.setSelected(true);
@@ -168,6 +172,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent =new Intent(MainActivity.this, InvoiceActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        linear_stock_adjustment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent =new Intent(MainActivity.this, AdjustmentActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -476,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
         Common.challanDetailsRepository = ChallanDetailsRepository.getInstance(ChallanDetailsDataSources.getInstance(Common.mainDatabase.challanDetailsDao()));
         Common.itemRepository = ItemRepository.getInstance(ItemDataSources.getInstance(Common.mainDatabase.itemDao()));
         Common.itemReturnRepository = ItemReturnRepository.getInstance(ItemReturnDataSources.getInstance(Common.mainDatabase.itemReturnDao()));
-
+        Common.itemAdjustmentRepository = ItemAdjustmentRepository.getInstance(ItemAdjustmentDataSources.getInstance(Common.mainDatabase.itemAdjustmentDao()));
     }
 
     private void loadCustomerSync() {

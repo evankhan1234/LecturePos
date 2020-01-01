@@ -15,6 +15,8 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.jaredrummler.android.device.DeviceName;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,7 +48,8 @@ public class SpalashActivity extends AppCompatActivity {
 
 
 
-
+        String deviceName = DeviceName.getDeviceName();
+        Log.e("deviceName","deviceName"+deviceName);
 
             Date date1 =null;
             SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");

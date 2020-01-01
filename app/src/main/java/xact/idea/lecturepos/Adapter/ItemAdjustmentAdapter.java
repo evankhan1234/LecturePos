@@ -13,26 +13,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import xact.idea.lecturepos.Database.Model.ItemReturn;
+import xact.idea.lecturepos.AdjustmentActivity;
+import xact.idea.lecturepos.Database.Model.ItemAdjustment;
+import xact.idea.lecturepos.Database.Model.Items;
 import xact.idea.lecturepos.Interface.ClickInterface;
 import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.ItemActivity;
+import xact.idea.lecturepos.ItemAdjustmentActivity;
 import xact.idea.lecturepos.R;
-import xact.idea.lecturepos.SalesReturnActivity;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
-public class ItemReturnAdapter extends RecyclerView.Adapter<ItemReturnAdapter.ItemModelListiewHolder> {
+public class ItemAdjustmentAdapter extends RecyclerView.Adapter<ItemAdjustmentAdapter.ItemModelListiewHolder> {
 
 
     private Activity mActivity = null;
     private ClickInterface mClickInterface= null;
-    private List<ItemReturn> messageEntities;
+    private List<ItemAdjustment> messageEntities;
     boolean row_index=true;
     //    ItemModelClickInterface ItemModelClickInterface;
-    public ItemReturnAdapter(Activity activity, List<ItemReturn> messageEntitie) {
+    public ItemAdjustmentAdapter(Activity activity, List<ItemAdjustment> messageEntitie) {
         mActivity = activity;
         messageEntities = messageEntitie;
         //   mClickInterface=ClickInterface;
@@ -42,46 +44,38 @@ public class ItemReturnAdapter extends RecyclerView.Adapter<ItemReturnAdapter.It
 
 
     @Override
-    public ItemReturnAdapter.ItemModelListiewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemAdjustmentAdapter.ItemModelListiewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_list, null);
         CorrectSizeUtil.getInstance(mActivity).correctSize(view);
 
 
-        return new ItemReturnAdapter.ItemModelListiewHolder(view);
+        return new ItemAdjustmentAdapter.ItemModelListiewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ItemReturnAdapter.ItemModelListiewHolder holder, final int position) {
+    public void onBindViewHolder(final ItemAdjustmentAdapter.ItemModelListiewHolder holder, final int position) {
 
         //   int row_index;
-        double total = messageEntities.get(position).Amount ;
+
 
         String text = messageEntities.get(position).BookNameBangla;
-        String text1 = "- "+String.valueOf(messageEntities.get(position).Discount)+" %";
-        String text4 = "Line Total : "+String.valueOf(rounded(total,2));
+
         String text2 = String.valueOf(messageEntities.get(position).Quantity);
-        String text3 = "x"+String.valueOf(messageEntities.get(position).Price);
         holder.text_book.setText(Html.fromHtml(text));
         holder.text_quantity.setText(Html.fromHtml(text2));
-        holder.text_price.setText(Html.fromHtml(text3));
-        holder.text_discount.setText(Html.fromHtml(text1));
-        holder.text_total.setText(Html.fromHtml(text4));
-        if (messageEntities.get(position).Stock!=null){
-            if (messageEntities.get(position).Stock.equals("In")){
-                holder.text_stock.setVisibility(View.VISIBLE);
-            }
-            else {
-                holder.text_stock.setVisibility(View.GONE);
-            }
-        }
-        else {
-            holder.text_stock.setVisibility(View.GONE);
-        }
+//        holder.text_price.setText(Html.fromHtml(text3));
+//        holder.text_discount.setText(Html.fromHtml(text1));
+//        holder.text_total.setText(Html.fromHtml(text4));
+        holder.text_stock.setVisibility(View.GONE);
+        holder.text_price.setVisibility(View.GONE);
+        holder.text_discount.setVisibility(View.GONE);
+        holder.text_total.setVisibility(View.GONE);
+
 
         holder.text_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, ItemActivity.class);
+                Intent intent = new Intent(mActivity, ItemAdjustmentActivity.class);
                 intent.putExtra("EXTRA_SESSION", "update");
                 Log.e("BookId","BookId"+messageEntities.get(position).BookId);
                 intent.putExtra("id", messageEntities.get(position).BookName);
@@ -93,13 +87,13 @@ public class ItemReturnAdapter extends RecyclerView.Adapter<ItemReturnAdapter.It
             @Override
             public void onClick(View view) {
 
-                Common.itemReturnRepository.emptyItemsById( messageEntities.get(position).id);
+                Common.itemAdjustmentRepository.emptyItemsById( messageEntities.get(position).id);
 
 
 
 
                 notifyDataSetChanged();
-                ((SalesReturnActivity)mActivity).fixed();
+               // ((AdjustmentActivity)mActivity).fixed();
             }
         });
         if (row_index){
