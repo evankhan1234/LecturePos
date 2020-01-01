@@ -7,6 +7,7 @@ import xact.idea.lecturepos.Database.Datasources.ChallanDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemRepository;
+import xact.idea.lecturepos.Database.Datasources.ItemReturnRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesMasterRepository;
@@ -25,6 +26,7 @@ public abstract class Common {
     public static LoginRepository loginRepository;
     public static ChallanRepositoy challanRepositoy;
     public static SyncRepository syncRepository;
+    public static ItemReturnRepository itemReturnRepository;
     public static BookStockRepository bookStockRepository;
     public static ChallanDetailsRepository challanDetailsRepository;
     public static ItemRepository itemRepository;

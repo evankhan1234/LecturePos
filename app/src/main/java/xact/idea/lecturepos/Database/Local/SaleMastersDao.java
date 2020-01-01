@@ -27,15 +27,15 @@ public interface SaleMastersDao {
     Flowable<List<SalesMaster>> getSalesMasterList(String SalesDetailsItemId);
     @Query("Select Count(id)  FROM sales_mst")
     int value();
-    @Query("Select MAX(id)  FROM sales_mst  WHERE InvoiceDate=:date")
-    int maxValue(Date date);
+    @Query("Select MAX(id)  FROM sales_mst  WHERE DateSimple=:date AND TrnType=:trnType")
+    int maxValue(String date,String trnType);
     @Query("Select *  FROM sales_mst WHERE id=:id")
     SalesMaster invoice(int id);
 
-    @Query("SELECT * FROM sales_mst WHERE InvoiceDate BETWEEN :from AND :to order By InvoiceDate Desc")
-    Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to);
-    @Query("SELECT * FROM sales_mst WHERE InvoiceDate BETWEEN :from AND :to AND CustomerName=:Name order By InvoiceDate Desc")
-    Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to,String Name);
+    @Query("SELECT * FROM sales_mst WHERE TrnType=:Trn AND InvoiceDate BETWEEN :from AND :to order By InvoiceDate Desc")
+    Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to,String Trn);
+    @Query("SELECT * FROM sales_mst WHERE  TrnType=:Trn AND InvoiceDate BETWEEN :from AND :to AND CustomerName=:Name order By InvoiceDate Desc")
+    Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to,String Name,String Trn);
     @Query("DELETE  FROM sales_mst")
     void emptySalesDetails();
 

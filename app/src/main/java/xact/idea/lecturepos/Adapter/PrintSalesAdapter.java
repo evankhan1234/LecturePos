@@ -50,14 +50,14 @@ public class PrintSalesAdapter extends RecyclerView.Adapter<PrintSalesAdapter.Sa
     public void onBindViewHolder(final PrintSalesAdapter.SalesDetailPrintModelListiewHolder holder, final int position) {
 
         //   int row_index;
-       Log.e("SDFsf","SDfs"+messageEntities.get(position).BookName);
+        Log.e("SDFsf", "SDfs" + messageEntities.get(position).BookName);
         holder.text_book.setText(messageEntities.get(position).BookNameBangla);
-           holder.text_quantity.setText(String.valueOf(messageEntities.get(position).Quantity));
-        double ss=Double.parseDouble(messageEntities.get(position).BookPrice)* (1-Double.parseDouble(messageEntities.get(position).Discount)/100);
-       holder.text_rate.setText(String.valueOf(rounded(ss,2)));
+        holder.text_quantity.setText(String.valueOf(messageEntities.get(position).Quantity));
+        double ss = messageEntities.get(position).MRP * (1 - Double.parseDouble(messageEntities.get(position).Discount) / 100);
+        holder.text_rate.setText(String.valueOf(rounded(ss, 2)));
 
-        double price = messageEntities.get(position).Quantity * Double.parseDouble(messageEntities.get(position).BookPrice)* (1-Double.parseDouble(messageEntities.get(position).Discount)/100);
-        holder.text_price.setText(String.valueOf(rounded(price,2)));
+        double price = messageEntities.get(position).Quantity * messageEntities.get(position).MRP * (1 - Double.parseDouble(messageEntities.get(position).Discount) / 100);
+        holder.text_price.setText(String.valueOf(rounded(price, 2)));
 
 //        char[] ch = new char[(String.valueOf(messageEntities.get(position).Quantity).length())];
 //
@@ -268,7 +268,7 @@ public class PrintSalesAdapter extends RecyclerView.Adapter<PrintSalesAdapter.Sa
 //                String prices = stringBuilderBookTotalPrice.toString();
 //                holder.text_price.setText(prices);
 //           }
-       // }
+        // }
 //        if (messageEntities.get(position).Quantity))
 //        String replaceString=s1.replace('a','e');
 

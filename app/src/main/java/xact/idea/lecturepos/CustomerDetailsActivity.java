@@ -195,7 +195,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date2,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date2,shopName,"S").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 displayCustomerItems(userActivities);
@@ -226,7 +226,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date1,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date1,shopName,"S").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 if (userActivities.size()==0){

@@ -13,47 +13,44 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import xact.idea.lecturepos.BarcodeActivity;
-import xact.idea.lecturepos.Database.Model.Items;
+import xact.idea.lecturepos.Database.Model.ItemReturn;
 import xact.idea.lecturepos.Interface.ClickInterface;
 import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.ItemActivity;
-import xact.idea.lecturepos.Model.ItemModel;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.Utils.Common;
-import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
 
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemModelListiewHolder> {
+public class ItemReturnAdapter extends RecyclerView.Adapter<ItemReturnAdapter.ItemModelListiewHolder> {
 
 
     private Activity mActivity = null;
     private ClickInterface mClickInterface= null;
-    private List<Items> messageEntities;
+    private List<ItemReturn> messageEntities;
     boolean row_index=true;
     //    ItemModelClickInterface ItemModelClickInterface;
-    public ItemAdapter(Activity activity, List<Items> messageEntitie) {
+    public ItemReturnAdapter(Activity activity, List<ItemReturn> messageEntitie) {
         mActivity = activity;
         messageEntities = messageEntitie;
-     //   mClickInterface=ClickInterface;
+        //   mClickInterface=ClickInterface;
         //mClick = mClicks;
 
     }
 
 
     @Override
-    public ItemAdapter.ItemModelListiewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemReturnAdapter.ItemModelListiewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_list, null);
         CorrectSizeUtil.getInstance(mActivity).correctSize(view);
 
 
-        return new ItemAdapter.ItemModelListiewHolder(view);
+        return new ItemReturnAdapter.ItemModelListiewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ItemAdapter.ItemModelListiewHolder holder, final int position) {
+    public void onBindViewHolder(final ItemReturnAdapter.ItemModelListiewHolder holder, final int position) {
 
         //   int row_index;
         double total = messageEntities.get(position).Amount ;

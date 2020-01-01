@@ -14,13 +14,13 @@ public interface ISalesMasterDataSource {
     SalesMaster getSalesMaster(String SalesDetailsItemId);
 
     Flowable<List<SalesMaster>> getSalesMaster(int favoriteid);
-    int maxValue(Date date);
+    int maxValue(String date,String trnType);
     void emptySalesMaster();
     int size();
     SalesMaster invoice(int id);
-    Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to);
+    Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to,String Trn);
     void insertToSalesMaster(SalesMaster... SalesMasters);
-    Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to,String Name);
+    Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to,String Name,String Trn);
     Flowable<List<SalesMaster>> getSalesMasterList(String SalesDetailsItemId);
     void updateSalesMaster(SalesMaster... SalesMasters);
 

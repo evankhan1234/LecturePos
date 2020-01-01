@@ -29,6 +29,7 @@ import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Interface.BookItemInterface;
 import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.ItemActivity;
+import xact.idea.lecturepos.ItemReturnActivity;
 import xact.idea.lecturepos.R;
 
 public class SpinnerDialogFor implements Filterable {
@@ -44,10 +45,12 @@ public class SpinnerDialogFor implements Filterable {
     SpinnerFilter filter;
     ArrayAdapter adapter;
     BookListAdapter mAdapters;
-    public SpinnerDialogFor(Activity activity, ArrayList<String> items, String dialogTitle) {
+    String value;
+    public SpinnerDialogFor(Activity activity, ArrayList<String> items, String dialogTitle,String value) {
         this.items = items;
         this.context = activity;
         this.dTitle = dialogTitle;
+        this.value = value;
     }
 
 
@@ -137,18 +140,35 @@ public class SpinnerDialogFor implements Filterable {
     BookItemInterface bookItemInterface = new BookItemInterface() {
         @Override
         public void Id(String value) {
-            Book book = Common.bookRepository.getBook(value.substring(value.length() - 16));
+            if (value.equals("S")){
+                Book book = Common.bookRepository.getBook(value.substring(value.length() - 16));
 
 
-            if (book != null) {
-                Intent intent = new Intent(context, ItemActivity.class);
-                intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
-                context.startActivity(intent);
-                context.finish();
-                //infoDialog.dismiss();
-            } else {
-              ///  Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
+                if (book != null) {
+                    Intent intent = new Intent(context, ItemActivity.class);
+                    intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
+                    context.startActivity(intent);
+                    context.finish();
+                    //infoDialog.dismiss();
+                } else {
+                    ///  Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
+                }
             }
+            else {
+                Book book = Common.bookRepository.getBook(value.substring(value.length() - 16));
+
+
+                if (book != null) {
+                    Intent intent = new Intent(context, ItemReturnActivity.class);
+                    intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
+                    context.startActivity(intent);
+                    context.finish();
+                    //infoDialog.dismiss();
+                } else {
+                    ///  Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
         }
     };
     public void closeSpinerDialog() {

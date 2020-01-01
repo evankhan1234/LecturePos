@@ -36,6 +36,7 @@ import xact.idea.lecturepos.Database.Datasources.ChallanDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.ChallanRepositoy;
 import xact.idea.lecturepos.Database.Datasources.CustomerRepository;
 import xact.idea.lecturepos.Database.Datasources.ItemRepository;
+import xact.idea.lecturepos.Database.Datasources.ItemReturnRepository;
 import xact.idea.lecturepos.Database.Datasources.LoginRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesDetailsRepository;
 import xact.idea.lecturepos.Database.Datasources.SalesMasterRepository;
@@ -46,6 +47,7 @@ import xact.idea.lecturepos.Database.Local.ChallanDataSources;
 import xact.idea.lecturepos.Database.Local.ChallanDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.CustomerDataSources;
 import xact.idea.lecturepos.Database.Local.ItemDataSources;
+import xact.idea.lecturepos.Database.Local.ItemReturnDataSources;
 import xact.idea.lecturepos.Database.Local.LoginDataSource;
 import xact.idea.lecturepos.Database.Local.SalesDetailsDataSources;
 import xact.idea.lecturepos.Database.Local.SalesMasterDataSources;
@@ -109,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                         String str = android.os.Build.MODEL;
                         String str1 = Build.DEVICE;
                         loginPostEntity.device_id = androidId;
-                        loginPostEntity.device_info = str + "" + str1;
+                        loginPostEntity.device_info = str + " " + str1;
                         loginPostEntity.login_time = currentDate + " " + currentTime;
                         loginPostEntity.device_ime = " ";
                         Log.e("ff", "dgg" + Common.loginRepository.size());
@@ -141,23 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void accept(LoginEntity loginEntity) throws Exception {
                                     Log.e("ff", "dgg" + new Gson().toJson(loginEntity));
-                                    if (loginEntity.message.equals("Device approval request has been sent!")) {
-                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
-                                        dismissLoadingProgress();
-                                    }
-                                    else  if (loginEntity.message.equals("UserID/Password is not correct!")) {
-                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
-                                        dismissLoadingProgress();
-                                    }
-                                    else  if (loginEntity.message.equals("Device approval request has been sent!")) {
-                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
-                                        dismissLoadingProgress();
-                                    }
-                                    else  if (loginEntity.message.equals("Device approval request is pending!")) {
-                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
-                                        dismissLoadingProgress();
-                                    }
-                                    else  if (loginEntity.message.equals("API Request Succeed")) {
+                                    if (loginEntity.status_code==200){
 
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, loginEntity.user_id + "");
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, loginEntity.data.CUSTOMER_NAME + "");
@@ -184,9 +170,28 @@ public class LoginActivity extends AppCompatActivity {
                                         dismissLoadingProgress();
                                     }
                                     else {
-                                        Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
-                                        dismissLoadingProgress();
+                                        if (loginEntity.message.equals("Device approval request has been sent!")) {
+                                            Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                            dismissLoadingProgress();
+                                        }
+                                        else  if (loginEntity.message.equals("UserID/Password is not correct!")) {
+                                            Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                            dismissLoadingProgress();
+                                        }
+                                        else  if (loginEntity.message.equals("Device approval request has been sent!")) {
+                                            Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                            dismissLoadingProgress();
+                                        }
+                                        else  if (loginEntity.message.equals("Device approval request is pending!")) {
+                                            Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                            dismissLoadingProgress();
+                                        }
+                                        else {
+                                            Toast.makeText(LoginActivity.this, loginEntity.message, Toast.LENGTH_SHORT).show();
+                                            dismissLoadingProgress();
+                                        }
                                     }
+
 
 
                                 }
@@ -271,6 +276,7 @@ public class LoginActivity extends AppCompatActivity {
         Common.bookStockRepository = BookStockRepository.getInstance(BookStockDataSources.getInstance(Common.mainDatabase.bookStockDao()));
         Common.challanDetailsRepository = ChallanDetailsRepository.getInstance(ChallanDetailsDataSources.getInstance(Common.mainDatabase.challanDetailsDao()));
         Common.itemRepository = ItemRepository.getInstance(ItemDataSources.getInstance(Common.mainDatabase.itemDao()));
+        Common.itemReturnRepository = ItemReturnRepository.getInstance(ItemReturnDataSources.getInstance(Common.mainDatabase.itemReturnDao()));
     }
 
     @Override

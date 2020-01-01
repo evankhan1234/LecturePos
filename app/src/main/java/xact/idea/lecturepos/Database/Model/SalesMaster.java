@@ -41,6 +41,8 @@ public class SalesMaster {
     public String Note;
     @ColumnInfo(name = "InvoiceDates")
     public String InvoiceDates;
+    @ColumnInfo(name = "DateSimple")
+    public String DateSimple;
     @ColumnInfo(name = "PhoneNumber")
     public String PhoneNumber;
     @ColumnInfo(name = "SubTotal")
@@ -49,4 +51,8 @@ public class SalesMaster {
     public String Return;
     @ColumnInfo(name = "Date")
     public Date  Date;
+    @ColumnInfo(name = "TrnType")
+    public String TrnType;
+
+
 }

@@ -5,12 +5,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,9 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -47,22 +42,19 @@ import java.util.List;
 import java.util.Locale;
 
 import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
-import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import xact.idea.lecturepos.Adapter.CustomerAdapter;
-import xact.idea.lecturepos.Adapter.ItemAdapter;
+import xact.idea.lecturepos.Adapter.ItemReturnAdapter;
 import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.Customer;
-import xact.idea.lecturepos.Database.Model.Items;
+import xact.idea.lecturepos.Database.Model.ItemReturn;
 import xact.idea.lecturepos.Database.Model.SalesDetails;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Interface.CustomerInterface;
-import xact.idea.lecturepos.Model.ItemModel;
 import xact.idea.lecturepos.Model.StockModel;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.Constant;
@@ -75,7 +67,7 @@ import xact.idea.lecturepos.Utils.Utils;
 
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
-public class InvoiceActivity extends AppCompatActivity {
+public class SalesReturnActivity extends AppCompatActivity {
 
     Button create;
     Button btn_scan;
@@ -92,8 +84,8 @@ public class InvoiceActivity extends AppCompatActivity {
     TextView text_sub_total;
     TextView text_net_amounts;
     static TextView text_customer_spinner;
-    ItemAdapter mAdapters;
-     CompositeDisposable compositeDisposable = new CompositeDisposable();
+    ItemReturnAdapter mAdapters;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
     RecyclerView rcl_this_customer_list;
     ImageView btn_header_back;
     private List<Customer> customerArrayList = new ArrayList<>();
@@ -104,7 +96,7 @@ public class InvoiceActivity extends AppCompatActivity {
     ArrayAdapter<Customer> customerListEntityArrayAdapter;
     ArrayAdapter<String> bookListEntityArrayAdapter;
     Spinner spinner_customer;
-     String Name;
+    String Name;
     RadioButton radioCash;
     RadioButton radioCredit;
     RadioGroup radioLogin;
@@ -115,7 +107,7 @@ public class InvoiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invoice);
+        setContentView(R.layout.activity_sales_return);
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         editReturn = findViewById(R.id.editReturn);
@@ -169,7 +161,7 @@ public class InvoiceActivity extends AppCompatActivity {
         text_customer_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spinnerDialog = new SpinnerDialogCustomer(InvoiceActivity.this, customerArrayList, ArrayList, "Select Customer", customerInterface);
+                spinnerDialog = new SpinnerDialogCustomer(SalesReturnActivity.this, customerArrayList, ArrayList, "Select Customer", customerInterface);
 
                 spinnerDialog.showSpinerDialog();
 
@@ -179,7 +171,7 @@ public class InvoiceActivity extends AppCompatActivity {
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(InvoiceActivity.this, BarcodeActivity.class));
+                startActivity(new Intent(SalesReturnActivity.this, BarcodeReturnActivity.class));
                 finish();
             }
         });
@@ -187,7 +179,7 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void accept(List<StockModel> books) throws Exception {
                 for (StockModel book : books) {
-                    String data= Utils.getValue("20"+book.F_BOOK_EDITION_NO);
+                    String data= Utils.getValue("120"+book.F_BOOK_EDITION_NO);
                     bookArrayList.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+"("+data+")"+book.BARCODE_NUMBER );
                     //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
                     //ArrayList.add(customer.ShopName);
@@ -202,7 +194,7 @@ public class InvoiceActivity extends AppCompatActivity {
 //
 
 
-                spinnerDialogs = new SpinnerDialogFor(InvoiceActivity.this, bookArrayList, "Select Book","S");
+                spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayList, "Select Book","R");
                 spinnerDialogs.showSpinerDialog();
                 //showInfoDialog();
             }
@@ -210,7 +202,7 @@ public class InvoiceActivity extends AppCompatActivity {
         btn_header_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
+                startActivity(new Intent(SalesReturnActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -243,7 +235,7 @@ public class InvoiceActivity extends AppCompatActivity {
                 @Override
                 public void accept(List<StockModel> books) throws Exception {
                     for (StockModel book : books) {
-                        String data= Utils.getValue("20"+book.F_BOOK_EDITION_NO);
+                        String data= Utils.getValue("120"+book.F_BOOK_EDITION_NO);
                         bookArrayListAgain.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+"("+data+")"+book.BARCODE_NUMBER );                        //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
                         //ArrayList.add(customer.ShopName);
                     }
@@ -255,7 +247,7 @@ public class InvoiceActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    spinnerDialogs = new SpinnerDialogFor(InvoiceActivity.this, bookArrayListAgain, "Select Book","S");
+                    spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayListAgain, "Select Book","R");
                     spinnerDialogs.showSpinerDialog();
                 }
             }, 300);
@@ -302,7 +294,7 @@ public class InvoiceActivity extends AppCompatActivity {
         edit_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dFragment = new DatePickerFromFragment();
+                DialogFragment dFragment = new SalesReturnActivity.DatePickerFromFragment();
                 dFragment.show(getSupportFragmentManager(), "Date Picker");
             }
         });
@@ -316,12 +308,12 @@ public class InvoiceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String amounts = text_sub_total.getText().toString();
                 amounts = amounts.replace(" Tk", "");
-                //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
+                //  Toast.makeText(SalesReturnActivity.this, amount, Toast.LENGTH_LONG).show();
                 if (!text_customer_spinner.getText().toString().equals("Select")){
                     if (!amounts.equals("0.0")) {
 
                         if (stock>0){
-                            Toast.makeText(InvoiceActivity.this, "Out of stock Items", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SalesReturnActivity.this, "Out of stock ItemReturn", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -348,9 +340,9 @@ public class InvoiceActivity extends AppCompatActivity {
                             Date datess = new Date(System.currentTimeMillis());
                             final SimpleDateFormat formatterq = new SimpleDateFormat("dd-MM-yyyy");
                             final Date dateq = new Date(System.currentTimeMillis());
-                       //     String currentDate =formatterq.format(dateq);
+                            //     String currentDate =formatterq.format(dateq);
 
-                            int value = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"S");
+                            int value = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"R");
                             String totalValue;
                             value = value + 1;
                             if (value < 9) {
@@ -378,10 +370,10 @@ public class InvoiceActivity extends AppCompatActivity {
                             Customer customer =Common.customerRepository.getCustomerss(Name);
                             salesMaster.CustomerName = customer.ShopName;
                             salesMaster.Discount = discount;
-                            salesMaster.TrnType = "S";
-                            salesMaster.InvoiceId = "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
-                            salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
-                            salesMaster.InvoiceNumber = "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
+                            salesMaster.TrnType = "R";
+                            salesMaster.InvoiceId = "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue;
+                            salesMaster.StoreId = SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
+                            salesMaster.InvoiceNumber = "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue;
                             SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
                             Date dates1 = new Date(System.currentTimeMillis());
                             String currentTime = formatters.format(dates1);
@@ -407,12 +399,12 @@ public class InvoiceActivity extends AppCompatActivity {
                             salesMaster.PhoneNumber = edit_contact_number.getText().toString();
                             salesMaster.Return = editReturn.getText().toString();
                             Common.salesMasterRepository.insertToSalesMaster(salesMaster);
-                            Flowable<List<Items>> units = Common.itemRepository.getItemItems();
+                            Flowable<List<ItemReturn>> units = Common.itemReturnRepository.getItemItems();
 
-                            for (Items itemModel : units.blockingFirst())
+                            for (ItemReturn itemModel : units.blockingFirst())
                             {
                                 Date datess1 = new Date(System.currentTimeMillis());
-                                int values = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"S");
+                                int values = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"R");
                                 SalesDetails salesDetails = new SalesDetails();
                                 salesDetails.BookId = itemModel.BookId;
                                 salesDetails.BookName = itemModel.BookName;
@@ -422,8 +414,8 @@ public class InvoiceActivity extends AppCompatActivity {
                                 salesDetails.TotalAmount = itemModel.Amount;
                                 SalesMaster salesMasters = Common.salesMasterRepository.invoice(values);
                                 salesDetails.InvoiceId = values;
-                                salesDetails.InvoiceIdNew = "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
-                                salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+                                salesDetails.InvoiceIdNew = "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue;
+                                salesDetails.StoreId = SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
                                 Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
 
 
@@ -432,7 +424,7 @@ public class InvoiceActivity extends AppCompatActivity {
 //                        bookStock.id=bookStocks.id;
 //                        bookStock.QTY_NUMBER=bookStocks.QTY_NUMBER-itemModel.Quantity;
 //                        Common.bookStockRepository.updateBookStock(bookStock);
-                                Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER - itemModel.Quantity, bookStocks.BOOK_ID);
+                                Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER +itemModel.Quantity, bookStocks.BOOK_ID);
 
                             }
                             SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
@@ -441,34 +433,34 @@ public class InvoiceActivity extends AppCompatActivity {
                             SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
                             Date dates11 = new Date(System.currentTimeMillis());
                             String currentTime1 = formatters1.format(dates11);
-                            SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_TEST ,"110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
+                            SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_TEST ,"120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue);
 
-                            SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
-                            SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
+                            SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
+                            SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
 
                             Constant.arrayList.clear();
                             Constant.name="";
-                            Constant.rate="rate";
-                            Common.itemRepository.emptyItem();
-                            Intent intent = new Intent(InvoiceActivity.this, InvoicePrintActivity.class);
+                            Constant.rate="rate12";
+                            Common.itemReturnRepository.emptyItem();
+                            Intent intent = new Intent(SalesReturnActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             intent.putExtra("customerName", Name);
-                            intent.putExtra("invoiceId", "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
+                            intent.putExtra("invoiceId", "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue);
                             startActivity(intent);
                             finish();
-                            Toast.makeText(InvoiceActivity.this, "Successfully Created a Invoice ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SalesReturnActivity.this, "Successfully Created a Return Invoice ", Toast.LENGTH_SHORT).show();
                         }
 
 
                     } else {
-                        Toast.makeText(InvoiceActivity.this, "Please Add Items", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SalesReturnActivity.this, "Please Add ItemReturn", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    Toast.makeText(InvoiceActivity.this, "Please Select Customer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SalesReturnActivity.this, "Please Select Customer", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -491,9 +483,9 @@ public class InvoiceActivity extends AppCompatActivity {
                 double d = 0.0;
                 String amount = text_sub_total.getText().toString();
                 amount = amount.replace(" Tk", "");
-                //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
+                //  Toast.makeText(SalesReturnActivity.this, amount, Toast.LENGTH_LONG).show();
                 if (amount.equals("0.0")) {
-                    Toast.makeText(InvoiceActivity.this, "Sub Total value is 0", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SalesReturnActivity.this, "Sub Total value is 0", Toast.LENGTH_SHORT).show();
                 } else {
                     double t1;
                     String s1 = text_sub_total.getText().toString();
@@ -520,7 +512,7 @@ public class InvoiceActivity extends AppCompatActivity {
                         t1 = t - ts;
                     } else {
                         t1 = 0;
-                        Toast.makeText(InvoiceActivity.this, "Return can not grater than Sub Total Value", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SalesReturnActivity.this, "Return can not grater than Sub Total Value", Toast.LENGTH_SHORT).show();
                     }
 
                     //    double t1 = t-Double.parseDouble(s.toString());
@@ -544,9 +536,9 @@ public class InvoiceActivity extends AppCompatActivity {
                 double d = 0.0;
                 String amount = text_sub_total.getText().toString();
                 amount = amount.replace(" Tk", "");
-                //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
+                //  Toast.makeText(SalesReturnActivity.this, amount, Toast.LENGTH_LONG).show();
                 if (amount.equals("0.0")) {
-                    Toast.makeText(InvoiceActivity.this, "Sub Total value is 0", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SalesReturnActivity.this, "Sub Total value is 0", Toast.LENGTH_SHORT).show();
                 } else {
 
                     String s1 = text_sub_total.getText().toString();
@@ -612,7 +604,7 @@ public class InvoiceActivity extends AppCompatActivity {
         }
     }
 
-//    public static void  data(String item){
+    //    public static void  data(String item){
 //        text_customer_spinner.setText(item);
 //        Name=item;
 //        Constant.name=item;
@@ -629,7 +621,7 @@ public class InvoiceActivity extends AppCompatActivity {
 //
 //        }
 //    }
-double stock = 0;;
+    double stock = 0;;
     @Override
     protected void onResume() {
         super.onResume();
@@ -645,16 +637,16 @@ double stock = 0;;
 //        for (ItemModel itemModel : Constant.arrayList) {
 //            total += itemModel.Amount;
 //        }
-//        compositeDisposable.add(Common.itemRepository.getItemItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Items>>() {
+//        compositeDisposable.add(Common.itemReturnRepository.getItemItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<ItemReturn>>() {
 //            @Override
-//            public void accept(List<Items> departments) throws Exception {
-//                for (Items itemModel : departments) {
+//            public void accept(List<ItemReturn> departments) throws Exception {
+//                for (ItemReturn itemModel : departments) {
 //                    total += itemModel.Amount;
 //                }
 //            }
 //        }));
-        total = Common.itemRepository.valueSum();
-        stock = Common.itemRepository.wrongItem("In");
+        total = Common.itemReturnRepository.valueSum();
+        stock = Common.itemReturnRepository.wrongItem("In");
         text_sub_total.setText(String.valueOf(total) + " Tk");
         if (!editShippingChargesValue.getText().toString().equals("")) {
             discount = Double.parseDouble(editShippingChargesValue.getText().toString());
@@ -672,7 +664,7 @@ double stock = 0;;
         double total = 0;
         double discount = 0;
         double amount = 0;
-        total = Common.itemRepository.valueSum();
+        total = Common.itemReturnRepository.valueSum();
         text_sub_total.setText(String.valueOf(total) + " Tk");
         if (!editShippingChargesValue.getText().toString().equals("")) {
             discount = Double.parseDouble(editShippingChargesValue.getText().toString());
@@ -688,21 +680,21 @@ double stock = 0;;
 
     private void loadBookItemsFor() {
 
-        compositeDisposable.add(Common.itemRepository.getItemItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<Items>>() {
+        compositeDisposable.add(Common.itemReturnRepository.getItemItems().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<ItemReturn>>() {
             @Override
-            public void accept(List<Items> items) throws Exception {
-                Log.e("Book", "Book" + new Gson().toJson(items));
-                loadCustomer(items);
+            public void accept(List<ItemReturn> ItemReturn) throws Exception {
+                Log.e("Book", "Book" + new Gson().toJson(ItemReturn));
+                loadCustomer(ItemReturn);
             }
         }));
 
     }
 
-    private void loadCustomer(List<Items> items) {
+    private void loadCustomer(List<ItemReturn> ItemReturn) {
 
         // List<ItemModel> arrayList= new ArrayList(Constant.map.values());
 
-        mAdapters = new ItemAdapter(this, items);
+        mAdapters = new ItemReturnAdapter(this, ItemReturn);
 
         rcl_this_customer_list.setAdapter(mAdapters);
 
@@ -792,7 +784,7 @@ double stock = 0;;
         CorrectSizeUtil.getInstance(this).correctSize(main_root);
         final SpinnerDialogFor spinnerDialogs;
 
-        spinnerDialogs = new SpinnerDialogFor(InvoiceActivity.this, bookArrayList, "Select Book","S");
+        spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayList, "Select Book","R");
         spinnerDialogs.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String item, int position) {
@@ -803,13 +795,13 @@ double stock = 0;;
 
 
                 if (book != null) {
-                    Intent intent = new Intent(InvoiceActivity.this, ItemActivity.class);
+                    Intent intent = new Intent(SalesReturnActivity.this, ItemActivity.class);
                     intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
                     startActivity(intent);
                     finish();
                     infoDialog.dismiss();
                 } else {
-                    Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SalesReturnActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -825,7 +817,7 @@ double stock = 0;;
             public void onClick(View view) {
                 edit_book_code.setVisibility(View.GONE);
                 btn_done.setVisibility(View.GONE);
-                startActivity(new Intent(InvoiceActivity.this, BarcodeActivity.class));
+                startActivity(new Intent(SalesReturnActivity.this, BarcodeActivity.class));
                 finish();
                 infoDialog.dismiss();
 
@@ -847,13 +839,13 @@ double stock = 0;;
 
 
                 if (book != null) {
-                    Intent intent = new Intent(InvoiceActivity.this, ItemActivity.class);
+                    Intent intent = new Intent(SalesReturnActivity.this, ItemActivity.class);
                     intent.putExtra("EXTRA_SESSION", edit_book_code.getText().toString());
                     startActivity(intent);
                     finish();
                     infoDialog.dismiss();
                 } else {
-                    Toast.makeText(InvoiceActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SalesReturnActivity.this, "No Books Found", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -862,3 +854,4 @@ double stock = 0;;
     }
 
 }
+
