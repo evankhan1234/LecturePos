@@ -22,7 +22,8 @@ public interface BookDao {
     Book getBook(String BookItem);
     @Query("SELECT * FROM books WHERE BookNo=:BookItem")
     Book getBookNo(String BookItem);
-
+    @Query("SELECT * FROM books WHERE BARCODE_NUMBER=:BookItem and BOOK_GROUP_ID=:Group GROUP BY BookNo HAVING MAX(BOOK_NET_PRICE)")
+    Book getBookItemFor(String BookItem,String Group);
     @Query("Select Count(id)  FROM books")
     int value();
 

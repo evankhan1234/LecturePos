@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="100px"
             android:orientation="horizontal"
-            android:weightSum="4"
+            android:weightSum="2"
             android:id="@+id/layout_header"
 
             >
@@ -65,21 +65,6 @@
                 android:background="@drawable/cell_shape"
                 android:id="@+id/text_customer_name" />
 
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/text_date"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/cell_shape"
-                android:gravity="center|center_vertical"
-                android:paddingTop="10px"
-                android:paddingBottom="10px"
-                android:tag="35"
-                android:text="Punch In "
-                android:textColor="@color/white"
-                android:textSize="35px"
-                android:textStyle="bold" />
 
             <TextView
                 android:textStyle="bold"
@@ -96,53 +81,10 @@
 
                 android:background="@drawable/cell_shape"
                 android:id="@+id/text_amounst" />
-            <TextView
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:paddingTop="10px"
-                android:paddingBottom="10px"
-                android:tag="35"
-                android:textSize="35px"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="Rate"
-                android:gravity="center|center_vertical"
-                android:layout_weight="1"
-
-                android:background="@drawable/cell_shape"
-                android:id="@+id/text_amount" />
 
 
-            <TextView
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:paddingTop="10px"
-                android:paddingBottom="10px"
-                android:tag="35"
-                android:textSize="35px"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="Price"
-                android:gravity="center|center_vertical"
-                android:layout_weight="1"
 
-                android:background="@drawable/cell_shape"
-                android:id="@+id/text_amounsvt" />
-            <TextView
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:paddingTop="10px"
-                android:paddingBottom="10px"
-                android:tag="35"
-                android:textSize="35px"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="Follow Up"
-                android:gravity="center|center_vertical"
-                android:layout_weight="1"
 
-                android:background="@drawable/cell_shape"
-                android:id="@+id/text_amouvnt" />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:nestedScrollingEnabled="false"
@@ -160,6 +102,7 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10px">
@@ -181,35 +124,38 @@
 
 
 
+        <Button
+            android:visibility="visible"
+            android:id="@+id/btn_cancel"
+            android:layout_width="420px"
+            android:layout_height="140px"
+            android:layout_gravity="center"
 
+            android:layout_marginLeft="0px"
+            android:layout_marginRight="15px"
+            android:background="@drawable/btn_no"
+            android:foreground="@drawable/ripple_corner"
+            android:gravity="center"
+            android:paddingBottom="5px"
+            android:stateListAnimator="@null"
+            android:tag="45"
+            android:text="Ok"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="45px" />
         <LinearLayout
             android:id="@+id/linear"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="80px"
             android:paddingBottom="73px"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_cancel"
-                android:layout_width="420px"
-                android:layout_height="140px"
-                android:layout_gravity="center"
 
-                android:layout_marginLeft="0px"
-                android:layout_marginRight="15px"
-                android:background="@drawable/btn_no"
-                android:foreground="@drawable/ripple_corner"
-                android:gravity="center"
-                android:paddingBottom="5px"
-                android:stateListAnimator="@null"
-                android:tag="45"
-                android:text="Cancel"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="45px" />
 
             <Button
+
                 android:backgroundTint="#F44336"
                 android:id="@+id/btn_ok"
                 android:layout_width="420px"
@@ -224,7 +170,7 @@
                 android:textColor="@color/white"
 
                 android:textSize="45px"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

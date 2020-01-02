@@ -39,6 +39,11 @@ public class BookDataSources implements IBookDataSource {
     }
 
     @Override
+    public Book getBookItemFor(String BookItem, String Group) {
+        return BookDao.getBookItemFor(BookItem, Group);
+    }
+
+    @Override
     public Flowable<List<Book>> getBook(int favoriteid) {
         return BookDao.getBook();
     }

@@ -40,7 +40,7 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
 
     @Override
     public SalesDetailsAdapter.ItemModelListiewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_inventory, parent, false );
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_adjustment, parent, false );
 
        // View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_invoice_sales_list, false);
         CorrectSizeUtil.getInstance(mActivity).correctSize(view);
@@ -78,8 +78,7 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
         holder.text_name.setText(book.BookNameBangla);
      //   holder.text_book_code.setText(Html.fromHtml(textId));
         holder.text_quantity.setText(String.valueOf(messageEntities.get(position).Quantity));
-        holder.text_mrp.setText(String.valueOf(rounded(ss,2)));
-        holder.text_net_price.setText(String.valueOf(rounded(price,2)));
+
     //    holder.text_total.setText(Html.fromHtml(text4));
 
     }
@@ -93,9 +92,7 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
 
         private TextView text_name;
         private TextView text_quantity;
-        private TextView text_mrp;
-        private TextView text_discount;
-        private TextView text_net_price;
+
      //   private TextView text_book_code;
 
 
@@ -106,9 +103,9 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
 
             text_name = itemView.findViewById(R.id.text_name);
             text_quantity = itemView.findViewById(R.id.text_quantity);
-            text_mrp = itemView.findViewById(R.id.text_mrp);
+
          //   text_discount = itemView.findViewById(R.id.text_discount);
-            text_net_price = itemView.findViewById(R.id.text_net_price);
+
          //   text_book_code = itemView.findViewById(R.id.text_book_code);
 
 
