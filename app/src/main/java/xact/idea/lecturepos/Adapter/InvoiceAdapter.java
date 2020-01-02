@@ -106,11 +106,13 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //                    LinearLayoutManager.HORIZONTAL,
 //                false
 //        );
-        if (messageEntities.get(position).TrnType.equals("S")){
-            holder.text_create_invoice.setVisibility(View.VISIBLE);
+        if (messageEntities.get(position).TrnType.equals("A")){
+            holder.text_create_invoice.setVisibility(View.GONE);
+            holder.text_create_invoice_adjustment.setVisibility(View.VISIBLE);
         }
         else {
-            holder.text_create_invoice.setVisibility(View.GONE);
+            holder.text_create_invoice.setVisibility(View.VISIBLE);
+            holder.text_create_invoice_adjustment.setVisibility(View.GONE);
 
         }
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
@@ -135,7 +137,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //            }
 //        }));
 
-        holder.text_view_details.setOnClickListener(new View.OnClickListener() {
+        holder.text_create_invoice_adjustment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showInfoDialogView(mActivity,position);
@@ -226,7 +228,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //        linear.setVisibility(View.GONE);
      //   tv_info.setVisibility(View.GONE);
 
-        spinerTitle.setText(" Invoice Number: "+messageEntities.get(position).InvoiceNumber);
+        spinerTitle.setText(" Adjustment Number: "+messageEntities.get(position).InvoiceNumber);
         CorrectSizeUtil.getInstance((Activity) mContext).correctSize(main_root);
         LinearLayoutManager lm = new LinearLayoutManager(mActivity);
         lm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -305,6 +307,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
     public class SalesMasterListiewHolder extends RecyclerView.ViewHolder {
 
         private TextView text_name;
+        private TextView text_create_invoice_adjustment;
         private TextView text_contact_number;
         private TextView text_invoice;
         private TextView text_code;
@@ -333,6 +336,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
             view_color = itemView.findViewById(R.id.view_color);
             text_view_details = itemView.findViewById(R.id.text_view_details);
             text_create_invoice = itemView.findViewById(R.id.text_create_invoice);
+            text_create_invoice_adjustment = itemView.findViewById(R.id.text_create_invoice_adjustment);
 
 
         }

@@ -299,9 +299,8 @@
 
 
                             </LinearLayout>
-
                             <LinearLayout
-                                android:id="@+id/linear_stock"
+                                android:id="@+id/linear_Publisher_return"
                                 android:layout_width="0px"
                                 android:layout_height="395px"
                                 android:layout_marginLeft="1px"
@@ -319,23 +318,24 @@
                                     android:layout_height="150px"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="1px"
-                                    android:layout_marginTop="90px"
-                                    android:src="@drawable/inventory" />
-
+                                    android:layout_marginTop="80px"
+                                    android:src="@drawable/publisher_return" />
                                 <TextView
+                                    android:padding="22px"
+                                    android:textStyle="bold"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="28px"
+                                    android:layout_marginTop="1px"
                                     android:gravity="center_horizontal"
                                     android:tag="40"
-                                    android:text="Inventory"
 
+                                    android:text="Publisher Return"
                                     android:textColor="@color/white"
-                                    android:textSize="40px"
-                                    android:textStyle="bold" />
+                                    android:textSize="40px" />
 
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:backgroundTint="@color/colorPrimary"
                                 android:id="@+id/linear_order"
@@ -405,42 +405,7 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
                             <LinearLayout
-                                android:backgroundTint="@color/colorPrimary"
-                                android:id="@+id/linear_sales_return"
-                                android:layout_width="0px"
-                                android:layout_height="395px"
-                                android:layout_marginLeft="1px"
-                                android:layout_marginRight="5px"
-                                android:layout_weight="1"
-                                android:background="@drawable/white_bx"
-
-                                android:orientation="vertical"
-
-                                >
-                                <ImageView
-                                    android:layout_width="150px"
-                                    android:layout_height="150px"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_marginLeft="1px"
-                                    android:layout_marginTop="90px"
-                                    android:src="@drawable/sales_return" />
-
-                                <TextView
-                                    android:textStyle="bold"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="28px"
-                                    android:gravity="center_horizontal"
-                                    android:tag="40"
-                                    android:text="Sales Return"
-                                    android:textColor="@color/white"
-                                    android:textSize="40px" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/linear_Publisher_return"
+                                android:id="@+id/linear_sync"
                                 android:layout_width="0px"
                                 android:layout_height="395px"
                                 android:layout_marginLeft="1px"
@@ -458,10 +423,9 @@
                                     android:layout_height="150px"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="1px"
-                                    android:layout_marginTop="80px"
-                                    android:src="@drawable/publisher_return" />
+                                    android:layout_marginTop="50px"
+                                    android:src="@drawable/sync" />
                                 <TextView
-                                    android:padding="22px"
                                     android:textStyle="bold"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -469,9 +433,61 @@
                                     android:gravity="center_horizontal"
                                     android:tag="40"
 
-                                    android:text="Publisher Return"
+                                    android:text="Sync"
                                     android:textColor="@color/white"
                                     android:textSize="40px" />
+                                <TextView
+                                    android:id="@+id/text_date_time"
+                                    android:textStyle="bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="1px"
+                                    android:gravity="center_horizontal"
+                                    android:tag="33"
+                                    android:padding="19px"
+                                    android:layout_marginBottom="5px"
+
+                                    android:text="2019-12-21 13:52:23"
+                                    android:textColor="@color/white"
+                                    android:textSize="33px" />
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/linear_stock"
+                                android:layout_width="0px"
+                                android:layout_height="395px"
+                                android:layout_marginLeft="1px"
+                                android:layout_marginRight="5px"
+                                android:layout_weight="1"
+                                android:background="@drawable/white_bx"
+                                android:backgroundTint="@color/colorPrimary"
+
+                                android:orientation="vertical"
+
+                                >
+
+                                <ImageView
+                                    android:layout_width="150px"
+                                    android:layout_height="150px"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginLeft="1px"
+                                    android:layout_marginTop="90px"
+                                    android:src="@drawable/inventory" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="28px"
+                                    android:gravity="center_horizontal"
+                                    android:tag="40"
+                                    android:text="Inventory"
+
+                                    android:textColor="@color/white"
+                                    android:textSize="40px"
+                                    android:textStyle="bold" />
 
 
                             </LinearLayout>
@@ -522,57 +538,41 @@
                             android:layout_marginTop="0px"
                             android:orientation="horizontal"
                             android:weightSum="3">
-
-
                             <LinearLayout
-                                android:id="@+id/linear_sync"
+                                android:backgroundTint="@color/colorPrimary"
+                                android:id="@+id/linear_sales_return"
                                 android:layout_width="0px"
                                 android:layout_height="395px"
                                 android:layout_marginLeft="1px"
                                 android:layout_marginRight="5px"
                                 android:layout_weight="1"
                                 android:background="@drawable/white_bx"
-                                android:backgroundTint="@color/colorPrimary"
 
                                 android:orientation="vertical"
 
                                 >
-
                                 <ImageView
                                     android:layout_width="150px"
                                     android:layout_height="150px"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="1px"
-                                    android:layout_marginTop="50px"
-                                    android:src="@drawable/sync" />
+                                    android:layout_marginTop="90px"
+                                    android:src="@drawable/sales_return" />
+
                                 <TextView
                                     android:textStyle="bold"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="1px"
+                                    android:layout_marginTop="28px"
                                     android:gravity="center_horizontal"
                                     android:tag="40"
-
-                                    android:text="Sync"
+                                    android:text="Sales Return"
                                     android:textColor="@color/white"
                                     android:textSize="40px" />
-                                <TextView
-                                    android:id="@+id/text_date_time"
-                                    android:textStyle="bold"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="1px"
-                                    android:gravity="center_horizontal"
-                                    android:tag="33"
-                                    android:padding="19px"
-                                    android:layout_marginBottom="5px"
-
-                                    android:text="2019-12-21 13:52:23"
-                                    android:textColor="@color/white"
-                                    android:textSize="33px" />
 
 
                             </LinearLayout>
+
 
                             <LinearLayout
                                 android:id="@+id/linear_web"

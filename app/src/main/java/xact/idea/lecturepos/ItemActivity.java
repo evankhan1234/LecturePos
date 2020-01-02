@@ -60,6 +60,7 @@ public class ItemActivity extends AppCompatActivity {
     String position;
     BookStock bookStock;
     Book book;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,14 +85,13 @@ public class ItemActivity extends AppCompatActivity {
         imm.showSoftInput(quantity, InputMethodManager.SHOW_IMPLICIT);
         sessionId = getIntent().getStringExtra("EXTRA_SESSION");
         Log.e("seesion", "dsd" + sessionId);
-        if (sessionId.equals("update"))
-        {
+        if (sessionId.equals("update")) {
             btn_update.setVisibility(View.VISIBLE);
             save.setVisibility(View.GONE);
             btn_new.setVisibility(View.GONE);
             position = getIntent().getStringExtra("id");
-            Log.e("position","position"+position);
-            Items   itemModel = Common.itemRepository.getItems(position);
+            Log.e("position", "position" + position);
+            Items itemModel = Common.itemRepository.getItems(position);
             if (itemModel != null) {
                 bookname.setText(itemModel.BookName);
                 quantity.setText(String.valueOf(itemModel.Quantity));
@@ -101,10 +101,9 @@ public class ItemActivity extends AppCompatActivity {
                 amount.setText(String.valueOf(itemModel.Amount));
                 booknameBangla.setText(String.valueOf(itemModel.BookNameBangla));
                 bookStock = Common.bookStockRepository.getBookStock(itemModel.BookId);
-                if (bookStock!=null){
+                if (bookStock != null) {
                     bookQuantity.setText(String.valueOf(bookStock.QTY_NUMBER));
-                }
-                else {
+                } else {
 
                 }
             }
@@ -113,22 +112,25 @@ public class ItemActivity extends AppCompatActivity {
             btn_update.setVisibility(View.GONE);
             save.setVisibility(View.VISIBLE);
             btn_new.setVisibility(View.VISIBLE);
-             book = Common.bookRepository.getBook(sessionId);
-             bookStock = Common.bookStockRepository.getBookStock(book.BookNo);
-            if (bookStock!=null){
-                bookQuantity.setText(String.valueOf(bookStock.QTY_NUMBER));
+            Book books = Common.bookRepository.getBook(sessionId);
+            book = Common.bookRepository.getBookItemFor(sessionId, books.BOOK_GROUP_ID);
+            if (book==null){
+                book=  Common.bookRepository.getBook(sessionId);
             }
-            else {
+            bookStock = Common.bookStockRepository.getBookStock(book.BookNo);
+            if (bookStock != null) {
+                bookQuantity.setText(String.valueOf(bookStock.QTY_NUMBER));
+            } else {
 
             }
 
 
             if (book != null) {
-                bookname.setText(book.BookName+" (20"+book.F_BOOK_EDITION_NO+")");
+                bookname.setText(book.BookName + " (20" + book.F_BOOK_EDITION_NO + ")");
 
-                String data= Utils.getValue("20"+book.F_BOOK_EDITION_NO);
-                booknameBangla.setText(book.BookNameBangla+" ("+data+")");
-              //  booknameBangla.setText(book.BookNameBangla);
+                String data = Utils.getValue("20" + book.F_BOOK_EDITION_NO);
+                booknameBangla.setText(book.BookNameBangla + " (" + data + ")");
+                //  booknameBangla.setText(book.BookNameBangla);
                 price.setText(String.valueOf(book.BOOK_NET_PRICE));
                 bookMRP.setText(String.valueOf(book.BOOK_FACE_VALUE));
             } else {
@@ -167,7 +169,7 @@ public class ItemActivity extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                 double quantitys = 0;
+                double quantitys = 0;
                 final double ss;
                 if (!s.toString().equals("")) {
                     ss = Double.parseDouble(s.toString());
@@ -175,14 +177,14 @@ public class ItemActivity extends AppCompatActivity {
                     ss = 0.0;
                 }
 //                double ss1=Double.parseDouble(s.toString());
-                double stock= 0;
+                double stock = 0;
                 try {
                     stock = Double.parseDouble(bookQuantity.getText().toString());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
-                    stock=0;
+                    stock = 0;
                 }
-                if (stock>=ss){
+                if (stock >= ss) {
                     final double prices;
 
                     final double d;
@@ -207,23 +209,19 @@ public class ItemActivity extends AppCompatActivity {
                     } else {
                         quantitys = 0.0;
                     }
-                    Log.e("prices",""+prices);
-                    Log.e("quantitys",""+quantitys);
-                    Log.e("dis",""+d);
+                    Log.e("prices", "" + prices);
+                    Log.e("quantitys", "" + quantitys);
+                    Log.e("dis", "" + d);
                     double total = (prices * d);
-                    double totals = (prices * d) * quantitys/100;
-                    double t = total-totals;
+                    double totals = (prices * d) * quantitys / 100;
+                    double t = total - totals;
 
                     amount.setText(String.valueOf(rounded(t, 2)));
-                }
-                else {
+                } else {
                     Toast.makeText(ItemActivity.this, "Quantity can not grater than Stock", Toast.LENGTH_SHORT).show();
                     amount.setText("");
 
                 }
-
-
-
 
 
             }
@@ -261,10 +259,10 @@ public class ItemActivity extends AppCompatActivity {
 
 
                     double total = (prices * quantitys);
-                    double totals = (prices * quantitys) * d/100;
-                    double t = total-totals;
+                    double totals = (prices * quantitys) * d / 100;
+                    double t = total - totals;
                     amount.setText(String.valueOf(rounded(t, 2)));
-                   // Toast.makeText(ItemActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(ItemActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -272,11 +270,11 @@ public class ItemActivity extends AppCompatActivity {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bookStock!=null){
-                    if (bookStock.QTY_NUMBER>0){
-                        if (!quantity.getText().toString().equals("")&& !amount.getText().toString().equals("")) {
-                            double quan= Double.parseDouble(quantity.getText().toString());
-                            if (quan>0){
+                if (bookStock != null) {
+                    if (bookStock.QTY_NUMBER > 0) {
+                        if (!quantity.getText().toString().equals("") && !amount.getText().toString().equals("")) {
+                            double quan = Double.parseDouble(quantity.getText().toString());
+                            if (quan > 0) {
                                 double pricesfor = Double.parseDouble(bookMRP.getText().toString());
                                 int quantityfor = Integer.parseInt(quantity.getText().toString());
                                 double discountfor;
@@ -293,15 +291,14 @@ public class ItemActivity extends AppCompatActivity {
                                 itemModel.Quantity = quantityfor;
                                 itemModel.Discount = discountfor;
 
-                                Items   itemModels = Common.itemRepository.getItems(position);
+                                Items itemModels = Common.itemRepository.getItems(position);
                                 itemModel.BookId = itemModels.BookId;
-                                BookStock  bookStocks = Common.bookStockRepository.getBookStock(itemModels.BookId);
-                                if (bookStocks!=null){
-                                    if (bookStock.QTY_NUMBER<=bookStocks.QTY_NUMBER){
-                                        itemModel.Stock="Out";
-                                    }
-                                    else {
-                                        itemModel.Stock="In";
+                                BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModels.BookId);
+                                if (bookStocks != null) {
+                                    if (bookStock.QTY_NUMBER <= bookStocks.QTY_NUMBER) {
+                                        itemModel.Stock = "Out";
+                                    } else {
+                                        itemModel.Stock = "In";
                                     }
                                 }
                                 //itemModel.Stock = itemModels.Stock;
@@ -312,8 +309,7 @@ public class ItemActivity extends AppCompatActivity {
                                 Common.itemRepository.updateItem(itemModel);
                                 startActivity(new Intent(ItemActivity.this, InvoiceActivity.class));
                                 finish();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(ItemActivity.this, "Quantity Can not be 0", Toast.LENGTH_SHORT).show();
 
                             }
@@ -322,16 +318,13 @@ public class ItemActivity extends AppCompatActivity {
                             Toast.makeText(ItemActivity.this, "Quantity Field is required", Toast.LENGTH_SHORT).show();
                             // Constant.arrayList.set(1,itemModel);
                         }
-                    }
-                    else {
+                    } else {
                         Toast.makeText(ItemActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
 
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(ItemActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
                 }
-
 
 
             }
@@ -340,117 +333,114 @@ public class ItemActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                if (bookStock!=null){
-                    if (bookStock.QTY_NUMBER>0){
+                if (bookStock != null) {
+                    if (bookStock.QTY_NUMBER > 0) {
                         if (!quantity.getText().toString().equals("") && !amount.getText().toString().equals("")) {
 
-                            double value=Double.parseDouble(amount.getText().toString());
-                           // if (value>0){
-                                double quan= Double.parseDouble(quantity.getText().toString());
-                                if (quan>0){
-                                    String s=bookname.getText().toString().substring(0,bookname.getText().toString().length()-7);
-                                    Items getItems =Common.itemRepository.getItems(s);
-                                  //  if (getItems!=null)
-                                  //  {
-                                        final double pricesfor = Double.parseDouble(bookMRP.getText().toString());
-                                        final int quantityfor = Integer.parseInt(quantity.getText().toString());
-                                        final double discountfor;
-                                        if (!discount.getText().toString().equals("")) {
-                                            discountfor = Double.parseDouble(discount.getText().toString());
-                                        } else {
-                                            discountfor = 0;
-                                        }
+                            double value = Double.parseDouble(amount.getText().toString());
+                            // if (value>0){
+                            double quan = Double.parseDouble(quantity.getText().toString());
+                            if (quan > 0) {
+                                String s = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
+                                Items getItems = Common.itemRepository.getItems(s);
+                                //  if (getItems!=null)
+                                //  {
+                                final double pricesfor = Double.parseDouble(bookMRP.getText().toString());
+                                final int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                final double discountfor;
+                                if (!discount.getText().toString().equals("")) {
+                                    discountfor = Double.parseDouble(discount.getText().toString());
+                                } else {
+                                    discountfor = 0;
+                                }
 
-                                        double totalfor = 0;
-                                        try {
-                                            totalfor = Double.parseDouble(amount.getText().toString());
-                                        } catch (NumberFormatException e) {
-                                            totalfor=0;
-                                            e.printStackTrace();
-                                        }
-                                      String s1=bookname.getText().toString().substring(0,bookname.getText().toString().length()-7);
+                                double totalfor = 0;
+                                try {
+                                    totalfor = Double.parseDouble(amount.getText().toString());
+                                } catch (NumberFormatException e) {
+                                    totalfor = 0;
+                                    e.printStackTrace();
+                                }
+                                String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
 
-                                        final Items items1 =Common.itemRepository.getItems(s1);
-                                        final Items items = new Items();
-                                        if (items1!=null){
-                                            final double finalTotalfor1 = totalfor;
-                                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                                @Override
-                                                public void accept(List<GroupModel> userActivities) throws Exception {
+                                final Items items1 = Common.itemRepository.getItems(s1);
+                                final Items items = new Items();
+                                if (items1 != null) {
+                                    final double finalTotalfor1 = totalfor;
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
 
 
-                                                    for (GroupModel groupModel:userActivities){
-                                                        double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
-                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
-                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
-                                                        double t = total-totals;
-                                                        items.Amount = t +items1.Amount;
-                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
-                                                        items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
-                                                        items.Quantity = quantityfor+items1.Quantity;
-                                                        items.Discount = discountfor+items1.Discount;
-                                                        items.BookId = groupModel.BookNo;
-                                                        items.BookName = groupModel.BookName;
-                                                        items.BookNameBangla = groupModel.BookNameBangla;
-                                                        Items it=Common.itemRepository.getItems(groupModel.BookName);
-                                                        BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
-                                                        if (bookStocks!=null){
-                                                            if (bookStock.QTY_NUMBER<=bookStocks.QTY_NUMBER){
-                                                                items.Stock="Out";
-                                                            }
-                                                            else {
-                                                                items.Stock="In";
-                                                            }
-                                                        }
-                                                        items.id=it.id;
-                                                        Common.itemRepository.updateItem(items);
+                                            for (GroupModel groupModel : userActivities) {
+                                                double qty = Double.parseDouble(quantity.getText().toString());
+                                                double dis = Double.parseDouble(discount.getText().toString());
+                                                double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis / 100;
+                                                double t = total - totals;
+                                                items.Amount = t + items1.Amount;
+                                                items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
+                                                items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
+                                                items.Quantity = quantityfor + items1.Quantity;
+                                                items.Discount = discountfor + items1.Discount;
+                                                items.BookId = groupModel.BookNo;
+                                                items.BookName = groupModel.BookName;
+                                                items.BookNameBangla = groupModel.BookNameBangla;
+                                                Items it = Common.itemRepository.getItems(groupModel.BookName);
+                                                BookStock bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
+                                                if (bookStocks != null) {
+                                                    if (bookStock.QTY_NUMBER <= bookStocks.QTY_NUMBER) {
+                                                        items.Stock = "Out";
+                                                    } else {
+                                                        items.Stock = "In";
                                                     }
                                                 }
-                                            }));
-
+                                                items.id = it.id;
+                                                Common.itemRepository.updateItem(items);
+                                            }
                                         }
-                                        else {
-                                            final double finalTotalfor = totalfor;
-                                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                                @Override
-                                                public void accept(List<GroupModel> userActivities) throws Exception {
+                                    }));
 
-                                                    for (GroupModel groupModel : userActivities){
+                                } else {
+                                    final double finalTotalfor = totalfor;
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
 
-                                                        double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
-                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
-                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
-                                                        double t = total-totals;
-                                                        items.Amount = t;
-                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
-                                                        items.Quantity = quantityfor;
-                                                        items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
-                                                        BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
-                                                        if (bookStocks!=null){
-                                                            if (bookStock.QTY_NUMBER<=bookStocks.QTY_NUMBER){
-                                                                items.Stock="Out";
-                                                            }
-                                                            else {
-                                                                items.Stock="In";
-                                                            }
-                                                        }
-                                                        items.Discount = discountfor;
-                                                        items.BookId = groupModel.BookNo;
-                                                        items.BookNameBangla = groupModel.BookNameBangla;
-                                                        items.BookName = groupModel.BookName;
-                                                        Common.itemRepository.insertToItem(items);
+                                            for (GroupModel groupModel : userActivities) {
+
+                                                double qty = Double.parseDouble(quantity.getText().toString());
+                                                double dis = Double.parseDouble(discount.getText().toString());
+                                                double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis / 100;
+                                                double t = total - totals;
+                                                items.Amount = t;
+                                                items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
+                                                items.Quantity = quantityfor;
+                                                items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
+                                                BookStock bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
+                                                if (bookStocks != null) {
+                                                    if (bookStock.QTY_NUMBER <= bookStocks.QTY_NUMBER) {
+                                                        items.Stock = "Out";
+                                                    } else {
+                                                        items.Stock = "In";
                                                     }
                                                 }
-                                            }));
-
-
+                                                items.Discount = discountfor;
+                                                items.BookId = groupModel.BookNo;
+                                                items.BookNameBangla = groupModel.BookNameBangla;
+                                                items.BookName = groupModel.BookName;
+                                                Common.itemRepository.insertToItem(items);
+                                            }
                                         }
+                                    }));
 
-                                        startActivity(new Intent(ItemActivity.this, InvoiceActivity.class));
-                                        finish();
-                                  //  }
+
+                                }
+
+                                startActivity(new Intent(ItemActivity.this, InvoiceActivity.class));
+                                finish();
+                                //  }
 //                                    else{
 //                                        double pricesfor = Double.parseDouble(bookMRP.getText().toString());
 //                                        final int quantityfor = Integer.parseInt(quantity.getText().toString());
@@ -497,11 +487,10 @@ public class ItemActivity extends AppCompatActivity {
 //                                        finish();
 //                                    }
 
-                                }
-                                else {
-                                    Toast.makeText(ItemActivity.this, "Quantity Can not be 0", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ItemActivity.this, "Quantity Can not be 0", Toast.LENGTH_SHORT).show();
 
-                                }
+                            }
 //                            }
 //
 //                            else {
@@ -510,24 +499,17 @@ public class ItemActivity extends AppCompatActivity {
 //                            }
 
 
-
-                        }
-
-                        else {
+                        } else {
                             Toast.makeText(ItemActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();
                             // Constant.arrayList.set(1,itemModel);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(ItemActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
 
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(ItemActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
                 }
-
 
 
             }
@@ -536,110 +518,107 @@ public class ItemActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                if (bookStock!=null){
-                    if (bookStock.QTY_NUMBER>0){
-                        if (!quantity.getText().toString().equals("")&& !amount.getText().toString().equals("")) {
-                            double value=Double.parseDouble(amount.getText().toString());
+                if (bookStock != null) {
+                    if (bookStock.QTY_NUMBER > 0) {
+                        if (!quantity.getText().toString().equals("") && !amount.getText().toString().equals("")) {
+                            double value = Double.parseDouble(amount.getText().toString());
 
-                          //  if (value>0){
-                                double quan= Double.parseDouble(quantity.getText().toString());
-                                if (quan>0){
-                                    Items getItems =Common.itemRepository.getItems(bookname.getText().toString());
-                                   // if (getItems!=null)
-                                   // {
-                                        final double pricesfor = Double.parseDouble(bookMRP.getText().toString());
-                                        final int quantityfor = Integer.parseInt(quantity.getText().toString());
-                                        final double discountfor;
-                                        if (!discount.getText().toString().equals("")) {
-                                            discountfor = Double.parseDouble(discount.getText().toString());
-                                        } else {
-                                            discountfor = 0;
-                                        }
+                            //  if (value>0){
+                            double quan = Double.parseDouble(quantity.getText().toString());
+                            if (quan > 0) {
+                                Items getItems = Common.itemRepository.getItems(bookname.getText().toString());
+                                // if (getItems!=null)
+                                // {
+                                final double pricesfor = Double.parseDouble(bookMRP.getText().toString());
+                                final int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                final double discountfor;
+                                if (!discount.getText().toString().equals("")) {
+                                    discountfor = Double.parseDouble(discount.getText().toString());
+                                } else {
+                                    discountfor = 0;
+                                }
 
-                                        double totalfor = Double.parseDouble(amount.getText().toString());
-                                    String s1=bookname.getText().toString().substring(0,bookname.getText().toString().length()-7);
+                                double totalfor = Double.parseDouble(amount.getText().toString());
+                                String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
 
-                                        final Items items1 =Common.itemRepository.getItems(s1);
-                                        final Items items = new Items();
-                                        if (items1!=null){
-                                            final double finalTotalfor1 = totalfor;
-                                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                                @Override
-                                                public void accept(List<GroupModel> userActivities) throws Exception {
+                                final Items items1 = Common.itemRepository.getItems(s1);
+                                final Items items = new Items();
+                                if (items1 != null) {
+                                    final double finalTotalfor1 = totalfor;
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
 
 
-                                                    for (GroupModel groupModel:userActivities){
-                                                        double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
-                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
-                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
-                                                        double t = total-totals;
-                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
-                                                        items.Amount = t +items1.Amount;
-                                                        items.Quantity = quantityfor+items1.Quantity;
-                                                        items.Discount = discountfor+items1.Discount;
-                                                        items.BookId = groupModel.BookNo;
-                                                        items.BookName = groupModel.BookName;
-                                                        items.BookNameBangla = groupModel.BookNameBangla;
-                                                        Items it =Common.itemRepository.getItems(groupModel.BookName);
-                                                        items.id=it.id;
-                                                        BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
-                                                        if (bookStocks!=null){
-                                                            if (bookStock.QTY_NUMBER<=bookStocks.QTY_NUMBER){
-                                                                items.Stock="Out";
-                                                            }
-                                                            else {
-                                                                items.Stock="In";
-                                                            }
-                                                        }
-                                                        Common.itemRepository.updateItem(items);
+                                            for (GroupModel groupModel : userActivities) {
+                                                double qty = Double.parseDouble(quantity.getText().toString());
+                                                double dis = Double.parseDouble(discount.getText().toString());
+                                                double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis / 100;
+                                                double t = total - totals;
+                                                items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
+                                                items.Amount = t + items1.Amount;
+                                                items.Quantity = quantityfor + items1.Quantity;
+                                                items.Discount = discountfor + items1.Discount;
+                                                items.BookId = groupModel.BookNo;
+                                                items.BookName = groupModel.BookName;
+                                                items.BookNameBangla = groupModel.BookNameBangla;
+                                                Items it = Common.itemRepository.getItems(groupModel.BookName);
+                                                items.id = it.id;
+                                                BookStock bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
+                                                if (bookStocks != null) {
+                                                    if (bookStock.QTY_NUMBER <= bookStocks.QTY_NUMBER) {
+                                                        items.Stock = "Out";
+                                                    } else {
+                                                        items.Stock = "In";
                                                     }
                                                 }
-                                            }));
-
+                                                Common.itemRepository.updateItem(items);
+                                            }
                                         }
-                                        else {
-                                            final double finalTotalfor = totalfor;
-                                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                                @Override
-                                                public void accept(List<GroupModel> userActivities) throws Exception {
+                                    }));
 
-                                                    for (GroupModel groupModel : userActivities){
-                                                        double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
-                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
-                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
-                                                        double t = total-totals;
-                                                        items.Amount = t;
-                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
-                                                        items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
-                                                        BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
-                                                        if (bookStocks!=null){
-                                                            if (bookStock.QTY_NUMBER<=bookStocks.QTY_NUMBER){
-                                                                items.Stock="Out";
-                                                            }
-                                                            else {
-                                                                items.Stock="In";
-                                                            }
-                                                        }
-                                                        items.Quantity = quantityfor;
-                                                        items.Discount = discountfor;
-                                                        items.BookId = groupModel.BookNo;
-                                                        items.BookNameBangla = groupModel.BookNameBangla;
-                                                        items.BookName = groupModel.BookName;
-                                                        Common.itemRepository.insertToItem(items);
+                                } else {
+                                    final double finalTotalfor = totalfor;
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
+
+                                            for (GroupModel groupModel : userActivities) {
+                                                double qty = Double.parseDouble(quantity.getText().toString());
+                                                double dis = Double.parseDouble(discount.getText().toString());
+                                                double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis / 100;
+                                                double t = total - totals;
+                                                items.Amount = t;
+                                                items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
+                                                items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
+                                                BookStock bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
+                                                if (bookStocks != null) {
+                                                    if (bookStock.QTY_NUMBER <= bookStocks.QTY_NUMBER) {
+                                                        items.Stock = "Out";
+                                                    } else {
+                                                        items.Stock = "In";
                                                     }
                                                 }
-                                            }));
-
-
+                                                items.Quantity = quantityfor;
+                                                items.Discount = discountfor;
+                                                items.BookId = groupModel.BookNo;
+                                                items.BookNameBangla = groupModel.BookNameBangla;
+                                                items.BookName = groupModel.BookName;
+                                                Common.itemRepository.insertToItem(items);
+                                            }
                                         }
+                                    }));
 
-                                        Intent intent = new Intent(ItemActivity.this, InvoiceActivity.class);
-                                        intent.putExtra("value", "value");
-                                        startActivity(intent);
-                                        finish();
-                                  //  }
+
+                                }
+
+                                Intent intent = new Intent(ItemActivity.this, InvoiceActivity.class);
+                                intent.putExtra("value", "value");
+                                startActivity(intent);
+                                finish();
+                                //  }
 //                                    else
 //                                        {
 //                                        double pricesfor = Double.parseDouble(bookMRP.getText().toString());
@@ -688,33 +667,28 @@ public class ItemActivity extends AppCompatActivity {
 //                                        finish();
 //                                    }
 
-                                }
-                                else {
-                                    Toast.makeText(ItemActivity.this, "Quantity Can not be 0", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ItemActivity.this, "Quantity Can not be 0", Toast.LENGTH_SHORT).show();
 
-                                }
+                            }
 
-                           // }
-                           // else {
-                           //     Toast.makeText(ItemActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
+                            // }
+                            // else {
+                            //     Toast.makeText(ItemActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
 
-                          //  }
+                            //  }
 
                         } else {
                             Toast.makeText(ItemActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();
                             // Constant.arrayList.set(1,itemModel);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(ItemActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
 
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(ItemActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
                 }
-
 
 
             }
@@ -739,6 +713,7 @@ public class ItemActivity extends AppCompatActivity {
         }
         return false;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

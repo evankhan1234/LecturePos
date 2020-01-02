@@ -110,7 +110,11 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
             btn_update.setVisibility(View.GONE);
             save.setVisibility(View.VISIBLE);
             btn_new.setVisibility(View.VISIBLE);
-            book = Common.bookRepository.getBook(sessionId);
+            Book books = Common.bookRepository.getBook(sessionId);
+            book = Common.bookRepository.getBookItemFor(sessionId, books.BOOK_GROUP_ID);
+            if (book==null){
+                book=  Common.bookRepository.getBook(sessionId);
+            }
             bookStock = Common.bookStockRepository.getBookStock(book.BookNo);
             if (bookStock != null) {
                 bookQuantity.setText(String.valueOf(bookStock.QTY_NUMBER));
