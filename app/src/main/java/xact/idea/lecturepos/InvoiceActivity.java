@@ -316,9 +316,10 @@ public class InvoiceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String amounts = text_sub_total.getText().toString();
                 amounts = amounts.replace(" Tk", "");
+               // Common.itemRepository.size();
                 //  Toast.makeText(InvoiceActivity.this, amount, Toast.LENGTH_LONG).show();
                 if (!text_customer_spinner.getText().toString().equals("Select")){
-                    if (!amounts.equals("0.0")) {
+                    if (Common.itemRepository.size()>0) {
 
                         if (stock>0){
                             Toast.makeText(InvoiceActivity.this, "Out of stock Items", Toast.LENGTH_SHORT).show();

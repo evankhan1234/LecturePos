@@ -15,6 +15,8 @@ public class GroupModel {
     public int  QTY_NUMBER;
     @SerializedName("BOOK_NET_MRP")
     public String  BOOK_NET_MRP;
+    @SerializedName("BOOK_FACE_VALUE")
+    public String  BOOK_FACE_VALUE;
 
     @SerializedName("BOOK_SPECIMEN_CODE")
     public String  BOOK_SPECIMEN_CODE;

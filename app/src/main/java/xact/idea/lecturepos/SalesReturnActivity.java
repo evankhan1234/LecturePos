@@ -310,7 +310,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                 amounts = amounts.replace(" Tk", "");
                 //  Toast.makeText(SalesReturnActivity.this, amount, Toast.LENGTH_LONG).show();
                 if (!text_customer_spinner.getText().toString().equals("Select")){
-                    if (!amounts.equals("0.0")) {
+                    if (Common.itemReturnRepository.size()>0) {
 
                         if (stock>0){
                             Toast.makeText(SalesReturnActivity.this, "Out of stock ItemReturn", Toast.LENGTH_SHORT).show();
