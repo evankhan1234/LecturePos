@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent =new Intent(MainActivity.this, AdjustmentActivity.class);
+                Intent intent =new Intent(MainActivity.this, AdjustmentListActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -1084,7 +1084,7 @@ public class MainActivity extends AppCompatActivity {
                 Date dates = new Date(System.currentTimeMillis());
                 SalesModel salesModel = new SalesModel();
                 salesModel.data = syncs;
-                Log.e("number2", "number2" + new Gson().toJson(salesModel));
+                Log.e("SalesMasterForResponseU", "SalesMasterForResponseU" + new Gson().toJson(salesModel));
 
                 Sync name = Common.syncRepository.valueFor("sales_mst");
                 if (name == null) {
@@ -1131,7 +1131,7 @@ public class MainActivity extends AppCompatActivity {
                 compositeDisposable.add(mService.syncSales(salesModel).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<Response>() {
                     @Override
                     public void accept(Response loginEntity) throws Exception {
-                        Log.e("number2", "number2" + loginEntity.status_code);
+                        Log.e("SalesMasterForResponse2", "SalesMasterForResponse2" + loginEntity.status_code);
 
 
                         if (loginEntity.status_code == 200) {
@@ -1166,7 +1166,7 @@ public class MainActivity extends AppCompatActivity {
         compositeDisposable.add(mService.downSalesMaster(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<SaleesMasterForModel>() {
             @Override
             public void accept(SaleesMasterForModel customerListResponse) throws Exception {
-                Log.e("number2", "number2" + new Gson().toJson(customerListResponse));
+                Log.e("SalesMasterForResponse", "SalesMasterForResponse" + new Gson().toJson(customerListResponse));
 
 
                 for (SaleesMasterForModel.Data customer : customerListResponse.data) {
@@ -1247,7 +1247,7 @@ public class MainActivity extends AppCompatActivity {
         showLoadingProgress(MainActivity.this);
         SalesDetailsPostEntity challanPostEntity = new SalesDetailsPostEntity();
         challanPostEntity.customer_no = SharedPreferenceUtil.getUserID(MainActivity.this);
-        challanPostEntity.transaction_type = "S";
+
         challanPostEntity.invoice_id = invoiceId;
         compositeDisposable.add(mService.downSalesDetails(challanPostEntity).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<SalesDetailsForModel>() {
             @Override
@@ -1308,7 +1308,7 @@ public class MainActivity extends AppCompatActivity {
             details.InvoiceId = salesDetails1.InvoiceIdNew;
             details.MRP = String.valueOf(salesDetails1.MRP);
             details.Discount = String.valueOf(salesDetails1.Discount);
-            details.DiscountPc = "";
+            details.DiscountPc = "0.0";
             details.ReturnAmt = "0.0";
             int value = Common.syncRepository.maxValue("sales_dtl");
             details.UpdNo = String.valueOf(value + 1);

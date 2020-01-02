@@ -338,8 +338,8 @@ public class ItemReturnActivity extends AppCompatActivity {
                     if (bookStock.QTY_NUMBER>0){
                         if (!quantity.getText().toString().equals("") && !amount.getText().toString().equals("")) {
 
-                            double value=Double.parseDouble(amount.getText().toString());
-                            if (value>0){
+                           // double value=Double.parseDouble(amount.getText().toString());
+                         //   if (value>0){
                                 double quan= Double.parseDouble(quantity.getText().toString());
                                 if (quan>0){
                                     String s=bookname.getText().toString().substring(0,bookname.getText().toString().length()-7);
@@ -374,8 +374,15 @@ public class ItemReturnActivity extends AppCompatActivity {
 
 
                                                 for (GroupModel groupModel:userActivities){
-                                                    ItemReturn.Amount = finalTotalfor1 +items1.Amount;
-                                                    ItemReturn.Price = pricesfor;
+                                                    double qty=Double.parseDouble(quantity.getText().toString());
+                                                    double dis=Double.parseDouble(discount.getText().toString());
+                                                    double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                    double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                    double t = total-totals;
+                                                    ItemReturn.Amount = t +items1.Amount;
+                                                    ItemReturn.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
+//                                                    ItemReturn.Amount = finalTotalfor1 +items1.Amount;
+//                                                    ItemReturn.Price = pricesfor;
                                                     ItemReturn.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                                     ItemReturn.Quantity = quantityfor+items1.Quantity;
                                                     ItemReturn.Discount = discountfor+items1.Discount;
@@ -406,8 +413,13 @@ public class ItemReturnActivity extends AppCompatActivity {
                                             public void accept(List<GroupModel> userActivities) throws Exception {
 
                                                 for (GroupModel groupModel : userActivities){
-                                                    ItemReturn.Amount = finalTotalfor;
-                                                    ItemReturn.Price = pricesfor;
+                                                    double qty=Double.parseDouble(quantity.getText().toString());
+                                                    double dis=Double.parseDouble(discount.getText().toString());
+                                                    double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                    double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                    double t = total-totals;
+                                                    ItemReturn.Amount = t ;
+                                                    ItemReturn.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
                                                     ItemReturn.Quantity = quantityfor;
                                                     ItemReturn.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                                     BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
@@ -485,10 +497,10 @@ public class ItemReturnActivity extends AppCompatActivity {
                                     Toast.makeText(ItemReturnActivity.this, "Quantity Can not be 0", Toast.LENGTH_SHORT).show();
 
                                 }
-                            }else {
-                                Toast.makeText(ItemReturnActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
-
-                            }
+                       //     }else {
+                           //     Toast.makeText(ItemReturnActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
+//
+                         //   }
 
 
 
@@ -522,7 +534,7 @@ public class ItemReturnActivity extends AppCompatActivity {
                         if (!quantity.getText().toString().equals("")&& !amount.getText().toString().equals("")) {
                             double value=Double.parseDouble(amount.getText().toString());
 
-                            if (value>0){
+                          //  if (value>0){
                                 double quan= Double.parseDouble(quantity.getText().toString());
                                 if (quan>0){
                                     ItemReturn getItems =Common.itemReturnRepository.getItems(bookname.getText().toString());
@@ -550,8 +562,13 @@ public class ItemReturnActivity extends AppCompatActivity {
 
 
                                                 for (GroupModel groupModel:userActivities){
-                                                    ItemReturn.Amount = finalTotalfor1 +items1.Amount;
-                                                    ItemReturn.Price = pricesfor;
+                                                    double qty=Double.parseDouble(quantity.getText().toString());
+                                                    double dis=Double.parseDouble(discount.getText().toString());
+                                                    double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                    double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                    double t = total-totals;
+                                                    ItemReturn.Amount = t +items1.Amount;
+                                                    ItemReturn.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
                                                     ItemReturn.Quantity = quantityfor+items1.Quantity;
                                                     ItemReturn.Discount = discountfor+items1.Discount;
                                                     ItemReturn.BookId = groupModel.BookNo;
@@ -581,8 +598,13 @@ public class ItemReturnActivity extends AppCompatActivity {
                                             public void accept(List<GroupModel> userActivities) throws Exception {
 
                                                 for (GroupModel groupModel : userActivities){
-                                                    ItemReturn.Amount = finalTotalfor;
-                                                    ItemReturn.Price = pricesfor;
+                                                    double qty=Double.parseDouble(quantity.getText().toString());
+                                                    double dis=Double.parseDouble(discount.getText().toString());
+                                                    double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                    double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                    double t = total-totals;
+                                                    ItemReturn.Amount = t ;
+                                                    ItemReturn.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
                                                     ItemReturn.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                                     BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
                                                     if (bookStocks!=null){
@@ -665,11 +687,11 @@ public class ItemReturnActivity extends AppCompatActivity {
 
                                 }
 
-                            }
-                            else {
-                                Toast.makeText(ItemReturnActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
+                           // }
+                           // else {
+                         //       Toast.makeText(ItemReturnActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
 
-                            }
+                         //   }
 
                         } else {
                             Toast.makeText(ItemReturnActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();

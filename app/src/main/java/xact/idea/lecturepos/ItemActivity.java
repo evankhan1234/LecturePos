@@ -345,7 +345,7 @@ public class ItemActivity extends AppCompatActivity {
                         if (!quantity.getText().toString().equals("") && !amount.getText().toString().equals("")) {
 
                             double value=Double.parseDouble(amount.getText().toString());
-                            if (value>0){
+                           // if (value>0){
                                 double quan= Double.parseDouble(quantity.getText().toString());
                                 if (quan>0){
                                     String s=bookname.getText().toString().substring(0,bookname.getText().toString().length()-7);
@@ -380,8 +380,13 @@ public class ItemActivity extends AppCompatActivity {
 
 
                                                     for (GroupModel groupModel:userActivities){
-                                                        items.Amount = finalTotalfor1 +items1.Amount;
-                                                        items.Price = pricesfor;
+                                                        double qty=Double.parseDouble(quantity.getText().toString());
+                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                        double t = total-totals;
+                                                        items.Amount = t +items1.Amount;
+                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
                                                         items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                                         items.Quantity = quantityfor+items1.Quantity;
                                                         items.Discount = discountfor+items1.Discount;
@@ -412,8 +417,14 @@ public class ItemActivity extends AppCompatActivity {
                                                 public void accept(List<GroupModel> userActivities) throws Exception {
 
                                                     for (GroupModel groupModel : userActivities){
-                                                        items.Amount = finalTotalfor;
-                                                        items.Price = pricesfor;
+
+                                                        double qty=Double.parseDouble(quantity.getText().toString());
+                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                        double t = total-totals;
+                                                        items.Amount = t;
+                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
                                                         items.Quantity = quantityfor;
                                                         items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                                         BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
@@ -491,10 +502,12 @@ public class ItemActivity extends AppCompatActivity {
                                     Toast.makeText(ItemActivity.this, "Quantity Can not be 0", Toast.LENGTH_SHORT).show();
 
                                 }
-                            }else {
-                                Toast.makeText(ItemActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
-
-                            }
+//                            }
+//
+//                            else {
+//                                Toast.makeText(ItemActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
+//
+//                            }
 
 
 
@@ -528,7 +541,7 @@ public class ItemActivity extends AppCompatActivity {
                         if (!quantity.getText().toString().equals("")&& !amount.getText().toString().equals("")) {
                             double value=Double.parseDouble(amount.getText().toString());
 
-                            if (value>0){
+                          //  if (value>0){
                                 double quan= Double.parseDouble(quantity.getText().toString());
                                 if (quan>0){
                                     Items getItems =Common.itemRepository.getItems(bookname.getText().toString());
@@ -556,8 +569,13 @@ public class ItemActivity extends AppCompatActivity {
 
 
                                                     for (GroupModel groupModel:userActivities){
-                                                        items.Amount = finalTotalfor1 +items1.Amount;
-                                                        items.Price = pricesfor;
+                                                        double qty=Double.parseDouble(quantity.getText().toString());
+                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                        double t = total-totals;
+                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
+                                                        items.Amount = t +items1.Amount;
                                                         items.Quantity = quantityfor+items1.Quantity;
                                                         items.Discount = discountfor+items1.Discount;
                                                         items.BookId = groupModel.BookNo;
@@ -587,8 +605,13 @@ public class ItemActivity extends AppCompatActivity {
                                                 public void accept(List<GroupModel> userActivities) throws Exception {
 
                                                     for (GroupModel groupModel : userActivities){
-                                                        items.Amount = finalTotalfor;
-                                                        items.Price = pricesfor;
+                                                        double qty=Double.parseDouble(quantity.getText().toString());
+                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
+                                                        double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
+                                                        double t = total-totals;
+                                                        items.Amount = t;
+                                                        items.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
                                                         items.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                                         BookStock  bookStocks = Common.bookStockRepository.getBookStock(groupModel.BookNo);
                                                         if (bookStocks!=null){
@@ -671,11 +694,11 @@ public class ItemActivity extends AppCompatActivity {
 
                                 }
 
-                            }
-                            else {
-                                Toast.makeText(ItemActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
+                           // }
+                           // else {
+                           //     Toast.makeText(ItemActivity.this, "Amount Can not be 0", Toast.LENGTH_SHORT).show();
 
-                            }
+                          //  }
 
                         } else {
                             Toast.makeText(ItemActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();

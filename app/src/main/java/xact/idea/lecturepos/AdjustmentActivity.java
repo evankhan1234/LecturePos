@@ -264,18 +264,30 @@ public class AdjustmentActivity extends AppCompatActivity {
                 salesMaster.Device = str1 + " " + str;
                 salesMaster.update_date = date1;
                 salesMaster.PayMode = " ";
-                salesMaster.SubTotal = " ";
+                salesMaster.SubTotal = "0";
                 salesMaster.InvoiceAmount = 0;
                 Date dates = new Date(System.currentTimeMillis());
                 salesMaster.Date = dates;
                 salesMaster.Note = edit_note.getText().toString();
                 salesMaster.RetailCode = " ";
                 salesMaster.PhoneNumber = " ";
-                salesMaster.Return = " ";
+                salesMaster.Return = "0.0";
                 Common.salesMasterRepository.insertToSalesMaster(salesMaster);
                 Flowable<List<ItemAdjustment>> units = Common.itemAdjustmentRepository.getItemItems();
 
                 for (ItemAdjustment itemModel : units.blockingFirst()) {
+                    int values = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"S");
+                    SalesDetails salesDetails = new SalesDetails();
+                    salesDetails.BookId = itemModel.BookId;
+                    salesDetails.BookName = itemModel.BookName;
+                    salesDetails.Discount = 0.0;
+                    salesDetails.MRP = 0;
+                    salesDetails.Quantity = itemModel.Quantity;
+                    salesDetails.TotalAmount = 0;
+                    salesDetails.InvoiceId = values;
+                    salesDetails.InvoiceIdNew = "130" + SharedPreferenceUtil.getUserID(AdjustmentActivity.this) + formatter.format(date) + totalValue;
+                    salesDetails.StoreId = SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+                    Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
 
                     BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
 
