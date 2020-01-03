@@ -37,6 +37,11 @@ public class BookStockRepository implements IBookStockDataSources {
     }
 
     @Override
+    public void updateReciverQuantity(int value, double price, String BookStockItem) {
+        IBookStockDataSources.updateReciverQuantity(value, price, BookStockItem);
+    }
+
+    @Override
     public int maxValue(String BookStockItem) {
         return IBookStockDataSources.maxValue(BookStockItem);
     }

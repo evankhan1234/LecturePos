@@ -424,7 +424,9 @@ public class SalesReturnActivity extends AppCompatActivity {
 //                        bookStock.id=bookStocks.id;
 //                        bookStock.QTY_NUMBER=bookStocks.QTY_NUMBER-itemModel.Quantity;
 //                        Common.bookStockRepository.updateBookStock(bookStock);
-                                Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER +itemModel.Quantity, bookStocks.BOOK_ID);
+                                double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
+                                double pr=bookStocks.BOOK_NET_PRICES+t;
+                                Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER +itemModel.Quantity,pr, bookStocks.BOOK_ID);
 
                             }
                             SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");

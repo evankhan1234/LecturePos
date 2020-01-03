@@ -33,6 +33,8 @@ public interface BookStockDao {
     double TotalPrice();
     @Query("UPDATE  book_stock SET QTY_NUMBER=:value WHERE BOOK_ID=:BookStockItem")
     void updateReciver(int value,String BookStockItem);
+    @Query("UPDATE  book_stock SET QTY_NUMBER=:value,BOOK_NET_PRICES=:price WHERE BOOK_ID=:BookStockItem")
+    void updateReciverQuantity(int value,double price,String BookStockItem);
 
     @Query("DELETE  FROM book_stock")
     void emptyBookStock();

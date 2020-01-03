@@ -292,10 +292,16 @@ public class AdjustmentActivity extends AppCompatActivity {
                     BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
 
                     if (itemModel.InOut.equals("In")) {
-                        Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER + itemModel.Quantity, bookStocks.BOOK_ID);
+                        double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
+                        double pr=bookStocks.BOOK_NET_PRICES+t;
+
+                        Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER + itemModel.Quantity,pr, bookStocks.BOOK_ID);
 
                     } else {
-                        Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER - itemModel.Quantity, bookStocks.BOOK_ID);
+                        double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
+                        double pr=bookStocks.BOOK_NET_PRICES+t;
+
+                        Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER - itemModel.Quantity,pr, bookStocks.BOOK_ID);
 
                     }
 

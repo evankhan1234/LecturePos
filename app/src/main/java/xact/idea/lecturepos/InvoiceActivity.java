@@ -429,11 +429,13 @@ public class InvoiceActivity extends AppCompatActivity {
 
 
                                 BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
+                                double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
+                                double pr=bookStocks.BOOK_NET_PRICES-t;
 //                        BookStock bookStock = new BookStock();
 //                        bookStock.id=bookStocks.id;
 //                        bookStock.QTY_NUMBER=bookStocks.QTY_NUMBER-itemModel.Quantity;
 //                        Common.bookStockRepository.updateBookStock(bookStock);
-                                Common.bookStockRepository.updateReciver(bookStocks.QTY_NUMBER - itemModel.Quantity, bookStocks.BOOK_ID);
+                                Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER - itemModel.Quantity,pr, bookStocks.BOOK_ID);
 
                             }
                             SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
