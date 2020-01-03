@@ -16,7 +16,7 @@ public interface IBookStockDataSources {
     Flowable<List<BookStock>> getBookStockItemById(int BookStockItemId);
 
     BookStock getBookStock(String BookStockItem);
-
+    void updateReciverQuantity(int value,double price,String BookStockItem);
     int maxValue(String BookStockItem);
     void emptyBookStock();
     int size();

@@ -37,6 +37,11 @@ public class BookStockDataSources implements IBookStockDataSources {
     }
 
     @Override
+    public void updateReciverQuantity(int value, double price, String BookStockItem) {
+        BookStockDao.updateReciverQuantity(value, price, BookStockItem);
+    }
+
+    @Override
     public int maxValue(String BookStockItem) {
         return BookStockDao.maxValue(BookStockItem);
     }
