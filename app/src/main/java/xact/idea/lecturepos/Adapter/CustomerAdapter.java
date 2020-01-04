@@ -34,7 +34,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     private Activity mActivity = null;
     private List<Customer> messageEntities;
-    double credit;
+ 
 //    CustomerClickInterface CustomerClickInterface;
     public CustomerAdapter(Activity activity, List<Customer> messageEntitie) {
         mActivity = activity;
@@ -92,6 +92,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
                 //  displayCustomerItems(userActivities);
                 Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
                 // Log.e("fsd","dfsdf"+date);
+                double credit = 0;
                 for (SalesMaster salesMaster:userActivities){
 
                     if (salesMaster.PayMode.equals("Credit")){

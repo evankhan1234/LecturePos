@@ -86,6 +86,11 @@ public class SalesMasterRepository implements ISalesMasterDataSource {
     }
 
     @Override
+    public Flowable<List<SalesMaster>> getDetailsActivityItemByDateByName(Date from, Date to, String Name) {
+        return ISalesMasterDataSource.getDetailsActivityItemByDateByName(from, to, Name);
+    }
+
+    @Override
     public void deleteSalesMasterItem(SalesMaster... SalesMasters) {
         ISalesMasterDataSource.deleteSalesMasterItem(SalesMasters);
     }

@@ -66,6 +66,7 @@ public class InvoicePrintActivity extends AppCompatActivity {
     TextView text_total_value;
     TextView text_return;
     TextView text_discount;
+    TextView text_payment;
     TextView create_challan;
     TextView text_sub_total_value;
     RecyclerView rcl_approval_in_list;
@@ -87,6 +88,7 @@ public class InvoicePrintActivity extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
 
+        text_payment=findViewById(R.id.text_payment);
         tv_temp_one_company_name=findViewById(R.id.tv_temp_one_company_name);
         tv_temp_one_address=findViewById(R.id.tv_temp_one_address);
         create_bill=findViewById(R.id.create_bill);
@@ -135,6 +137,7 @@ public class InvoicePrintActivity extends AppCompatActivity {
                     text_store.setText("");
 
                    text_sub_total_value.setText(salesMaster.SubTotal);
+                    text_payment.setText("Payment Type: "+salesMaster.PayMode);
 
                     text_total_value.setText(String.valueOf(salesMaster.NetValue));
                     if (salesMaster.Return!=null){

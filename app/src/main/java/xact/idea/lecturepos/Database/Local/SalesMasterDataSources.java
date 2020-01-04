@@ -92,6 +92,11 @@ public class SalesMasterDataSources implements ISalesMasterDataSource {
     }
 
     @Override
+    public Flowable<List<SalesMaster>> getDetailsActivityItemByDateByName(Date from, Date to, String Name) {
+        return SaleMastersDao.getDetailsActivityItemByDateByName(from, to, Name);
+    }
+
+    @Override
     public void deleteSalesMasterItem(SalesMaster... carts) {
 
         SaleMastersDao.deleteSalesDetailsItem(carts);

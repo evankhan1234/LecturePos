@@ -62,10 +62,12 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
     double value;
     double value2;
     InvoiceFilter filter;
+    String valueFor;
     //    SalesMasterClickInterface SalesMasterClickInterface;
-    public InvoiceAdapter(Activity activity, List<SalesMaster> messageEntitie) {
+    public InvoiceAdapter(Activity activity, List<SalesMaster> messageEntitie, String value) {
         mActivity = activity;
         messageEntities = messageEntitie;
+        valueFor=value;
         //mClick = mClicks;
 
     }
@@ -108,6 +110,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //        );
         if (messageEntities.get(position).TrnType.equals("A")){
             holder.text_create_invoice.setVisibility(View.GONE);
+            holder.text_total.setVisibility(View.GONE);
             holder.text_create_invoice_adjustment.setVisibility(View.VISIBLE);
         }
         else {
@@ -173,6 +176,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
                                     SharedPreferenceUtil.saveShared(mActivity, SharedPreferenceUtil.USER_TEST, messageEntities.get(position).InvoiceId);
                                     intent.putExtra("sub",String.valueOf(rounded(value2,2)));
                                     intent.putExtra("customerName", customer.ShopName);
+                                    intent.putExtra("value", valueFor);
                                     intent.putExtra("invoiceId", messageEntities.get(position).InvoiceId);
                                     mActivity.startActivity(intent);
                                     mActivity.finish();

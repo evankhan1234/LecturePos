@@ -399,8 +399,10 @@ public class InvoiceActivity extends AppCompatActivity {
                             salesMaster.PayMode = pay;
                             String s1 = text_sub_total.getText().toString();
                             s1 = s1.replace(" Tk", "");
+                            String s2 = text_net_amounts.getText().toString();
+                            s2= s2.replace(" Tk", "");
                             salesMaster.SubTotal = s1;
-                            salesMaster.InvoiceAmount = Double.parseDouble(s1);
+                            salesMaster.InvoiceAmount = Double.parseDouble(s2);
                             Date dates = new Date(System.currentTimeMillis());
                             salesMaster.Date = dates;
                             salesMaster.Note = edit_note.getText().toString();
@@ -864,4 +866,9 @@ double stock = 0;;
         infoDialog.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(InvoiceActivity.this,MainActivity.class));
+        finish();
+    }
 }

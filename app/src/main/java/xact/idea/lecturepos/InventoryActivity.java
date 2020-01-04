@@ -150,5 +150,9 @@ public class InventoryActivity extends AppCompatActivity {
         super.onStop();
         compositeDisposable.clear();
     }
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(InventoryActivity.this,MainActivity.class));
+        finish();
+    }
 }
