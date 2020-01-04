@@ -374,7 +374,13 @@ public class ItemReturnActivity extends AppCompatActivity {
                                         final double finalTotalfor1 = totalfor;
                                         if (book.BOOK_GROUP_ID.equals("0")){
                                             double qty=Double.parseDouble(quantity.getText().toString());
-                                            double dis=Double.parseDouble(discount.getText().toString());
+                                            double dis=0;
+                                            try {
+                                                dis = Double.parseDouble(discount.getText().toString());
+                                            } catch (NumberFormatException e) {
+                                                e.printStackTrace();
+                                                dis=0;
+                                            }
                                             double total = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty);
                                             double totals = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty) * dis/100;
                                             double t = total-totals;
@@ -384,7 +390,7 @@ public class ItemReturnActivity extends AppCompatActivity {
 //                                                    ItemReturn.Price = pricesfor;
                                             ItemReturn.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                             ItemReturn.Quantity = quantityfor+items1.Quantity;
-                                            ItemReturn.Discount = discountfor+items1.Discount;
+                                            ItemReturn.Discount = discountfor;
                                             ItemReturn.BookId = book.BookNo;
                                             ItemReturn.BookName = book.BookName;
                                             ItemReturn.BookNameBangla = book.BookNameBangla;
@@ -403,7 +409,13 @@ public class ItemReturnActivity extends AppCompatActivity {
 
                                                     for (GroupModel groupModel:userActivities){
                                                         double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double dis=0;
+                                                        try {
+                                                            dis = Double.parseDouble(discount.getText().toString());
+                                                        } catch (NumberFormatException e) {
+                                                            e.printStackTrace();
+                                                            dis=0;
+                                                        }
                                                         double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
                                                         double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
                                                         double t = total-totals;
@@ -413,7 +425,7 @@ public class ItemReturnActivity extends AppCompatActivity {
 //                                                    ItemReturn.Price = pricesfor;
                                                         ItemReturn.ValuePrice = Double.parseDouble(bookMRP.getText().toString());
                                                         ItemReturn.Quantity = quantityfor+items1.Quantity;
-                                                        ItemReturn.Discount = discountfor+items1.Discount;
+                                                        ItemReturn.Discount = discountfor;
                                                         ItemReturn.BookId = groupModel.BookNo;
                                                         ItemReturn.BookName = groupModel.BookName;
                                                         ItemReturn.BookNameBangla = groupModel.BookNameBangla;
@@ -434,7 +446,13 @@ public class ItemReturnActivity extends AppCompatActivity {
                                         final double finalTotalfor = totalfor;
                                         if (book.BOOK_GROUP_ID.equals("0")){
                                             double qty=Double.parseDouble(quantity.getText().toString());
-                                            double dis=Double.parseDouble(discount.getText().toString());
+                                            double dis=0;
+                                            try {
+                                                dis = Double.parseDouble(discount.getText().toString());
+                                            } catch (NumberFormatException e) {
+                                                e.printStackTrace();
+                                                dis=0;
+                                            }
                                             double total = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty);
                                             double totals = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty) * dis/100;
                                             double t = total-totals;
@@ -458,7 +476,13 @@ public class ItemReturnActivity extends AppCompatActivity {
 
                                                     for (GroupModel groupModel : userActivities){
                                                         double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double dis=0;
+                                                        try {
+                                                            dis = Double.parseDouble(discount.getText().toString());
+                                                        } catch (NumberFormatException e) {
+                                                            e.printStackTrace();
+                                                            dis=0;
+                                                        }
                                                         double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
                                                         double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
                                                         double t = total-totals;
@@ -597,14 +621,20 @@ public class ItemReturnActivity extends AppCompatActivity {
                                         final double finalTotalfor1 = totalfor;
                                         if (book.BOOK_GROUP_ID.equals("0")){
                                             double qty=Double.parseDouble(quantity.getText().toString());
-                                            double dis=Double.parseDouble(discount.getText().toString());
+                                            double dis=0;
+                                            try {
+                                                dis = Double.parseDouble(discount.getText().toString());
+                                            } catch (NumberFormatException e) {
+                                                e.printStackTrace();
+                                                dis=0;
+                                            }
                                             double total = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty);
                                             double totals = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty) * dis/100;
                                             double t = total-totals;
                                            // ItemReturn.Amount = t +items1.Amount;
                                             ItemReturn.Price = Double.parseDouble(book.BOOK_FACE_VALUE);
                                             ItemReturn.Quantity = quantityfor+items1.Quantity;
-                                            ItemReturn.Discount = discountfor+items1.Discount;
+                                            ItemReturn.Discount = discountfor;
                                             ItemReturn.BookId = book.BookNo;
                                             ItemReturn.BookName = book.BookName;
                                             ItemReturn.BookNameBangla = book.BookNameBangla;
@@ -624,14 +654,20 @@ public class ItemReturnActivity extends AppCompatActivity {
 
                                                     for (GroupModel groupModel:userActivities){
                                                         double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double dis=0;
+                                                        try {
+                                                            dis = Double.parseDouble(discount.getText().toString());
+                                                        } catch (NumberFormatException e) {
+                                                            e.printStackTrace();
+                                                            dis=0;
+                                                        }
                                                         double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
                                                         double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
                                                         double t = total-totals;
                                                         //ItemReturn.Amount = t +items1.Amount;
                                                         ItemReturn.Price = Double.parseDouble(groupModel.BOOK_FACE_VALUE);
                                                         ItemReturn.Quantity = quantityfor+items1.Quantity;
-                                                        ItemReturn.Discount = discountfor+items1.Discount;
+                                                        ItemReturn.Discount = discountfor;
                                                         ItemReturn.BookId = groupModel.BookNo;
                                                         ItemReturn.BookName = groupModel.BookName;
                                                         ItemReturn.BookNameBangla = groupModel.BookNameBangla;
@@ -652,7 +688,13 @@ public class ItemReturnActivity extends AppCompatActivity {
                                         final double finalTotalfor = totalfor;
                                         if (book.BOOK_GROUP_ID.equals("0")){
                                             double qty=Double.parseDouble(quantity.getText().toString());
-                                            double dis=Double.parseDouble(discount.getText().toString());
+                                            double dis=0;
+                                            try {
+                                                dis = Double.parseDouble(discount.getText().toString());
+                                            } catch (NumberFormatException e) {
+                                                e.printStackTrace();
+                                                dis=0;
+                                            }
                                             double total = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty);
                                             double totals = (Double.parseDouble(book.BOOK_FACE_VALUE) * qty) * dis/100;
                                             double t = total-totals;
@@ -675,7 +717,13 @@ public class ItemReturnActivity extends AppCompatActivity {
 
                                                     for (GroupModel groupModel : userActivities){
                                                         double qty=Double.parseDouble(quantity.getText().toString());
-                                                        double dis=Double.parseDouble(discount.getText().toString());
+                                                        double dis=0;
+                                                        try {
+                                                            dis = Double.parseDouble(discount.getText().toString());
+                                                        } catch (NumberFormatException e) {
+                                                            e.printStackTrace();
+                                                            dis=0;
+                                                        }
                                                         double total = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty);
                                                         double totals = (Double.parseDouble(groupModel.BOOK_FACE_VALUE) * qty) * dis/100;
                                                         double t = total-totals;

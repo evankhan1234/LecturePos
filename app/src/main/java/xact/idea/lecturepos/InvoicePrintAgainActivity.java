@@ -47,6 +47,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
     String customerName;
     String sub;
     String ww;
+    String valueFor;
     Button create_bill;
     TextView tv_temp_one_company_name;
     TextView tv_temp_one_address;
@@ -62,6 +63,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
     TextView text_invoice_number;
     TextView text_invoice_date;
     TextView text_store;
+    TextView text_payment;
     TextView text_total_value;
     TextView text_return;
     TextView text_discount;
@@ -89,6 +91,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         tv_temp_one_company_name = findViewById(R.id.tv_temp_one_company_name);
+        text_payment = findViewById(R.id.text_payment);
         tv_temp_one_address = findViewById(R.id.tv_temp_one_address);
         create_bill = findViewById(R.id.create_bill);
         create_challan = findViewById(R.id.create_challan);
@@ -111,6 +114,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
         invoiceId = getIntent().getStringExtra("invoiceId");
         sub = getIntent().getStringExtra("sub");
         ww = getIntent().getStringExtra("ww");
+        valueFor = getIntent().getStringExtra("value");
 
         tv_temp_one_company_name.setText(SharedPreferenceUtil.getUserName(InvoicePrintAgainActivity.this));
         tv_temp_one_address.setText(SharedPreferenceUtil.getUserAddress(InvoicePrintAgainActivity.this));
@@ -136,8 +140,8 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
                     text_invoice_date.setText(salesMaster.InvoiceDates);
                     text_store.setText("");
 
-                    text_sub_total_value.setText(String.valueOf(salesMaster.InvoiceAmount));
-
+                    text_sub_total_value.setText(String.valueOf(salesMaster.SubTotal));
+                    text_payment.setText("Payment Type: "+salesMaster.PayMode);
                     text_total_value.setText(String.valueOf(salesMaster.NetValue));
                     if (salesMaster.Return != null) {
                         text_return.setText(String.valueOf(salesMaster.Return));
@@ -631,14 +635,47 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        compositeDisposable.clear();
-        Intent intent = new Intent(InvoicePrintAgainActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-        startActivity(intent);
-        finishAffinity();
+        if (valueFor.equals("Adjustment")){
+            Intent intent = new Intent(InvoicePrintAgainActivity.this, AdjustmentListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            startActivity(intent);
+            finish();
+        }
+        else  if (valueFor.equals("Customer")){
+            Intent intent = new Intent(InvoicePrintAgainActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            startActivity(intent);
+            finish();
+        }
+        else  if (valueFor.equals("Invoice")){
+            Intent intent = new Intent(InvoicePrintAgainActivity.this, InvoiceListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            startActivity(intent);
+            finish();
+        }
+        else  if (valueFor.equals("Return")){
+            Intent intent = new Intent(InvoicePrintAgainActivity.this, SalesReturnListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            startActivity(intent);
+            finish();
+        }
+
 
 
      //   super.onBackPressed();

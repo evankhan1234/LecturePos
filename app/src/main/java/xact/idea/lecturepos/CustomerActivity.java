@@ -95,5 +95,9 @@ public class CustomerActivity extends AppCompatActivity {
         super.onStop();
         compositeDisposable.clear();
     }
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(CustomerActivity.this,MainActivity.class));
+        finish();
+    }
 }

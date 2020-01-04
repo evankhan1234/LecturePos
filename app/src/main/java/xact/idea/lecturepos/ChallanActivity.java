@@ -120,4 +120,9 @@ public class ChallanActivity extends AppCompatActivity implements TabLayout.OnTa
         super.onStop();
         compositeDisposable.clear();
     }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ChallanActivity.this,MainActivity.class));
+        finish();
+    }
 }

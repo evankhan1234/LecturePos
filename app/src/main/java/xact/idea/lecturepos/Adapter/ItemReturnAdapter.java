@@ -17,6 +17,7 @@ import xact.idea.lecturepos.Database.Model.ItemReturn;
 import xact.idea.lecturepos.Interface.ClickInterface;
 import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.ItemActivity;
+import xact.idea.lecturepos.ItemReturnActivity;
 import xact.idea.lecturepos.R;
 import xact.idea.lecturepos.SalesReturnActivity;
 import xact.idea.lecturepos.Utils.Common;
@@ -81,7 +82,7 @@ public class ItemReturnAdapter extends RecyclerView.Adapter<ItemReturnAdapter.It
         holder.text_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, ItemActivity.class);
+                Intent intent = new Intent(mActivity, ItemReturnActivity.class);
                 intent.putExtra("EXTRA_SESSION", "update");
                 Log.e("BookId","BookId"+messageEntities.get(position).BookId);
                 intent.putExtra("id", messageEntities.get(position).BookName);

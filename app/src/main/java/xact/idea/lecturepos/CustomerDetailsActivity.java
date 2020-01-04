@@ -176,7 +176,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     }
     private void displayCustomerItems(List<SalesMaster> userActivities) {
         //  showLoadingProgress(mActivity);
-        mAdapters = new InvoiceAdapter(this, userActivities);
+        mAdapters = new InvoiceAdapter(this, userActivities,"Customer");
 
         rcl_this_customer_list.setAdapter(mAdapters);
 
@@ -195,7 +195,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date2,shopName,"S").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getDetailsActivityItemByDateByName(date1,date2,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 displayCustomerItems(userActivities);
@@ -261,7 +261,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                 for (SalesDetails salesDetails:units){
                     // value+=salesDetails.MRP;
                     //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
-                    book+=1;
+                    book+=salesDetails.Quantity;
 
                     //value +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
                 }
@@ -284,10 +284,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                   value+=salesMaster.NetValue;
                   if (salesMaster.PayMode.equals("Cash")){
                       Log.e("NetValue","NetValue"+salesMaster.NetValue);
-                      cash+=salesMaster.NetValue;
+                      cash+=salesMaster.InvoiceAmount;
                   }
                   if (salesMaster.PayMode.equals("Credit")){
-                      credit+=salesMaster.NetValue;
+                      credit+=salesMaster.InvoiceAmount;
                   }
                   loadSub(salesMaster.InvoiceId);
               }

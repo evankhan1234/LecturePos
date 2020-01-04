@@ -143,7 +143,7 @@ public class AdjustmentListActivity extends AppCompatActivity {
     }
     private void displayCustomerItems(List<SalesMaster> userActivities) {
         //  showLoadingProgress(mActivity);
-        mAdapters = new InvoiceAdapter(this, userActivities);
+        mAdapters = new InvoiceAdapter(this, userActivities,"Adjustment");
 
         rcl_this_customer_list.setAdapter(mAdapters);
 
@@ -294,5 +294,10 @@ public class AdjustmentListActivity extends AppCompatActivity {
             }
 
         }
+    }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AdjustmentListActivity.this,MainActivity.class));
+        finish();
     }
 }

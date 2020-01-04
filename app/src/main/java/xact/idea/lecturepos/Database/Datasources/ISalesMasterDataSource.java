@@ -24,6 +24,6 @@ public interface ISalesMasterDataSource {
     Flowable<List<SalesMaster>> getSalesMasterList(String SalesDetailsItemId);
     void updateSalesMaster(SalesMaster... SalesMasters);
 
-
+    Flowable<List<SalesMaster>> getDetailsActivityItemByDateByName(Date from, Date to,String Name);
     void deleteSalesMasterItem(SalesMaster... SalesMasters);
 }
