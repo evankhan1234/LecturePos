@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -26,7 +27,8 @@ public interface SaleDetailsDao {
     SalesDetails getSalesMaster(String SalesDetailsItemId);
     @Query("Select Count(id)  FROM sales_dtl")
     int value();
-
+    @Query("SELECT * FROM sales_dtl WHERE InvoiceIdNew=:SalesDetailsItemId AND InvoiceDate BETWEEN :from AND :to order By InvoiceDate Desc")
+    Flowable<List<SalesDetails>> getSalesDetailsItemByDate(String SalesDetailsItemId, Date from, Date to);
 
     @Query("DELETE  FROM sales_dtl")
     void emptySalesDetails();

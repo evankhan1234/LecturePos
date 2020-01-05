@@ -21,12 +21,12 @@ public interface ChallanDao {
     Flowable<List<Challan>> getChallanItemById(int ChallanItemId);
     @Query("SELECT * FROM challan WHERE CHALLAN_NO=:ChallanItem")
     Challan getChallan(String ChallanItem);
-    @Query("SELECT * FROM challan WHERE IS_RECEIVE=:ChallanItemId and Date BETWEEN :from AND :to")
+    @Query("SELECT * FROM challan WHERE IS_RECEIVE=:ChallanItemId and Date BETWEEN :from AND :to order By Date Desc")
     Flowable<List<Challan>> getChallanActivityItemByDate(Date from, Date to,String ChallanItemId);
     @Query("Select Count(id)  FROM challan")
     int value();
 
-    @Query("SELECT * FROM challan WHERE IS_RECEIVE=:ChallanItemId")
+    @Query("SELECT * FROM challan WHERE IS_RECEIVE=:ChallanItemId order By Date Desc")
     Flowable<List<Challan>> getList(String ChallanItemId);
     @Query("DELETE  FROM challan")
     void emptyChallan();

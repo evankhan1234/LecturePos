@@ -175,11 +175,11 @@ public class SalesReturnActivity extends AppCompatActivity {
                 finish();
             }
         });
-        compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+        compositeDisposable.add(Common.bookStockRepository.getBookStockModelReturenAdjustment().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
             @Override
             public void accept(List<StockModel> books) throws Exception {
                 for (StockModel book : books) {
-                    String data= Utils.getValue("120"+book.F_BOOK_EDITION_NO);
+                    String data= Utils.getValue("12"+book.F_BOOK_EDITION_NO);
                     bookArrayList.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+"("+data+")"+book.BARCODE_NUMBER );
                     //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
                     //ArrayList.add(customer.ShopName);
@@ -231,11 +231,11 @@ public class SalesReturnActivity extends AppCompatActivity {
         if (sessionId == null) {
             //   showInfoDialog();
         } else if (sessionId.equals("value")) {
-            compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+            compositeDisposable.add(Common.bookStockRepository.getBookStockModelReturenAdjustment().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
                 @Override
                 public void accept(List<StockModel> books) throws Exception {
                     for (StockModel book : books) {
-                        String data= Utils.getValue("120"+book.F_BOOK_EDITION_NO);
+                        String data= Utils.getValue("12"+book.F_BOOK_EDITION_NO);
                         bookArrayListAgain.add(  book.BookName + " \n "+ book.BookNameBangla + " \n "+book.BOOK_SPECIMEN_CODE + "(20"+book.F_BOOK_EDITION_NO+") "+"("+data+")"+book.BARCODE_NUMBER );                        //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
                         //ArrayList.add(customer.ShopName);
                     }
@@ -353,7 +353,30 @@ public class SalesReturnActivity extends AppCompatActivity {
                             } else {
                                 totalValue = String.valueOf(value);
                             }
+                            String store = null;
+                            if (SharedPreferenceUtil.getUserID(SalesReturnActivity.this).length()<6){
+                                store="0"+SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
+                            }
+                            else if (SharedPreferenceUtil.getUserID(SalesReturnActivity.this).length()<5){
+                                store="00"+SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
 
+                            }
+                            else if (SharedPreferenceUtil.getUserID(SalesReturnActivity.this).length()<4){
+                                store="000"+SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
+
+                            }
+                            else if (SharedPreferenceUtil.getUserID(SalesReturnActivity.this).length()<3){
+                                store="0000"+SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
+
+                            }
+                            else if (SharedPreferenceUtil.getUserID(SalesReturnActivity.this).length()<2){
+                                store="00000"+SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
+
+                            }
+                            else if (SharedPreferenceUtil.getUserID(SalesReturnActivity.this).length()<1){
+                                store="000000"+SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
+
+                            }
                             Date date1 = null;
                             Date date2 = null;
                             SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
@@ -371,9 +394,9 @@ public class SalesReturnActivity extends AppCompatActivity {
                             salesMaster.CustomerName = customer.ShopName;
                             salesMaster.Discount = discount;
                             salesMaster.TrnType = "R";
-                            salesMaster.InvoiceId = "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue;
+                            salesMaster.InvoiceId = "12" + store + formatter.format(date) + totalValue;
                             salesMaster.StoreId = SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
-                            salesMaster.InvoiceNumber = "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue;
+                            salesMaster.InvoiceNumber = "12" + store + formatter.format(date) + totalValue;
                             SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
                             Date dates1 = new Date(System.currentTimeMillis());
                             String currentTime = formatters.format(dates1);
@@ -393,6 +416,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                             salesMaster.SubTotal = s1;
                             String s2 = text_net_amounts.getText().toString();
                             s2= s2.replace(" Tk", "");
+                            salesMaster.UpdateNo = 0;
                             salesMaster.InvoiceAmount = Double.parseDouble(s2);
                             Date dates = new Date(System.currentTimeMillis());
                             salesMaster.Date = dates;
@@ -412,11 +436,13 @@ public class SalesReturnActivity extends AppCompatActivity {
                                 salesDetails.BookName = itemModel.BookName;
                                 salesDetails.Discount = itemModel.Discount;
                                 salesDetails.MRP = itemModel.Price;
+                                salesDetails.UpdateNo = 0;
+                                salesDetails.InvoiceDate = date1;
                                 salesDetails.Quantity = itemModel.Quantity;
                                 salesDetails.TotalAmount = itemModel.Amount;
                                 SalesMaster salesMasters = Common.salesMasterRepository.invoice(values);
                                 salesDetails.InvoiceId = values;
-                                salesDetails.InvoiceIdNew = "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue;
+                                salesDetails.InvoiceIdNew = "12" + store + formatter.format(date) + totalValue;
                                 salesDetails.StoreId = SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
                                 Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
 
@@ -437,7 +463,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                             SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
                             Date dates11 = new Date(System.currentTimeMillis());
                             String currentTime1 = formatters1.format(dates11);
-                            SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_TEST ,"120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue);
+                            SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_TEST ,"12" + store + formatter.format(date) + totalValue);
 
                             SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
                             SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
@@ -452,7 +478,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             intent.putExtra("customerName", Name);
-                            intent.putExtra("invoiceId", "120" + SharedPreferenceUtil.getUserID(SalesReturnActivity.this) + formatter.format(date) + totalValue);
+                            intent.putExtra("invoiceId", "12" + store + formatter.format(date) + totalValue);
                             startActivity(intent);
                             finish();
                             Toast.makeText(SalesReturnActivity.this, "Successfully Created a Return Invoice ", Toast.LENGTH_SHORT).show();

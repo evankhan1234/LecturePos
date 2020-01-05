@@ -1,5 +1,6 @@
 package xact.idea.lecturepos.Database.Datasources;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -18,7 +19,7 @@ public interface ISalesDetailsDataSource {
   void emptySalesDetails();
   int size();
   Flowable<List<SalesDetailPrintModel>> getBookStockModel(String SalesDetailsItemId);
-
+  Flowable<List<SalesDetails>> getSalesDetailsItemByDate(String SalesDetailsItemId, Date from, Date to);
   void insertToSalesDetails(SalesDetails... SalesDetailss);
 
 

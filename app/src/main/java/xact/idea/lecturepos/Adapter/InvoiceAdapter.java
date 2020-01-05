@@ -95,7 +95,6 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //        String text4 = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>"+messageEntities.get(position).Amount+"</font>";
 //        String text2 = "<font color=#358ED3>"+messageEntities.get(position).Quantity+"</font> <b><font color=#000 > * BDT </font></b>";
 //        String text3 = "<font color=#358ED3>"+messageEntities.get(position).Price+"</font> ";
-        holder.text_name.setText(Html.fromHtml(name));
         holder.text_contact_number.setText(Html.fromHtml(invoice_date));
         holder.text_invoice.setText(Html.fromHtml(invoice_number));
         holder.text_code.setText(Html.fromHtml(retail_code));
@@ -111,9 +110,12 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         if (messageEntities.get(position).TrnType.equals("A")){
             holder.text_create_invoice.setVisibility(View.GONE);
             holder.text_total.setVisibility(View.GONE);
+            holder.text_name.setVisibility(View.GONE);
             holder.text_create_invoice_adjustment.setVisibility(View.VISIBLE);
         }
         else {
+            holder.text_name.setText(Html.fromHtml(name));
+
             holder.text_create_invoice.setVisibility(View.VISIBLE);
             holder.text_create_invoice_adjustment.setVisibility(View.GONE);
 

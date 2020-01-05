@@ -32,6 +32,11 @@ public class BookStockDataSources implements IBookStockDataSources {
     }
 
     @Override
+    public Flowable<List<StockModel>> getBookStockModelReturenAdjustment() {
+        return BookStockDao.getBookStockModelReturenAdjustment();
+    }
+
+    @Override
     public BookStock getBookStock(String BookStockItem) {
         return BookStockDao.getBookStock(BookStockItem);
     }

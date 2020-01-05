@@ -349,7 +349,7 @@ public class InvoiceActivity extends AppCompatActivity {
                             Date datess = new Date(System.currentTimeMillis());
                             final SimpleDateFormat formatterq = new SimpleDateFormat("dd-MM-yyyy");
                             final Date dateq = new Date(System.currentTimeMillis());
-                       //     String currentDate =formatterq.format(dateq);
+                         //   String currentDate =formatterq.format(dateq);
 
                             int value = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"S");
                             String totalValue;
@@ -362,7 +362,31 @@ public class InvoiceActivity extends AppCompatActivity {
                             } else {
                                 totalValue = String.valueOf(value);
                             }
+                            String st=SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+                            String store = null;
+                            if (SharedPreferenceUtil.getUserID(InvoiceActivity.this).length()<6){
+                                store="0"+SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+                            }
+                            else if (SharedPreferenceUtil.getUserID(InvoiceActivity.this).length()<5){
+                                store="00"+SharedPreferenceUtil.getUserID(InvoiceActivity.this);
 
+                            }
+                            else if (SharedPreferenceUtil.getUserID(InvoiceActivity.this).length()<4){
+                                store="000"+SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+
+                            }
+                            else if (SharedPreferenceUtil.getUserID(InvoiceActivity.this).length()<3){
+                                store="0000"+SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+
+                            }
+                            else if (SharedPreferenceUtil.getUserID(InvoiceActivity.this).length()<2){
+                                store="00000"+SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+
+                            }
+                            else if (SharedPreferenceUtil.getUserID(InvoiceActivity.this).length()<1){
+                                store="000000"+SharedPreferenceUtil.getUserID(InvoiceActivity.this);
+
+                            }
                             Date date1 = null;
                             Date date2 = null;
                             SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
@@ -380,9 +404,9 @@ public class InvoiceActivity extends AppCompatActivity {
                             salesMaster.CustomerName = customer.ShopName;
                             salesMaster.Discount = discount;
                             salesMaster.TrnType = "S";
-                            salesMaster.InvoiceId = "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
+                            salesMaster.InvoiceId = "11" + store + formatter.format(date) + totalValue;
                             salesMaster.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
-                            salesMaster.InvoiceNumber = "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
+                            salesMaster.InvoiceNumber = "11" + store + formatter.format(date) + totalValue;
                             SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
                             Date dates1 = new Date(System.currentTimeMillis());
                             String currentTime = formatters.format(dates1);
@@ -397,6 +421,7 @@ public class InvoiceActivity extends AppCompatActivity {
                             salesMaster.Device = str1 + " " + str;
                             salesMaster.update_date = date1;
                             salesMaster.PayMode = pay;
+                            salesMaster.UpdateNo = 0;
                             String s1 = text_sub_total.getText().toString();
                             s1 = s1.replace(" Tk", "");
                             String s2 = text_net_amounts.getText().toString();
@@ -405,6 +430,7 @@ public class InvoiceActivity extends AppCompatActivity {
                             salesMaster.InvoiceAmount = Double.parseDouble(s2);
                             Date dates = new Date(System.currentTimeMillis());
                             salesMaster.Date = dates;
+                            salesMaster.Return = "0.0";
                             salesMaster.Note = edit_note.getText().toString();
                             salesMaster.RetailCode = edit_retail_code.getText().toString();
                             salesMaster.PhoneNumber = edit_contact_number.getText().toString();
@@ -421,11 +447,13 @@ public class InvoiceActivity extends AppCompatActivity {
                                 salesDetails.BookName = itemModel.BookName;
                                 salesDetails.Discount = itemModel.Discount;
                                 salesDetails.MRP = itemModel.Price;
+                                salesDetails.InvoiceDate = date1;
                                 salesDetails.Quantity = itemModel.Quantity;
                                 salesDetails.TotalAmount = itemModel.Amount;
+                                salesDetails.UpdateNo = 0;
                                 SalesMaster salesMasters = Common.salesMasterRepository.invoice(values);
                                 salesDetails.InvoiceId = values;
-                                salesDetails.InvoiceIdNew = "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue;
+                                salesDetails.InvoiceIdNew = "11" + store + formatter.format(date) + totalValue;
                                 salesDetails.StoreId = SharedPreferenceUtil.getUserID(InvoiceActivity.this);
                                 Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
 
@@ -446,7 +474,7 @@ public class InvoiceActivity extends AppCompatActivity {
                             SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
                             Date dates11 = new Date(System.currentTimeMillis());
                             String currentTime1 = formatters1.format(dates11);
-                            SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_TEST ,"110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
+                            SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_TEST ,"11" + store + formatter.format(date) + totalValue);
 
                             SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
                             SharedPreferenceUtil.saveShared(InvoiceActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
@@ -461,7 +489,7 @@ public class InvoiceActivity extends AppCompatActivity {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             intent.putExtra("customerName", Name);
-                            intent.putExtra("invoiceId", "110" + SharedPreferenceUtil.getUserID(InvoiceActivity.this) + formatter.format(date) + totalValue);
+                            intent.putExtra("invoiceId", "11" + store + formatter.format(date) + totalValue);
                             startActivity(intent);
                             finish();
                             Toast.makeText(InvoiceActivity.this, "Successfully Created a Invoice ", Toast.LENGTH_SHORT).show();

@@ -64,10 +64,8 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     EditText edit_content;
     String shopName;
     String Name;
-    double value;
-    double cash;
-    double credit;
-    int book;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +95,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         LinearLayoutManager lm = new LinearLayoutManager(this);
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         rcl_this_customer_list.setLayoutManager(lm);
-        loadCustomer();
-        onTotal();
+
 //        text_book.setText(String.valueOf(book));
 //        text_cash.setText(String.valueOf(cash));
 //        text_credit.setText(String.valueOf(credit));
@@ -149,6 +146,8 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                 }
                 else {
                     loadDataByDate();
+                    book=0;
+                    onTotal();
                 }
 
 
@@ -208,7 +207,8 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        loadCustomer();
+        onTotal();
 
     }
 
@@ -226,7 +226,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        compositeDisposable.add(Common.salesMasterRepository.getInvoiceActivityItemByDateByName(date1,date1,shopName,"S").observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+        compositeDisposable.add(Common.salesMasterRepository.getDetailsActivityItemByDateByName(date1,date1,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
                 if (userActivities.size()==0){
@@ -251,12 +251,23 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         }));
 
     }
-
+    int book=0;
     private void loadSub(String invoice){
-        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(invoice).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+        String startDate=edit_start_date.getText().toString();
+        String endDate=edit_end_date.getText().toString();
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1=new SimpleDateFormat("dd-MM-yyyy").parse(startDate);
+            date2=new SimpleDateFormat("dd-MM-yyyy").parse(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemByDate(invoice,date1,date2).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
             @Override
             public void accept(List<SalesDetails> units) throws Exception {
                 Log.e("data","data"+new Gson().toJson(units));
+
 
                 for (SalesDetails salesDetails:units){
                     // value+=salesDetails.MRP;
@@ -274,27 +285,50 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
 
   private   void onTotal(){
-      compositeDisposable.add(Common.salesMasterRepository.getSalesMasterList(shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
+      String startDate=edit_start_date.getText().toString();
+      String endDate=edit_end_date.getText().toString();
+      Date date1 = null;
+      Date date2 = null;
+      try {
+          date1=new SimpleDateFormat("dd-MM-yyyy").parse(startDate);
+          date2=new SimpleDateFormat("dd-MM-yyyy").parse(endDate);
+      } catch (ParseException e) {
+          e.printStackTrace();
+      }
+      compositeDisposable.add(Common.salesMasterRepository.getDetailsActivityItemByDateByName(date1,date2,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
           @Override
           public void accept(List<SalesMaster> userActivities) throws Exception {
-            //  displayCustomerItems(userActivities);
-              Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
-              // Log.e("fsd","dfsdf"+date);
-              for (SalesMaster salesMaster:userActivities){
-                  value+=salesMaster.NetValue;
-                  if (salesMaster.PayMode.equals("Cash")){
-                      Log.e("NetValue","NetValue"+salesMaster.NetValue);
-                      cash+=salesMaster.InvoiceAmount;
+              if (userActivities.size()>0){
+                  //  displayCustomerItems(userActivities);
+                  Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
+                  // Log.e("fsd","dfsdf"+date);
+                  double value = 0;
+                  double cash= 0;
+                  double credit= 0;
+                  for (SalesMaster salesMaster:userActivities){
+
+                      value+=salesMaster.NetValue;
+                      if (salesMaster.PayMode.equals("Cash")){
+                          Log.e("NetValue","NetValue"+salesMaster.NetValue);
+                          cash+=salesMaster.InvoiceAmount;
+                      }
+                      if (salesMaster.PayMode.equals("Credit")){
+                          credit+=salesMaster.InvoiceAmount;
+                      }
+                      loadSub(salesMaster.InvoiceId);
                   }
-                  if (salesMaster.PayMode.equals("Credit")){
-                      credit+=salesMaster.InvoiceAmount;
-                  }
-                  loadSub(salesMaster.InvoiceId);
+                  text_cash.setText(String.valueOf(Utils.getCommaValue(cash)));
+                  text_net_price.setText(String.valueOf(Utils.getCommaValue(value)));
+                  text_credit.setText(String.valueOf(credit));
+                  progress_bar.setVisibility(View.GONE);
               }
-              text_cash.setText(String.valueOf(Utils.getCommaValue(cash)));
-              text_net_price.setText(String.valueOf(Utils.getCommaValue(value)));
-              text_credit.setText(String.valueOf(credit));
-              progress_bar.setVisibility(View.GONE);
+              else {
+                  text_book.setText(String.valueOf(0)+" Pcs");
+                  text_cash.setText("0");
+                  text_net_price.setText("0");
+                  text_credit.setText("0");
+              }
+
           }
       }));
   }
@@ -376,4 +410,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
         }
     }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(CustomerDetailsActivity.this,MainActivity.class));
+        finish();
+    }
+
 }

@@ -243,6 +243,30 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        if (Common.customerRepository.size() > 0) {
+
+        } else {
+            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
+//                Customer customers = new Customer();
+//                customers.Address = "Dhaka";
+//                customers.ShopName = "Retail Library";
+//                customers.RetailerCode = "1001";
+//                customers.MobileNumber = "00000000000";
+//                customers.UpdateDate = "25-DEC-19";
+//                customers.UpdateNo = "0";
+//                customers.Name = "Retail Customer";
+//                customers.StoreId = SharedPreferenceUtil.getUserID(MainActivity.this);
+//                customers.Status = "I";
+//
+//                Common.customerRepository.insertToCustomer(customers);
+                loadCustomers();
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+
+        }
         linear_sync.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -434,30 +458,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (Common.customerRepository.size() > 0) {
-
-        } else {
-            if (Utils.broadcastIntent(MainActivity.this, root_rlt_dashboard)) {
-//                Customer customers = new Customer();
-//                customers.Address = "Dhaka";
-//                customers.ShopName = "Retail Library";
-//                customers.RetailerCode = "1001";
-//                customers.MobileNumber = "00000000000";
-//                customers.UpdateDate = "25-DEC-19";
-//                customers.UpdateNo = "0";
-//                customers.Name = "Retail Customer";
-//                customers.StoreId = SharedPreferenceUtil.getUserID(MainActivity.this);
-//                customers.Status = "I";
-//
-//                Common.customerRepository.insertToCustomer(customers);
-                loadCustomers();
-            } else {
-                Snackbar snackbar = Snackbar
-                        .make(root_rlt_dashboard, "No Internet", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-
-        }
 
 
         if (Common.salesMasterRepository.size() > 0) {
@@ -1068,7 +1068,7 @@ public class MainActivity extends AppCompatActivity {
                     salesMaster.Note = sales.Note;
                     salesMaster.ReturnAmt = sales.Return;
                     int value = Common.syncRepository.maxValue("sales_mst");
-                    salesMaster.UpdNo = String.valueOf(value + 1);
+                    salesMaster.UpdNo = String.valueOf(sales.UpdateNo);
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                     Date date = new Date(System.currentTimeMillis());
                     String currentDate = formatter.format(date);
@@ -1178,8 +1178,11 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         SalesMaster salesMaster1 = new SalesMaster();
                         Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(customer.INV_DATE);
-
+                        final SimpleDateFormat formatterq = new SimpleDateFormat("dd-MM-yyyy");
+                       // final Date dateq = new Date(System.currentTimeMillis());
+                        //   String currentDate =formatterq.format(dateq);
                         salesMaster1.InvoiceId = customer.INVOICE_ID;
+                        salesMaster1.DateSimple = formatterq.format(date1);
                         if (customer.TRN_TYPE!=null){
                             salesMaster1.TrnType = customer.TRN_TYPE;
                         }
@@ -1216,17 +1219,20 @@ public class MainActivity extends AppCompatActivity {
 
 
                         salesMaster1.StoreId = customer.STORE_ID;
+                        salesMaster1.UpdateNo = Integer.parseInt(customer.UPD_NO);
                         salesMaster1.InvoiceNumber = customer.INVOICE_NO;
                         salesMaster1.InvoiceDates = customer.INV_DATE;
                         salesMaster1.Note = customer.NOTE;
                         salesMaster1.PayMode = customer.PAY_MODE;
                         salesMaster1.Device = customer.DEVICE;
+                        salesMaster1.SubTotal = customer.INVOICE_AMT;
+
                         salesMaster1.NetValue = Double.parseDouble(customer.NET_VALUE);
 
 
                         Common.salesMasterRepository.insertToSalesMaster(salesMaster1);
 
-                        loadSalesDetails(customer.INVOICE_ID, customer.STORE_ID);
+                        loadSalesDetails(customer.INVOICE_ID, customer.STORE_ID,date1);
                     }
 
 
@@ -1243,7 +1249,7 @@ public class MainActivity extends AppCompatActivity {
         }));
     }
 
-    private void loadSalesDetails(final String invoiceId, final String storeId) {
+    private void loadSalesDetails(final String invoiceId, final String storeId,final Date date) {
 
 
         showLoadingProgress(MainActivity.this);
@@ -1279,6 +1285,8 @@ public class MainActivity extends AppCompatActivity {
                     salesDetails1.MRP = Double.parseDouble(customer.MRP);
                     salesDetails1.TotalAmount = Double.parseDouble(customer.TOTAL_VALUE);
                     salesDetails1.StoreId = storeId;
+                    salesDetails1.InvoiceDate = date;
+                    salesDetails1.UpdateNo = Integer.parseInt(customer.UPD_NO);
                     salesDetails1.Discount = Double.parseDouble(customer.DISCOUNT_AMT);
                     salesDetails1.Quantity = Integer.parseInt(customer.QTY);
 
@@ -1313,7 +1321,7 @@ public class MainActivity extends AppCompatActivity {
             details.DiscountPc = "0.0";
             details.ReturnAmt = "0.0";
             int value = Common.syncRepository.maxValue("sales_dtl");
-            details.UpdNo = String.valueOf(value + 1);
+            details.UpdNo = String.valueOf(salesDetails1.UpdateNo);
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date date = new Date(System.currentTimeMillis());
             String currentDate = formatter.format(date);

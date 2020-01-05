@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity(tableName = "sales_dtl")
 public class SalesDetails {
     @NonNull
@@ -29,4 +31,8 @@ public class SalesDetails {
     public double Discount;
     @ColumnInfo(name = "TotalAmount")
     public double TotalAmount;
+    @ColumnInfo(name = "UpdateNo")
+    public int UpdateNo;
+    @ColumnInfo(name = "InvoiceDate")
+    public Date InvoiceDate;
 }
