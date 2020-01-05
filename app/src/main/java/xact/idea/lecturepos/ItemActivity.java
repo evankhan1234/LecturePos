@@ -967,5 +967,9 @@ public class ItemActivity extends AppCompatActivity {
         super.onStop();
         compositeDisposable.clear();
     }
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ItemActivity.this,InvoiceActivity.class));
+        finish();
+    }
 }

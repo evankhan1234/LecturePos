@@ -180,7 +180,7 @@ public class ItemReturnActivity extends AppCompatActivity {
                     e.printStackTrace();
                     stock=0;
                 }
-                if (stock>=ss){
+               // if (stock>=ss){
                     final double prices;
 
                     final double d;
@@ -213,12 +213,12 @@ public class ItemReturnActivity extends AppCompatActivity {
                     double t = total-totals;
 
                     amount.setText(String.valueOf(rounded(t, 2)));
-                }
-                else {
-                    Toast.makeText(ItemReturnActivity.this, "Quantity can not grater than Stock", Toast.LENGTH_SHORT).show();
-                    amount.setText("");
-
-                }
+//                }
+//                else {
+//                    Toast.makeText(ItemReturnActivity.this, "Quantity can not grater than Stock", Toast.LENGTH_SHORT).show();
+//                    amount.setText("");
+//
+//                }
 
 
 
@@ -271,7 +271,8 @@ public class ItemReturnActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (bookStock!=null){
-                    if (bookStock.QTY_NUMBER>0){
+                   // if (bookStock.QTY_NUMBER>0)
+                  //  {
                         if (!quantity.getText().toString().equals("")&& !amount.getText().toString().equals("")) {
                             double quan= Double.parseDouble(quantity.getText().toString());
                             if (quan>0){
@@ -320,11 +321,11 @@ public class ItemReturnActivity extends AppCompatActivity {
                             Toast.makeText(ItemReturnActivity.this, "Quantity Field is required", Toast.LENGTH_SHORT).show();
                             // Constant.arrayList.set(1,itemModel);
                         }
-                    }
-                    else {
-                        Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
+                 //   }
+                   // else {
+                   //     Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
 
-                    }
+                   // }
                 }
                 else {
                     Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
@@ -339,7 +340,8 @@ public class ItemReturnActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (bookStock!=null){
-                    if (bookStock.QTY_NUMBER>0){
+                  //  if (bookStock.QTY_NUMBER>0)
+                  //  {
                         if (!quantity.getText().toString().equals("") && !amount.getText().toString().equals("")) {
 
                            // double value=Double.parseDouble(amount.getText().toString());
@@ -573,12 +575,12 @@ public class ItemReturnActivity extends AppCompatActivity {
                             Toast.makeText(ItemReturnActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();
                             // Constant.arrayList.set(1,itemModel);
                         }
-                    }
-                    else
-                    {
-                        Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
+                    //}
+                   // else
+                   // {
+                      //  Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
 
-                    }
+                   // }
                 }
                 else {
                     Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
@@ -593,7 +595,7 @@ public class ItemReturnActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (bookStock!=null){
-                    if (bookStock.QTY_NUMBER>0){
+                  ///  if (bookStock.QTY_NUMBER>0){
                         if (!quantity.getText().toString().equals("")&& !amount.getText().toString().equals("")) {
                             double value=Double.parseDouble(amount.getText().toString());
 
@@ -816,12 +818,12 @@ public class ItemReturnActivity extends AppCompatActivity {
                             Toast.makeText(ItemReturnActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();
                             // Constant.arrayList.set(1,itemModel);
                         }
-                    }
-                    else
-                    {
-                        Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
+                 //   }
+                 //   else
+                  //  {
+                  //      Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
 
-                    }
+                  //  }
                 }
                 else {
                     Toast.makeText(ItemReturnActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
@@ -862,5 +864,9 @@ public class ItemReturnActivity extends AppCompatActivity {
         super.onStop();
         compositeDisposable.clear();
     }
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ItemReturnActivity.this,SalesReturnActivity.class));
+        finish();
+    }
 }

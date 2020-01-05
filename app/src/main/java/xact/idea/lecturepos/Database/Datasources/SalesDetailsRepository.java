@@ -1,5 +1,6 @@
 package xact.idea.lecturepos.Database.Datasources;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -53,6 +54,11 @@ public class SalesDetailsRepository implements ISalesDetailsDataSource {
     @Override
     public Flowable<List<SalesDetailPrintModel>> getBookStockModel(String SalesDetailsItemId) {
         return ISalesDetailsDataSource.getBookStockModel(SalesDetailsItemId);
+    }
+
+    @Override
+    public Flowable<List<SalesDetails>> getSalesDetailsItemByDate(String SalesDetailsItemId, Date from, Date to) {
+        return ISalesDetailsDataSource.getSalesDetailsItemByDate(SalesDetailsItemId, from, to);
     }
 
     @Override

@@ -131,7 +131,7 @@ public class AdjustmentActivity extends AppCompatActivity {
                 finish();
             }
         });
-        compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+        compositeDisposable.add(Common.bookStockRepository.getBookStockModelReturenAdjustment().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
             @Override
             public void accept(List<StockModel> books) throws Exception {
                 for (StockModel book : books) {
@@ -171,7 +171,7 @@ public class AdjustmentActivity extends AppCompatActivity {
         if (sessionId == null) {
             //   showInfoDialog();
         } else if (sessionId.equals("value")) {
-            compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+            compositeDisposable.add(Common.bookStockRepository.getBookStockModelReturenAdjustment().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
                 @Override
                 public void accept(List<StockModel> books) throws Exception {
                     for (StockModel book : books) {
@@ -210,122 +210,157 @@ public class AdjustmentActivity extends AppCompatActivity {
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
+                if (Common.itemAdjustmentRepository.size()>0) {
+                    SalesMaster salesMaster = new SalesMaster();
+                    Date datess = new Date(System.currentTimeMillis());
+                    final SimpleDateFormat formatterq = new SimpleDateFormat("dd-MM-yyyy");
+                    final Date dateq = new Date(System.currentTimeMillis());
 
-
-                SalesMaster salesMaster = new SalesMaster();
-                Date datess = new Date(System.currentTimeMillis());
-                final SimpleDateFormat formatterq = new SimpleDateFormat("dd-MM-yyyy");
-                final Date dateq = new Date(System.currentTimeMillis());
-
-                int value = Common.salesMasterRepository.maxValue(formatterq.format(dateq), "A");
-                String totalValue;
-                value = value + 1;
-                if (value < 9) {
-                    totalValue = "00" + value;
-
-                } else if (value > 9) {
-                    totalValue = "0" + value;
-                } else {
-                    totalValue = String.valueOf(value);
-                }
-
-                Date date1 = null;
-                Date date2 = null;
-                SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-                Date date = new Date(System.currentTimeMillis());
-                try {
-                    date1 = new SimpleDateFormat("dd-MM-yyyy").parse(edit_date.getText().toString());
-                    // date2= new SimpleDateFormat("yy-MM-dd").parse(edit_date.getText().toString());
-
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-             //   Customer customer = Common.customerRepository.getCustomerss(Name);
-                salesMaster.CustomerName = "";
-                salesMaster.Discount = 0;
-                salesMaster.TrnType = "A";
-                salesMaster.InvoiceId = "130" + SharedPreferenceUtil.getUserID(AdjustmentActivity.this) + formatter.format(date) + totalValue;
-                salesMaster.StoreId = SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
-                salesMaster.InvoiceNumber = "130" + SharedPreferenceUtil.getUserID(AdjustmentActivity.this) + formatter.format(date) + totalValue;
-                SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
-                Date dates1 = new Date(System.currentTimeMillis());
-                String currentTime = formatters.format(dates1);
-                salesMaster.InvoiceDates = edit_date.getText().toString() + " " + currentTime;
-                salesMaster.DateSimple = edit_date.getText().toString();
-                salesMaster.InvoiceDate = date1;
-                //salesMaster.Discount = discount;
-
-                salesMaster.NetValue = 0;
-                String str = android.os.Build.MODEL;
-                String str1 = Build.DEVICE;
-                salesMaster.Device = str1 + " " + str;
-                salesMaster.update_date = date1;
-                salesMaster.PayMode = " ";
-                salesMaster.SubTotal = "0";
-                salesMaster.InvoiceAmount = 0;
-                Date dates = new Date(System.currentTimeMillis());
-                salesMaster.Date = dates;
-                salesMaster.Note = edit_note.getText().toString();
-                salesMaster.RetailCode = " ";
-                salesMaster.PhoneNumber = " ";
-                salesMaster.Return = "0.0";
-                Common.salesMasterRepository.insertToSalesMaster(salesMaster);
-                Flowable<List<ItemAdjustment>> units = Common.itemAdjustmentRepository.getItemItems();
-
-                for (ItemAdjustment itemModel : units.blockingFirst()) {
-                    int values = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"S");
-                    SalesDetails salesDetails = new SalesDetails();
-                    salesDetails.BookId = itemModel.BookId;
-                    salesDetails.BookName = itemModel.BookName;
-                    salesDetails.Discount = 0.0;
-                    salesDetails.MRP = 0;
-                    salesDetails.Quantity = itemModel.Quantity;
-                    salesDetails.TotalAmount = 0;
-                    salesDetails.InvoiceId = values;
-                    salesDetails.InvoiceIdNew = "130" + SharedPreferenceUtil.getUserID(AdjustmentActivity.this) + formatter.format(date) + totalValue;
-                    salesDetails.StoreId = SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
-                    Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
-
-                    BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
-
-                    if (itemModel.InOut.equals("In")) {
-                        double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
-                        double pr=bookStocks.BOOK_NET_PRICES+t;
-
-                        Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER + itemModel.Quantity,pr, bookStocks.BOOK_ID);
-
-                    } else {
-                        double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
-                        double pr=bookStocks.BOOK_NET_PRICES+t;
-
-                        Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER - itemModel.Quantity,pr, bookStocks.BOOK_ID);
+                    int value = Common.salesMasterRepository.maxValue(formatterq.format(dateq), "A");
+                    String totalValue;
+                    String store = null;
+                    if (SharedPreferenceUtil.getUserID(AdjustmentActivity.this).length()<6){
+                        store="0"+SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+                    }
+                    else if (SharedPreferenceUtil.getUserID(AdjustmentActivity.this).length()<5){
+                        store="00"+SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
 
                     }
+                    else if (SharedPreferenceUtil.getUserID(AdjustmentActivity.this).length()<4){
+                        store="000"+SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+
+                    }
+                    else if (SharedPreferenceUtil.getUserID(AdjustmentActivity.this).length()<3){
+                        store="0000"+SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+
+                    }
+                    else if (SharedPreferenceUtil.getUserID(AdjustmentActivity.this).length()<2){
+                        store="00000"+SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+
+                    }
+                    else if (SharedPreferenceUtil.getUserID(AdjustmentActivity.this).length()<1){
+                        store="000000"+SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+
+                    }
+                    value = value + 1;
+                    if (value < 9) {
+                        totalValue = "00" + value;
+
+                    } else if (value > 9) {
+                        totalValue = "0" + value;
+                    } else {
+                        totalValue = String.valueOf(value);
+                    }
+
+                    Date date1 = null;
+                    Date date2 = null;
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+                    Date date = new Date(System.currentTimeMillis());
+                    try {
+                        date1 = new SimpleDateFormat("dd-MM-yyyy").parse(edit_date.getText().toString());
+                        // date2= new SimpleDateFormat("yy-MM-dd").parse(edit_date.getText().toString());
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    //   Customer customer = Common.customerRepository.getCustomerss(Name);
+                    salesMaster.CustomerName = "";
+                    salesMaster.Discount = 0;
+                    salesMaster.TrnType = "A";
+                    salesMaster.InvoiceId = "13" + store + formatter.format(date) + totalValue;
+                    salesMaster.StoreId = SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+                    salesMaster.InvoiceNumber = "13" + store + formatter.format(date) + totalValue;
+                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
+                    Date dates1 = new Date(System.currentTimeMillis());
+                    String currentTime = formatters.format(dates1);
+                    salesMaster.InvoiceDates = edit_date.getText().toString() + " " + currentTime;
+                    salesMaster.DateSimple = edit_date.getText().toString();
+                    salesMaster.InvoiceDate = date1;
+                    //salesMaster.Discount = discount;
+
+                    salesMaster.NetValue = 0;
+                    String str = android.os.Build.MODEL;
+                    String str1 = Build.DEVICE;
+                    salesMaster.Device = str1 + " " + str;
+                    salesMaster.update_date = date1;
+                    salesMaster.PayMode = " ";
+                    salesMaster.SubTotal = "0";
+                    salesMaster.InvoiceAmount = 0;
+                    Date dates = new Date(System.currentTimeMillis());
+                    salesMaster.Date = dates;
+                    salesMaster.Note = edit_note.getText().toString();
+                    salesMaster.RetailCode = " ";
+                    salesMaster.PhoneNumber = " ";
+                    salesMaster.Return = "0.0";
+                    salesMaster.UpdateNo = 0;
+                    Common.salesMasterRepository.insertToSalesMaster(salesMaster);
+                    Flowable<List<ItemAdjustment>> units = Common.itemAdjustmentRepository.getItemItems();
+
+                    for (ItemAdjustment itemModel : units.blockingFirst()) {
+                        int values = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"S");
+                        SalesDetails salesDetails = new SalesDetails();
+                        salesDetails.BookId = itemModel.BookId;
+                        salesDetails.BookName = itemModel.BookName;
+                        salesDetails.Discount = 0.0;
+                        salesDetails.MRP = 0;
+                        salesDetails.Quantity = itemModel.Quantity;
+                        salesDetails.TotalAmount = 0;
+                        salesDetails.InvoiceDate = date1;
+
+                        salesDetails.UpdateNo = 0;
+                        salesDetails.InvoiceId = values;
+                        salesDetails.InvoiceIdNew = "13" + store + formatter.format(date) + totalValue;
+                        salesDetails.StoreId = SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
+                        Common.salesDetailsRepository.insertToSalesDetails(salesDetails);
+
+                        BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
+
+                        if (itemModel.InOut.equals("In")) {
+                            double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
+                            double pr=bookStocks.BOOK_NET_PRICES+t;
+
+                            Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER + itemModel.Quantity,pr, bookStocks.BOOK_ID);
+
+                        } else {
+                            double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
+                            double pr=bookStocks.BOOK_NET_PRICES+t;
+
+                            Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER - itemModel.Quantity,pr, bookStocks.BOOK_ID);
+
+                        }
+
+                    }
+                    SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date11 = new Date(System.currentTimeMillis());
+                    String currentDate = formatter1.format(date11);
+                    SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
+                    Date dates11 = new Date(System.currentTimeMillis());
+                    String currentTime1 = formatters1.format(dates11);
+                    SharedPreferenceUtil.saveShared(AdjustmentActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
+                    SharedPreferenceUtil.saveShared(AdjustmentActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
+
+                    Constant.arrayList.clear();
+                    Constant.name = "";
+                    Constant.rate = "ratejk";
+                    Common.itemAdjustmentRepository.emptyItem();
+                    Intent intent = new Intent(AdjustmentActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(AdjustmentActivity.this, "Successfully Created a Adjustment ", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(AdjustmentActivity.this, "Please Add Items", Toast.LENGTH_SHORT).show();
 
                 }
-                SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
-                Date date11 = new Date(System.currentTimeMillis());
-                String currentDate = formatter1.format(date11);
-                SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
-                Date dates11 = new Date(System.currentTimeMillis());
-                String currentTime1 = formatters1.format(dates11);
-                SharedPreferenceUtil.saveShared(AdjustmentActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
-                SharedPreferenceUtil.saveShared(AdjustmentActivity.this, SharedPreferenceUtil.USER_SUNC_DATE_TIME, currentDate + " " + currentTime1 + "");
 
-                Constant.arrayList.clear();
-                Constant.name = "";
-                Constant.rate = "ratejk";
-                Common.itemAdjustmentRepository.emptyItem();
-                Intent intent = new Intent(AdjustmentActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                Toast.makeText(AdjustmentActivity.this, "Successfully Created a Adjustment ", Toast.LENGTH_SHORT).show();
+
             }
 
 

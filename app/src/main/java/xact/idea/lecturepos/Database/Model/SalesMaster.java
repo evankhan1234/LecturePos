@@ -53,6 +53,8 @@ public class SalesMaster {
     public Date  Date;
     @ColumnInfo(name = "TrnType")
     public String TrnType;
+    @ColumnInfo(name = "UpdateNo")
+    public int UpdateNo;
 
 
 }

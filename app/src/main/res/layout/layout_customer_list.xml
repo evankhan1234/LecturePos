@@ -195,21 +195,22 @@
             />
 
         <TextView
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/text_update"
             android:layout_width="228px"
-            android:layout_height="58px"
+            android:layout_height="88px"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="11px"
             android:layout_marginTop="7px"
             android:layout_marginRight="10px"
+            android:backgroundTint="#2196F3"
             android:background="@drawable/status_accepted"
             android:gravity="center_horizontal|center_vertical"
             android:paddingLeft="0px"
             android:paddingRight="5px"
             android:paddingBottom="4px"
             android:tag="34"
-            android:text="update"
+            android:text="Sales Return"
             android:textColor="@color/white"
             android:textSize="34px"
             />

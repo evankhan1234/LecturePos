@@ -139,7 +139,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8px"
-                                android:text="Invoice Date"/>
+                                android:text="Return Invoice Date"/>
                             <EditText
                                 android:focusable="false"
                                 android:tag="35"
@@ -702,7 +702,15 @@
                         android:background="#CCC"
                         android:layout_width="match_parent"
                         android:layout_height="2px"/>
-
+                    <TextView
+                        android:layout_marginTop="15px"
+                        android:tag="35"
+                        android:textSize="35px"
+                        android:textColor="#000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8px"
+                        android:text="Return via"/>
                     <RadioGroup
                         android:layout_gravity="center"
                         android:layout_marginTop="10px"

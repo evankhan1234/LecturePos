@@ -14,6 +14,7 @@ public interface IBookStockDataSources {
 
 
     Flowable<List<BookStock>> getBookStockItemById(int BookStockItemId);
+    Flowable<List<StockModel>> getBookStockModelReturenAdjustment();
 
     BookStock getBookStock(String BookStockItem);
     void updateReciverQuantity(int value,double price,String BookStockItem);

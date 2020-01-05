@@ -24,6 +24,7 @@ import xact.idea.lecturepos.Database.Model.Customer;
 import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.InvoiceActivity;
 import xact.idea.lecturepos.R;
+import xact.idea.lecturepos.SalesReturnActivity;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.Constant;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
@@ -74,6 +75,16 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
                 Constant.name=messageEntities.get(position).ShopName;
             }
         });
+        holder.text_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(new Intent(mActivity, SalesReturnActivity.class));
+                intent.putExtra("data",messageEntities.get(position).ShopName);
+                mActivity.startActivity(intent);
+                mActivity.finish();
+                Constant.name=messageEntities.get(position).ShopName;
+            }
+        });
         holder.text_view_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,9 +106,20 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
                 double credit = 0;
                 for (SalesMaster salesMaster:userActivities){
 
-                    if (salesMaster.PayMode.equals("Credit")){
-                        credit+=salesMaster.NetValue;
+                    if (salesMaster.TrnType.equals("S")){
+                        if (salesMaster.PayMode.equals("Credit")){
+                            credit+=salesMaster.NetValue;
+                        }
                     }
+                    else if (salesMaster.TrnType.equals("R")){
+                        if (salesMaster.PayMode.equals("Credit")){
+                            credit-=salesMaster.NetValue;
+                        }
+                    }
+
+//                    else {
+//                        credit-=salesMaster.NetValue;
+//                    }
                    // loadSub(salesMaster.InvoiceId);
                 }
                 String name = "<b><font color=#000 >Total Credit :  </font></b> <font color=#358ED3>"+Utils.getCommaValue(credit)+"</font>";
@@ -123,6 +145,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         private TextView text_name;
         private TextView text_create_invoice;
         private TextView text_view_details;
+        private TextView text_update;
 
 
 
@@ -137,6 +160,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             text_name = itemView.findViewById(R.id.text_name);
             text_create_invoice = itemView.findViewById(R.id.text_create_invoice);
             text_view_details = itemView.findViewById(R.id.text_view_details);
+            text_update = itemView.findViewById(R.id.text_update);
 
 
 

@@ -63,6 +63,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
     TextView text_invoice_number;
     TextView text_invoice_date;
     TextView text_store;
+    TextView frag_to_TvInvoiceTitle;
     TextView text_payment;
     TextView text_total_value;
     TextView text_return;
@@ -92,6 +93,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
         tv_temp_one_company_name = findViewById(R.id.tv_temp_one_company_name);
         text_payment = findViewById(R.id.text_payment);
+        frag_to_TvInvoiceTitle = findViewById(R.id.frag_to_TvInvoiceTitle);
         tv_temp_one_address = findViewById(R.id.tv_temp_one_address);
         create_bill = findViewById(R.id.create_bill);
         create_challan = findViewById(R.id.create_challan);
@@ -139,7 +141,13 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
                     text_invoice_number.setText(salesMaster.InvoiceId);
                     text_invoice_date.setText(salesMaster.InvoiceDates);
                     text_store.setText("");
+                    if (salesMaster.TrnType.equals("S")){
+                        frag_to_TvInvoiceTitle.setText("Invoice");
+                    }
+                    else if (salesMaster.TrnType.equals("R")){
+                        frag_to_TvInvoiceTitle.setText("Return Invoice");
 
+                    }
                     text_sub_total_value.setText(String.valueOf(salesMaster.SubTotal));
                     text_payment.setText("Payment Type: "+salesMaster.PayMode);
                     text_total_value.setText(String.valueOf(salesMaster.NetValue));
@@ -646,7 +654,8 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
             finish();
         }
         else  if (valueFor.equals("Customer")){
-            Intent intent = new Intent(InvoicePrintAgainActivity.this, MainActivity.class);
+            Intent intent = new Intent(InvoicePrintAgainActivity.this, CustomerDetailsActivity.class);
+            intent.putExtra("ShopName",salesMaster.CustomerName);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

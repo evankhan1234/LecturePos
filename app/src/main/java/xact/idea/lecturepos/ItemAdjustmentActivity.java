@@ -416,5 +416,9 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
         super.onStop();
         compositeDisposable.clear();
     }
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ItemAdjustmentActivity.this,AdjustmentActivity.class));
+        finish();
+    }
 }
