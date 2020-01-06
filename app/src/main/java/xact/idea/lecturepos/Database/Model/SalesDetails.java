@@ -33,6 +33,8 @@ public class SalesDetails {
     public double TotalAmount;
     @ColumnInfo(name = "UpdateNo")
     public int UpdateNo;
+    @ColumnInfo(name = "QTY")
+    public int QTY;
     @ColumnInfo(name = "InvoiceDate")
     public Date InvoiceDate;
 }

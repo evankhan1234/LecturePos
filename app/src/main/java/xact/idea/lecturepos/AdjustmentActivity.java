@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -72,11 +73,15 @@ public class AdjustmentActivity extends AppCompatActivity {
 
 
     Button btn_scan;
+    Button btn_scan_out;
     Button btn_input;
+    Button btn_input_out;
     Button save;
     Button saves;
 
     EditText edit_note;
+    LinearLayout linear1;
+    LinearLayout linear2;
 
 
     static EditText edit_date;
@@ -90,12 +95,16 @@ public class AdjustmentActivity extends AppCompatActivity {
     private ArrayList<String> ArrayList = new ArrayList<>();
     private ArrayList<String> ArrayList1 = new ArrayList<>();
     private ArrayList<String> bookArrayList = new ArrayList<>();
+    private ArrayList<String> bookArrayListOut = new ArrayList<>();
     private ArrayList<String> bookArrayListAgain = new ArrayList<>();
+    private ArrayList<String> bookArrayListOutAgain = new ArrayList<>();
     String Name;
     String sessionId;
     String dataId;
     SpinnerDialogCustomer spinnerDialog;
     SpinnerDialogFor spinnerDialogs;
+    RadioButton radioIn;
+    RadioButton radioOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +113,13 @@ public class AdjustmentActivity extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
 
+        btn_scan_out = findViewById(R.id.btn_scan_out);
         btn_input = findViewById(R.id.btn_input);
+        linear1 = findViewById(R.id.linear1);
+        linear2 = findViewById(R.id.linear2);
+        radioIn = findViewById(R.id.radioIn);
+        radioOut = findViewById(R.id.radioOut);
+        btn_input_out = findViewById(R.id.btn_input_out);
 
         edit_date = findViewById(R.id.edit_date);
         save = findViewById(R.id.save);
@@ -123,11 +138,36 @@ public class AdjustmentActivity extends AppCompatActivity {
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         rcl_this_customer_list.setLayoutManager(lm);
 
+        radioIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linear1.setVisibility(View.VISIBLE);
+                linear2.setVisibility(View.GONE);
+            }
+        });
+        radioOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linear1.setVisibility(View.GONE);
+                linear2.setVisibility(View.VISIBLE);
+            }
+        });
 
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdjustmentActivity.this, BarcodeAdjustmentActivity.class));
+                Intent intent = new Intent(AdjustmentActivity.this, BarcodeAdjustmentActivity.class);
+                intent.putExtra("TYPE", "In");
+                startActivity(intent);
+                finish();
+            }
+        });
+        btn_scan_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdjustmentActivity.this, BarcodeAdjustmentActivity.class);
+                intent.putExtra("TYPE", "Out");
+                startActivity(intent);
                 finish();
             }
         });
@@ -144,13 +184,37 @@ public class AdjustmentActivity extends AppCompatActivity {
                 //  dismissLoadingProgress();
             }
         }));
+        compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+            @Override
+            public void accept(List<StockModel> books) throws Exception {
+                for (StockModel book : books) {
+                    String data = Utils.getValue("20" + book.F_BOOK_EDITION_NO);
+                    bookArrayListOut.add(book.BookName + " \n " + book.BookNameBangla + " \n " + book.BOOK_SPECIMEN_CODE + "(20" + book.F_BOOK_EDITION_NO + ") " + "(" + data + ")" + book.BARCODE_NUMBER);
+                    //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
+                    //ArrayList.add(customer.ShopName);
+                }
+
+                //  dismissLoadingProgress();
+            }
+        }));
         btn_input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //
 
 
-                spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayList, "Select Book", "A");
+                spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayList, "Select Book", "A","In");
+                spinnerDialogs.showSpinerDialog();
+                //showInfoDialog();
+            }
+        });
+        btn_input_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//
+
+
+                spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayListOut, "Select Book", "A","Out");
                 spinnerDialogs.showSpinerDialog();
                 //showInfoDialog();
             }
@@ -170,7 +234,7 @@ public class AdjustmentActivity extends AppCompatActivity {
 
         if (sessionId == null) {
             //   showInfoDialog();
-        } else if (sessionId.equals("value")) {
+        } else if (sessionId.equals("In")) {
             compositeDisposable.add(Common.bookStockRepository.getBookStockModelReturenAdjustment().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
                 @Override
                 public void accept(List<StockModel> books) throws Exception {
@@ -187,12 +251,36 @@ public class AdjustmentActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayListAgain, "Select Book", "A");
+                    spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayListAgain, "Select Book", "A","In");
                     spinnerDialogs.showSpinerDialog();
                 }
             }, 300);
 
-        } else {
+        }
+        else if (sessionId.equals("Out")) {
+            compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
+                @Override
+                public void accept(List<StockModel> books) throws Exception {
+                    for (StockModel book : books) {
+                        String data = Utils.getValue("20" + book.F_BOOK_EDITION_NO);
+                        bookArrayListOutAgain.add(book.BookName + " \n " + book.BookNameBangla + " \n " + book.BOOK_SPECIMEN_CODE + "(20" + book.F_BOOK_EDITION_NO + ") " + "(" + data + ")" + book.BARCODE_NUMBER);                        //  bookArrayList.add(book.BOOK_SPECIMEN_CODE+" "+book.BookName+" "+book.BARCODE_NUMBER);
+                        //ArrayList.add(customer.ShopName);
+                    }
+
+                    //  dismissLoadingProgress();
+                }
+            }));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayListOutAgain, "Select Book", "A","Out");
+                    spinnerDialogs.showSpinerDialog();
+                }
+            }, 300);
+
+        }
+        else {
 
         }
 
@@ -274,7 +362,7 @@ public class AdjustmentActivity extends AppCompatActivity {
                     salesMaster.InvoiceId = "13" + store + formatter.format(date) + totalValue;
                     salesMaster.StoreId = SharedPreferenceUtil.getUserID(AdjustmentActivity.this);
                     salesMaster.InvoiceNumber = "13" + store + formatter.format(date) + totalValue;
-                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
+                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss a");
                     Date dates1 = new Date(System.currentTimeMillis());
                     String currentTime = formatters.format(dates1);
                     salesMaster.InvoiceDates = edit_date.getText().toString() + " " + currentTime;
@@ -301,13 +389,21 @@ public class AdjustmentActivity extends AppCompatActivity {
                     Flowable<List<ItemAdjustment>> units = Common.itemAdjustmentRepository.getItemItems();
 
                     for (ItemAdjustment itemModel : units.blockingFirst()) {
-                        int values = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"S");
+                        int values = Common.salesMasterRepository.maxValue(formatterq.format(dateq),"A");
                         SalesDetails salesDetails = new SalesDetails();
                         salesDetails.BookId = itemModel.BookId;
                         salesDetails.BookName = itemModel.BookName;
                         salesDetails.Discount = 0.0;
                         salesDetails.MRP = 0;
                         salesDetails.Quantity = itemModel.Quantity;
+                        if (itemModel.InOut.equals("In")){
+                            salesDetails.QTY = itemModel.Quantity;
+                        }
+                        else {
+                            salesDetails.QTY = -itemModel.Quantity;
+                        }
+
+
                         salesDetails.TotalAmount = 0;
                         salesDetails.InvoiceDate = date1;
 
@@ -319,6 +415,7 @@ public class AdjustmentActivity extends AppCompatActivity {
 
                         BookStock bookStocks = Common.bookStockRepository.getBookStock(itemModel.BookId);
 
+
                         if (itemModel.InOut.equals("In")) {
                             double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
                             double pr=bookStocks.BOOK_NET_PRICES+t;
@@ -327,8 +424,9 @@ public class AdjustmentActivity extends AppCompatActivity {
 
                         } else {
                             double t =bookStocks.BOOK_NET_MRP*itemModel.Quantity;
-                            double pr=bookStocks.BOOK_NET_PRICES+t;
-
+                            double pr=bookStocks.BOOK_NET_PRICES-t;
+                            int  qtr=bookStocks.QTY_NUMBER - itemModel.Quantity;
+                            int qty=-qtr;
                             Common.bookStockRepository.updateReciverQuantity(bookStocks.QTY_NUMBER - itemModel.Quantity,pr, bookStocks.BOOK_ID);
 
                         }
@@ -337,7 +435,7 @@ public class AdjustmentActivity extends AppCompatActivity {
                     SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
                     Date date11 = new Date(System.currentTimeMillis());
                     String currentDate = formatter1.format(date11);
-                    SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
+                    SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss a");
                     Date dates11 = new Date(System.currentTimeMillis());
                     String currentTime1 = formatters1.format(dates11);
                     SharedPreferenceUtil.saveShared(AdjustmentActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
@@ -468,7 +566,7 @@ public class AdjustmentActivity extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize(main_root);
         final SpinnerDialogFor spinnerDialogs;
 
-        spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayList, "Select Book", "A");
+        spinnerDialogs = new SpinnerDialogFor(AdjustmentActivity.this, bookArrayList, "Select Book", "A","");
         spinnerDialogs.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String item, int position) {

@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 import xact.idea.lecturepos.Database.Model.Book;
 import xact.idea.lecturepos.Database.Model.BookStock;
 import xact.idea.lecturepos.Database.Model.ItemAdjustment;
+import xact.idea.lecturepos.Database.Model.Items;
 import xact.idea.lecturepos.Model.GroupModel;
 import xact.idea.lecturepos.Model.ItemModel;
 import xact.idea.lecturepos.Utils.Common;
@@ -53,6 +54,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
     Button btn_update;
     ImageView btn_header_back;
     String sessionId;
+    String type;
     String position;
     BookStock bookStock;
     Book book;
@@ -86,6 +88,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(quantity, InputMethodManager.SHOW_IMPLICIT);
         sessionId = getIntent().getStringExtra("EXTRA_SESSION");
+        type = getIntent().getStringExtra("TYPE");
         Log.e("seesion", "dsd" + sessionId);
         if (sessionId.equals("update")) {
             btn_update.setVisibility(View.VISIBLE);
@@ -118,7 +121,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
             }
             bookStock = Common.bookStockRepository.getBookStock(book.BookNo);
             if (bookStock != null) {
-                bookQuantity.setText(String.valueOf(bookStock.QTY_NUMBER));
+               // bookQuantity.setText(String.valueOf(bookStock.QTY_NUMBER));
             } else {
 
             }
@@ -132,6 +135,36 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                 //  booknameBangla.setText(book.BookNameBangla);
                 price.setText(String.valueOf(book.BOOK_NET_PRICE));
                 bookMRP.setText(String.valueOf(book.BOOK_FACE_VALUE));
+                if (bookStock != null) {
+                    String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
+
+                    final ItemAdjustment items1 = Common.itemAdjustmentRepository.getItems(s1);
+                    if (items1!=null){
+//                        if (type.equals("In")){
+//                            int qty=bookStock.QTY_NUMBER+items1.Quantity;
+//                            bookQuantity.setText(String.valueOf(qty));
+//                            int a=3-4;
+//                        }
+//                        else {
+////                            if (items1.InOut.equals("In")){
+////                                int qty=bookStock.QTY_NUMBER+items1.Quantity;
+////                                bookQuantity.setText(String.valueOf(qty));
+////                            }
+////                            else {
+//                                int qty=bookStock.QTY_NUMBER-items1.Quantity;
+//                                bookQuantity.setText(String.valueOf(qty));
+//                            //}
+//
+//                        }
+                        bookQuantity.setText(String.valueOf(items1.stock));
+                    }
+                    else {
+                        bookQuantity.setText(String.valueOf(bookStock.QTY_NUMBER));
+                    }
+
+                } else {
+
+                }
             } else {
                 Toast.makeText(this, "No Books Found", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
@@ -154,24 +187,54 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (bookStock != null) {
-                    if (bookStock.QTY_NUMBER > 0) {
+
                         if (!quantity.getText().toString().equals("")) {
                             int selectedId = radioLogin.getCheckedRadioButtonId();
                             RadioButton radioSexButton = findViewById(selectedId);
 
                             String pay = String.valueOf(radioSexButton.getText());
-                            ItemAdjustment itemModel = new ItemAdjustment();
-                            ItemAdjustment itemModels = Common.itemAdjustmentRepository.getItems(position);
-                            itemModel.BookId = itemModels.BookId;
-                            itemModel.id = itemModels.id;
-                            itemModel.InOut = pay;
                             int quantityfor = Integer.parseInt(quantity.getText().toString());
-                            itemModel.Quantity = quantityfor;
-                            itemModel.BookName = bookname.getText().toString();
-                            itemModel.BookNameBangla = booknameBangla.getText().toString();
-                            Common.itemAdjustmentRepository.updateItem(itemModel);
-                            startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
-                            finish();
+                            int qt=bookStock.QTY_NUMBER-quantityfor;
+                            ItemAdjustment itemModel1 = Common.itemAdjustmentRepository.getItems(position);
+                            if (itemModel1.InOut.equals("Out"))
+                            {
+
+                                if (qt>=0){
+                                    ItemAdjustment itemModel = new ItemAdjustment();
+
+                                    itemModel.BookId = itemModel1.BookId;
+                                    itemModel.id = itemModel1.id;
+                                    itemModel.InOut = itemModel1.InOut;
+                                    itemModel.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
+
+                                    itemModel.Quantity = quantityfor;
+                                    itemModel.BookName = bookname.getText().toString();
+                                    itemModel.BookNameBangla = booknameBangla.getText().toString();
+                                    Common.itemAdjustmentRepository.updateItem(itemModel);
+                                    startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
+                                    finish();
+
+                                }
+                                else {
+                                    Toast.makeText(ItemAdjustmentActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                            else {
+                                ItemAdjustment itemModel = new ItemAdjustment();
+                                ItemAdjustment itemModels = Common.itemAdjustmentRepository.getItems(position);
+                                itemModel.BookId = itemModels.BookId;
+                                itemModel.id = itemModels.id;
+                                itemModel.InOut = itemModels.InOut;
+                                itemModel.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+                                itemModel.Quantity = quantityfor;
+                                itemModel.BookName = bookname.getText().toString();
+                                itemModel.BookNameBangla = booknameBangla.getText().toString();
+                                Common.itemAdjustmentRepository.updateItem(itemModel);
+                                startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
+                                finish();
+
+                            }
 
 
                         } else {
@@ -182,9 +245,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                         Toast.makeText(ItemAdjustmentActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
 
                     }
-                } else {
-                    Toast.makeText(ItemAdjustmentActivity.this, "Not Enough Stocck", Toast.LENGTH_SHORT).show();
-                }
+
 
 
             }
@@ -193,105 +254,225 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
+                if (type.equals("Out"))
+                {
+                    int quantityfor = Integer.parseInt(quantity.getText().toString());
+                    int qt=bookStock.QTY_NUMBER-quantityfor;
+                    if (qt>=0)
+                    {
+                        if (!quantity.getText().toString().equals(""))
+                        {
 
+                            String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
 
-                if (!quantity.getText().toString().equals("")) {
+                            final ItemAdjustment ItemAdjustment1 = Common.itemAdjustmentRepository.getItems(s1);
+                            final ItemAdjustment ItemAdjustment = new ItemAdjustment();
 
-                    String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
+                            if (ItemAdjustment1 != null) {
+                                if (book.BOOK_GROUP_ID.equals("0")) {
+                                    int quantityfor1 = Integer.parseInt(quantity.getText().toString());
+                                    int selectedId = radioLogin.getCheckedRadioButtonId();
+                                    RadioButton radioSexButton = findViewById(selectedId);
 
-                    final ItemAdjustment ItemAdjustment1 = Common.itemAdjustmentRepository.getItems(s1);
-                    final ItemAdjustment ItemAdjustment = new ItemAdjustment();
+                                    String pay = String.valueOf(radioSexButton.getText());
+                                    ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
+                                    ItemAdjustment.Quantity = quantityfor1+ItemAdjustment1.Quantity;
+                                    ItemAdjustment.InOut = type;
+                                    ItemAdjustment.BookId = book.BookNo;
+                                    ItemAdjustment.BookName = book.BookName;
+                                    ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                    ItemAdjustment it = Common.itemAdjustmentRepository.getItems(book.BookName);
+                                    ItemAdjustment.id = it.id;
+                                    Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                                } else {
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
 
-                    if (ItemAdjustment1 != null) {
-                        if (book.BOOK_GROUP_ID.equals("0")) {
-                            int quantityfor = Integer.parseInt(quantity.getText().toString());
-                            int selectedId = radioLogin.getCheckedRadioButtonId();
-                            RadioButton radioSexButton = findViewById(selectedId);
+                                            for (GroupModel groupModel : userActivities) {
+                                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                                RadioButton radioSexButton = findViewById(selectedId);
 
-                            String pay = String.valueOf(radioSexButton.getText());
+                                                String pay = String.valueOf(radioSexButton.getText());
+                                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
 
-                            ItemAdjustment.Quantity = quantityfor;
-                            ItemAdjustment.InOut = pay;
-                            ItemAdjustment.BookId = book.BookNo;
-                            ItemAdjustment.BookName = book.BookName;
-                            ItemAdjustment.BookNameBangla = book.BookNameBangla;
-                            ItemAdjustment it = Common.itemAdjustmentRepository.getItems(book.BookName);
-                            ItemAdjustment.id = it.id;
-                            Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
-                        } else {
-                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                @Override
-                                public void accept(List<GroupModel> userActivities) throws Exception {
+                                                ItemAdjustment.Quantity = quantityfor+ItemAdjustment1.Quantity;
+                                                ItemAdjustment.InOut = type;
+                                                ItemAdjustment.BookId = groupModel.BookNo;
+                                                ItemAdjustment.BookName = groupModel.BookName;
+                                                ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                                ItemAdjustment it = Common.itemAdjustmentRepository.getItems(groupModel.BookName);
+                                                ItemAdjustment.id = it.id;
+                                                Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                                            }
+                                        }
+                                    }));
 
-                                    for (GroupModel groupModel : userActivities) {
-                                        int quantityfor = Integer.parseInt(quantity.getText().toString());
-                                        int selectedId = radioLogin.getCheckedRadioButtonId();
-                                        RadioButton radioSexButton = findViewById(selectedId);
-
-                                        String pay = String.valueOf(radioSexButton.getText());
-
-                                        ItemAdjustment.Quantity = quantityfor;
-                                        ItemAdjustment.InOut = pay;
-                                        ItemAdjustment.BookId = groupModel.BookNo;
-                                        ItemAdjustment.BookName = groupModel.BookName;
-                                        ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
-                                        ItemAdjustment it = Common.itemAdjustmentRepository.getItems(groupModel.BookName);
-                                        ItemAdjustment.id = it.id;
-                                        Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
-                                    }
                                 }
-                            }));
+
+                            } else {
+
+                                if (book.BOOK_GROUP_ID.equals("0")){
+                                    int quantityfor1= Integer.parseInt(quantity.getText().toString());
+                                    int selectedId = radioLogin.getCheckedRadioButtonId();
+                                    RadioButton radioSexButton = findViewById(selectedId);
+                                    ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
+
+                                    String pay = String.valueOf(radioSexButton.getText());
+                                    ItemAdjustment.Quantity = quantityfor1;
+                                    ItemAdjustment.InOut = type;
+                                    ItemAdjustment.BookId = book.BookNo;
+                                    ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                    ItemAdjustment.BookName = book.BookName;
+                                    Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+
+                                }
+                                else {
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
+
+                                            for (GroupModel groupModel : userActivities) {
+                                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                                RadioButton radioSexButton = findViewById(selectedId);
+                                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
+
+                                                String pay = String.valueOf(radioSexButton.getText());
+                                                ItemAdjustment.Quantity = quantityfor;
+                                                ItemAdjustment.InOut = type;
+                                                ItemAdjustment.BookId = groupModel.BookNo;
+                                                ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                                ItemAdjustment.BookName = groupModel.BookName;
+                                                Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+                                            }
+                                        }
+                                    }));
+                                }
+
+
+
+                            }
+                            startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
+                            finish();
+
+                        } else {
+                            Toast.makeText(ItemAdjustmentActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();
+                            // Constant.arrayList.set(1,itemModel);
+                        }
+                    }
+                    else {
+                        Toast.makeText(ItemAdjustmentActivity.this, "Not Enough Stock", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else
+                    {
+                    if (!quantity.getText().toString().equals(""))
+                    {
+
+                        String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
+
+                        final ItemAdjustment ItemAdjustment1 = Common.itemAdjustmentRepository.getItems(s1);
+                        final ItemAdjustment ItemAdjustment = new ItemAdjustment();
+
+                        if (ItemAdjustment1 != null) {
+                            if (book.BOOK_GROUP_ID.equals("0")) {
+                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                RadioButton radioSexButton = findViewById(selectedId);
+
+                                String pay = String.valueOf(radioSexButton.getText());
+                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                ItemAdjustment.Quantity = quantityfor+ItemAdjustment1.Quantity;
+                                ItemAdjustment.InOut = type;
+                                ItemAdjustment.BookId = book.BookNo;
+                                ItemAdjustment.BookName = book.BookName;
+                                ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                ItemAdjustment it = Common.itemAdjustmentRepository.getItems(book.BookName);
+                                ItemAdjustment.id = it.id;
+                                Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                            } else {
+                                compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                    @Override
+                                    public void accept(List<GroupModel> userActivities) throws Exception {
+
+                                        for (GroupModel groupModel : userActivities) {
+                                            int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                            int selectedId = radioLogin.getCheckedRadioButtonId();
+                                            RadioButton radioSexButton = findViewById(selectedId);
+
+                                            String pay = String.valueOf(radioSexButton.getText());
+                                            ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                            ItemAdjustment.Quantity = quantityfor+ItemAdjustment1.Quantity;
+                                            ItemAdjustment.InOut = type;
+                                            ItemAdjustment.BookId = groupModel.BookNo;
+                                            ItemAdjustment.BookName = groupModel.BookName;
+                                            ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                            ItemAdjustment it = Common.itemAdjustmentRepository.getItems(groupModel.BookName);
+                                            ItemAdjustment.id = it.id;
+                                            Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                                        }
+                                    }
+                                }));
+
+                            }
+
+                        } else {
+
+                            if (book.BOOK_GROUP_ID.equals("0")){
+                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                RadioButton radioSexButton = findViewById(selectedId);
+                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                String pay = String.valueOf(radioSexButton.getText());
+                                ItemAdjustment.Quantity = quantityfor;
+                                ItemAdjustment.InOut = type;
+                                ItemAdjustment.BookId = book.BookNo;
+                                ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                ItemAdjustment.BookName = book.BookName;
+                                Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+
+                            }
+                            else {
+                                compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                    @Override
+                                    public void accept(List<GroupModel> userActivities) throws Exception {
+
+                                        for (GroupModel groupModel : userActivities) {
+                                            int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                            int selectedId = radioLogin.getCheckedRadioButtonId();
+                                            RadioButton radioSexButton = findViewById(selectedId);
+                                            ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                            String pay = String.valueOf(radioSexButton.getText());
+                                            ItemAdjustment.Quantity = quantityfor;
+                                            ItemAdjustment.InOut = type;
+                                            ItemAdjustment.BookId = groupModel.BookNo;
+                                            ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                            ItemAdjustment.BookName = groupModel.BookName;
+                                            Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+                                        }
+                                    }
+                                }));
+                            }
+
+
 
                         }
+                        startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
+                        finish();
 
                     } else {
-
-                        if (book.BOOK_GROUP_ID.equals("0")){
-                            int quantityfor = Integer.parseInt(quantity.getText().toString());
-                            int selectedId = radioLogin.getCheckedRadioButtonId();
-                            RadioButton radioSexButton = findViewById(selectedId);
-
-                            String pay = String.valueOf(radioSexButton.getText());
-                            ItemAdjustment.Quantity = quantityfor;
-                            ItemAdjustment.InOut = pay;
-                            ItemAdjustment.BookId = book.BookNo;
-                            ItemAdjustment.BookNameBangla = book.BookNameBangla;
-                            ItemAdjustment.BookName = book.BookName;
-                            Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
-
-                        }
-                        else {
-                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                @Override
-                                public void accept(List<GroupModel> userActivities) throws Exception {
-
-                                    for (GroupModel groupModel : userActivities) {
-                                        int quantityfor = Integer.parseInt(quantity.getText().toString());
-                                        int selectedId = radioLogin.getCheckedRadioButtonId();
-                                        RadioButton radioSexButton = findViewById(selectedId);
-
-                                        String pay = String.valueOf(radioSexButton.getText());
-                                        ItemAdjustment.Quantity = quantityfor;
-                                        ItemAdjustment.InOut = pay;
-                                        ItemAdjustment.BookId = groupModel.BookNo;
-                                        ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
-                                        ItemAdjustment.BookName = groupModel.BookName;
-                                        Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
-                                    }
-                                }
-                            }));
-                        }
-
-
-
+                        Toast.makeText(ItemAdjustmentActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();
+                        // Constant.arrayList.set(1,itemModel);
                     }
-                    startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
-                    finish();
-
-                } else {
-                    Toast.makeText(ItemAdjustmentActivity.this, "Quantity Field is more than stock", Toast.LENGTH_SHORT).show();
-                    // Constant.arrayList.set(1,itemModel);
                 }
+
+
 
 
             }
@@ -300,101 +481,302 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                if (!quantity.getText().toString().equals("")) {
+                if (!quantity.getText().toString().equals(""))
+                {
+
+                    if (type.equals("Out"))
+                    {
+                        int quantityfor = Integer.parseInt(quantity.getText().toString());
+                        int qt = bookStock.QTY_NUMBER - quantityfor;
+                        if (qt>=0)
+                        {
+                            String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
+
+                            final ItemAdjustment ItemAdjustment1 = Common.itemAdjustmentRepository.getItems(s1);
+                            final ItemAdjustment ItemAdjustment = new ItemAdjustment();
+
+                            if (ItemAdjustment1 != null) {
+
+                                if (book.BOOK_GROUP_ID.equals("0")){
+                                    int quantityfor1 = Integer.parseInt(quantity.getText().toString());
+                                    int selectedId = radioLogin.getCheckedRadioButtonId();
+                                    RadioButton radioSexButton = findViewById(selectedId);
+                                    ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
+
+                                    String pay = String.valueOf(radioSexButton.getText());
+                                    ItemAdjustment.InOut = type;
+                                    ItemAdjustment.Quantity = quantityfor1+ItemAdjustment1.Quantity;
+                                    ItemAdjustment.BookId = book.BookNo;
+                                    ItemAdjustment.BookName = book.BookName;
+                                    ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                    ItemAdjustment it = Common.itemAdjustmentRepository.getItems(book.BookName);
+                                    ItemAdjustment.id = it.id;
+                                    Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                                    Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+
+                                    if (type.equals("In")){
+                                        intent.putExtra("value", "In");
+                                    }
+                                    else if (type.equals("Out")){
+                                        intent.putExtra("value", "Out");
+                                    }
+
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else {
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
 
 
-                    String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
+                                            for (GroupModel groupModel : userActivities) {
+                                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                                RadioButton radioSexButton = findViewById(selectedId);
+                                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
 
-                    final ItemAdjustment ItemAdjustment1 = Common.itemAdjustmentRepository.getItems(s1);
-                    final ItemAdjustment ItemAdjustment = new ItemAdjustment();
+                                                String pay = String.valueOf(radioSexButton.getText());
+                                                ItemAdjustment.InOut = type;
+                                                ItemAdjustment.Quantity = quantityfor+ItemAdjustment1.Quantity;
+                                                ItemAdjustment.BookId = groupModel.BookNo;
+                                                ItemAdjustment.BookName = groupModel.BookName;
+                                                ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                                ItemAdjustment it = Common.itemAdjustmentRepository.getItems(groupModel.BookName);
+                                                ItemAdjustment.id = it.id;
+                                                Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                                            }
+                                        }
+                                    }));
+                                    Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+                                    int quantityfor1 = Integer.parseInt(quantity.getText().toString());
+                                    int selectedId = radioLogin.getCheckedRadioButtonId();
+                                    RadioButton radioSexButton = findViewById(selectedId);
 
-                    if (ItemAdjustment1 != null) {
+                                    String pay = String.valueOf(radioSexButton.getText());
+                                    if (type.equals("In")){
+                                        intent.putExtra("value", "In");
+                                    }
+                                    else if (type.equals("Out")){
+                                        intent.putExtra("value", "Out");
+                                    }
 
-                        if (book.BOOK_GROUP_ID.equals("0")){
-                            int quantityfor = Integer.parseInt(quantity.getText().toString());
-                            int selectedId = radioLogin.getCheckedRadioButtonId();
-                            RadioButton radioSexButton = findViewById(selectedId);
+                                    startActivity(intent);
+                                    finish();
+                                }
 
-                            String pay = String.valueOf(radioSexButton.getText());
-                            ItemAdjustment.InOut = pay;
-                            ItemAdjustment.Quantity = quantityfor;
-                            ItemAdjustment.BookId = book.BookNo;
-                            ItemAdjustment.BookName = book.BookName;
-                            ItemAdjustment.BookNameBangla = book.BookNameBangla;
-                            ItemAdjustment it = Common.itemAdjustmentRepository.getItems(book.BookName);
-                            ItemAdjustment.id = it.id;
-                            Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+
+                            } else {
+
+                                if (book.BOOK_GROUP_ID.equals("0")){
+                                    int quantityfor1 = Integer.parseInt(quantity.getText().toString());
+                                    int selectedId = radioLogin.getCheckedRadioButtonId();
+                                    RadioButton radioSexButton = findViewById(selectedId);
+                                    ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
+
+                                    String pay = String.valueOf(radioSexButton.getText());
+                                    ItemAdjustment.Quantity = quantityfor1;
+                                    ItemAdjustment.InOut = type;
+                                    ItemAdjustment.BookId = book.BookNo;
+                                    ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                    ItemAdjustment.BookName = book.BookName;
+                                    Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+                                    Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+                                    if (type.equals("In")){
+                                        intent.putExtra("value", "In");
+                                    }
+                                    else if (type.equals("Out")){
+                                        intent.putExtra("value", "Out");
+                                    }
+
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else {
+                                    compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                        @Override
+                                        public void accept(List<GroupModel> userActivities) throws Exception {
+
+                                            for (GroupModel groupModel : userActivities) {
+                                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                                RadioButton radioSexButton = findViewById(selectedId);
+                                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())-quantityfor;
+
+                                                String pay = String.valueOf(radioSexButton.getText());
+                                                ItemAdjustment.Quantity = quantityfor;
+                                                ItemAdjustment.InOut = type;
+                                                ItemAdjustment.BookId = groupModel.BookNo;
+                                                ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                                ItemAdjustment.BookName = groupModel.BookName;
+                                                Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+                                            }
+                                        }
+                                    }));
+                                    Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+                                    int quantityfor1 = Integer.parseInt(quantity.getText().toString());
+                                    int selectedId = radioLogin.getCheckedRadioButtonId();
+                                    RadioButton radioSexButton = findViewById(selectedId);
+
+                                    String pay = String.valueOf(radioSexButton.getText());
+                                    if (type.equals("In")){
+                                        intent.putExtra("value", "In");
+                                    }
+                                    else if (type.equals("Out")){
+                                        intent.putExtra("value", "Out");
+                                    }
+
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+
+
+                            }
+
                         }
                         else {
-                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                @Override
-                                public void accept(List<GroupModel> userActivities) throws Exception {
+                            Toast.makeText(ItemAdjustmentActivity.this, "Not Enough Stock", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        String s1 = bookname.getText().toString().substring(0, bookname.getText().toString().length() - 7);
 
+                        final ItemAdjustment ItemAdjustment1 = Common.itemAdjustmentRepository.getItems(s1);
+                        final ItemAdjustment ItemAdjustment = new ItemAdjustment();
 
-                                    for (GroupModel groupModel : userActivities) {
-                                        int quantityfor = Integer.parseInt(quantity.getText().toString());
-                                        int selectedId = radioLogin.getCheckedRadioButtonId();
-                                        RadioButton radioSexButton = findViewById(selectedId);
+                        if (ItemAdjustment1 != null) {
 
-                                        String pay = String.valueOf(radioSexButton.getText());
-                                        ItemAdjustment.InOut = pay;
-                                        ItemAdjustment.Quantity = quantityfor;
-                                        ItemAdjustment.BookId = groupModel.BookNo;
-                                        ItemAdjustment.BookName = groupModel.BookName;
-                                        ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
-                                        ItemAdjustment it = Common.itemAdjustmentRepository.getItems(groupModel.BookName);
-                                        ItemAdjustment.id = it.id;
-                                        Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
-                                    }
+                            if (book.BOOK_GROUP_ID.equals("0")){
+                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                RadioButton radioSexButton = findViewById(selectedId);
+                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                String pay = String.valueOf(radioSexButton.getText());
+                                ItemAdjustment.InOut = type;
+                                ItemAdjustment.Quantity = quantityfor+ItemAdjustment1.Quantity;
+                                ItemAdjustment.BookId = book.BookNo;
+                                ItemAdjustment.BookName = book.BookName;
+                                ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                ItemAdjustment it = Common.itemAdjustmentRepository.getItems(book.BookName);
+                                ItemAdjustment.id = it.id;
+                                Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                                Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+
+                                if (type.equals("In")){
+                                    intent.putExtra("value", "In");
                                 }
-                            }));
-                        }
-
-
-                    } else {
-
-                        if (book.BOOK_GROUP_ID.equals("0")){
-                            int quantityfor = Integer.parseInt(quantity.getText().toString());
-                            int selectedId = radioLogin.getCheckedRadioButtonId();
-                            RadioButton radioSexButton = findViewById(selectedId);
-
-                            String pay = String.valueOf(radioSexButton.getText());
-                            ItemAdjustment.Quantity = quantityfor;
-                            ItemAdjustment.InOut = pay;
-                            ItemAdjustment.BookId = book.BookNo;
-                            ItemAdjustment.BookNameBangla = book.BookNameBangla;
-                            ItemAdjustment.BookName = book.BookName;
-                            Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
-                        }
-                        else {
-                            compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
-                                @Override
-                                public void accept(List<GroupModel> userActivities) throws Exception {
-
-                                    for (GroupModel groupModel : userActivities) {
-                                        int quantityfor = Integer.parseInt(quantity.getText().toString());
-                                        int selectedId = radioLogin.getCheckedRadioButtonId();
-                                        RadioButton radioSexButton = findViewById(selectedId);
-
-                                        String pay = String.valueOf(radioSexButton.getText());
-                                        ItemAdjustment.Quantity = quantityfor;
-                                        ItemAdjustment.InOut = pay;
-                                        ItemAdjustment.BookId = groupModel.BookNo;
-                                        ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
-                                        ItemAdjustment.BookName = groupModel.BookName;
-                                        Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
-                                    }
+                                else if (type.equals("Out")){
+                                    intent.putExtra("value", "Out");
                                 }
-                            }));
+
+                                startActivity(intent);
+                                finish();
+                            }
+                            else {
+                                compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                    @Override
+                                    public void accept(List<GroupModel> userActivities) throws Exception {
+
+
+                                        for (GroupModel groupModel : userActivities) {
+                                            int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                            int selectedId = radioLogin.getCheckedRadioButtonId();
+                                            RadioButton radioSexButton = findViewById(selectedId);
+                                            ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                            String pay = String.valueOf(radioSexButton.getText());
+                                            ItemAdjustment.InOut = type;
+                                            ItemAdjustment.Quantity =quantityfor +ItemAdjustment1.Quantity;
+                                            ItemAdjustment.BookId = groupModel.BookNo;
+                                            ItemAdjustment.BookName = groupModel.BookName;
+                                            ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                            ItemAdjustment it = Common.itemAdjustmentRepository.getItems(groupModel.BookName);
+                                            ItemAdjustment.id = it.id;
+                                            Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
+                                        }
+                                    }
+                                }));
+                                Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                RadioButton radioSexButton = findViewById(selectedId);
+
+                                String pay = String.valueOf(radioSexButton.getText());
+                                if (pay.equals("In")){
+                                    intent.putExtra("value", "In");
+                                }
+                                else if (pay.equals("Out")){
+                                    intent.putExtra("value", "Out");
+                                }
+
+                                startActivity(intent);
+                                finish();
+                            }
+
+
+                        } else {
+
+                            if (book.BOOK_GROUP_ID.equals("0")){
+                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                RadioButton radioSexButton = findViewById(selectedId);
+                                ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                String pay = String.valueOf(radioSexButton.getText());
+                                ItemAdjustment.Quantity = quantityfor;
+                                ItemAdjustment.InOut = type;
+                                ItemAdjustment.BookId = book.BookNo;
+                                ItemAdjustment.BookNameBangla = book.BookNameBangla;
+                                ItemAdjustment.BookName = book.BookName;
+                                Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+                            }
+                            else {
+                                compositeDisposable.add(Common.bookStockRepository.getGroup(book.BOOK_GROUP_ID).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<GroupModel>>() {
+                                    @Override
+                                    public void accept(List<GroupModel> userActivities) throws Exception {
+
+                                        for (GroupModel groupModel : userActivities) {
+                                            int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                            int selectedId = radioLogin.getCheckedRadioButtonId();
+                                            RadioButton radioSexButton = findViewById(selectedId);
+                                            ItemAdjustment.stock = Integer.parseInt(bookQuantity.getText().toString())+quantityfor;
+
+                                            String pay = String.valueOf(radioSexButton.getText());
+                                            ItemAdjustment.Quantity = quantityfor;
+                                            ItemAdjustment.InOut = type;
+                                            ItemAdjustment.BookId = groupModel.BookNo;
+                                            ItemAdjustment.BookNameBangla = groupModel.BookNameBangla;
+                                            ItemAdjustment.BookName = groupModel.BookName;
+                                            Common.itemAdjustmentRepository.insertToItem(ItemAdjustment);
+                                        }
+                                    }
+                                }));
+                                Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+                                int quantityfor = Integer.parseInt(quantity.getText().toString());
+                                int selectedId = radioLogin.getCheckedRadioButtonId();
+                                RadioButton radioSexButton = findViewById(selectedId);
+
+                                String pay = String.valueOf(radioSexButton.getText());
+                                if (pay.equals("In")){
+                                    intent.putExtra("value", "In");
+                                }
+                                else if (pay.equals("Out")){
+                                    intent.putExtra("value", "Out");
+                                }
+
+                                startActivity(intent);
+                                finish();
+                            }
+
+
+
                         }
-
-
 
                     }
-                    Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
-                    intent.putExtra("value", "value");
-                    startActivity(intent);
-                    finish();
+
 
                 } else {
                     Toast.makeText(ItemAdjustmentActivity.this, "Quantity Field is required", Toast.LENGTH_SHORT).show();

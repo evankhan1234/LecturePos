@@ -63,11 +63,13 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
     double value2;
     InvoiceFilter filter;
     String valueFor;
+    String vals;
     //    SalesMasterClickInterface SalesMasterClickInterface;
-    public InvoiceAdapter(Activity activity, List<SalesMaster> messageEntitie, String value) {
+    public InvoiceAdapter(Activity activity, List<SalesMaster> messageEntitie, String value,String val) {
         mActivity = activity;
         messageEntities = messageEntitie;
         valueFor=value;
+        vals=val;
         //mClick = mClicks;
 
     }
@@ -84,14 +86,87 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 
     @Override
     public void onBindViewHolder(final InvoiceAdapter.SalesMasterListiewHolder holder, final int position) {
+       final String name = null;
 
         //   int row_index;
-       String name = "<b><font color=#000 ></font></b> <font color=#358ED3>"+messageEntities.get(position).CustomerName+"</font>";
+        if (valueFor.equals("Customer"))
+        {
+            holder.linLayoutAmountfaa.setVisibility(View.VISIBLE);
+            String type = "<b><font color=#000 >Payment Type :  </font></b> <font color=#358ED3>"+messageEntities.get(position).PayMode+"</font>";
+            holder.text_payment_type.setText(Html.fromHtml(type));
+            if (messageEntities.get(position).TrnType.equals("S")){
+                String invoice_total = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>+"+messageEntities.get(position).NetValue+"</font>";
+                holder.text_total.setText(String.valueOf(Html.fromHtml(invoice_total)));
+
+            }
+            else if (messageEntities.get(position).TrnType.equals("R")){
+                String invoice_total = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>-"+messageEntities.get(position).NetValue+"</font>";
+                holder.text_total.setText(String.valueOf(Html.fromHtml(invoice_total)));
+
+            }
+
+            compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+                @Override
+                public void accept(List<SalesDetails> units) throws Exception {
+                    Log.e("qert","ss"+new Gson().toJson(units));
+                    int qnt=0;
+                    String val = null;
+                    for (SalesDetails salesDetails:units){
+                        qnt=salesDetails.Quantity;
+                        if (messageEntities.get(position).TrnType.equals("S")){
+                            val="+";
+                        }
+                        else if (messageEntities.get(position).TrnType.equals("R")){
+                            val="-";
+                        }
+                        // value+=salesDetails.MRP;
+                        //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+                    }
+                    //tv_total.setText("Total Price: "+String.valueOf(price));
+                 String  name = "<b><font color=#000 >Total Quantity</font></b> <font color=#358ED3>"+val+qnt+"</font>";
+                    holder.text_name.setText(Html.fromHtml(name));
+                }
+            }));
+
+
+        }
+        else if (valueFor.equals("Adjustment")){
+            holder.linLayoutAmountfaa.setVisibility(View.GONE);
+
+            compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(messageEntities.get(position).InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+                @Override
+                public void accept(List<SalesDetails> units) throws Exception {
+                    Log.e("qert","ss"+new Gson().toJson(units));
+                    int qnt=0;
+                    String val = null;
+                    for (SalesDetails salesDetails:units){
+                        qnt=salesDetails.Quantity;
+//                        if (messageEntities.get(position).TrnType.equals("S")){
+//                            val="+";
+//                        }
+//                        else if (messageEntities.get(position).TrnType.equals("R")){
+//                            val="-";
+//                        }
+                        // value+=salesDetails.MRP;
+                        //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+                    }
+                    //tv_total.setText("Total Price: "+String.valueOf(price));
+                    String  name = "<b><font color=#000 >Total Quantity : </font></b> <font color=#358ED3>"+qnt+"</font>";
+                    holder.text_name.setText(Html.fromHtml(name));
+                }
+            }));
+        }
+        else {
+            String invoice_total = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>"+messageEntities.get(position).NetValue+"</font>";
+            holder.linLayoutAmountfaa.setVisibility(View.GONE);
+            String  names = "<b><font color=#000 ></font></b> <font color=#358ED3>"+messageEntities.get(position).CustomerName+"</font>";
+            holder.text_name.setText(Html.fromHtml(names));
+            holder.text_total.setText(String.valueOf(Html.fromHtml(invoice_total)));
+        }
        String store = "<b><font color=#000 >Store Id :  </font></b> <font color=#358ED3>"+messageEntities.get(position).StoreId+"</font>";
        String invoice_number = "<b><font color=#000 ></font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceNumber+"</font>";
        String retail_code = "<b><font color=#000 >Retail Code :  </font></b> <font color=#358ED3>"+messageEntities.get(position).RetailCode+"</font>";
        String invoice_date = "<b><font color=#000 ></font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceDates+"</font>";
-       String invoice_total = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>"+messageEntities.get(position).InvoiceAmount+"</font>";
 //        String text4 = "<b><font color=#000 >Total :  </font></b> <font color=#358ED3>"+messageEntities.get(position).Amount+"</font>";
 //        String text2 = "<font color=#358ED3>"+messageEntities.get(position).Quantity+"</font> <b><font color=#000 > * BDT </font></b>";
 //        String text3 = "<font color=#358ED3>"+messageEntities.get(position).Price+"</font> ";
@@ -100,7 +175,8 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         holder.text_code.setText(Html.fromHtml(retail_code));
     //    holder.text_invoice_date.setText(Html.fromHtml(invoice_date));
        // holder.text_discount.setText(String.valueOf(messageEntities.get(position).Discount));
-        holder.text_total.setText(String.valueOf(Html.fromHtml(invoice_total)));
+
+
 
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
 //                mActivity,
@@ -110,11 +186,12 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         if (messageEntities.get(position).TrnType.equals("A")){
             holder.text_create_invoice.setVisibility(View.GONE);
             holder.text_total.setVisibility(View.GONE);
-            holder.text_name.setVisibility(View.GONE);
+            //holder.text_name.setVisibility(View.GONE);
+
             holder.text_create_invoice_adjustment.setVisibility(View.VISIBLE);
         }
         else {
-            holder.text_name.setText(Html.fromHtml(name));
+
 
             holder.text_create_invoice.setVisibility(View.VISIBLE);
             holder.text_create_invoice_adjustment.setVisibility(View.GONE);
@@ -322,6 +399,8 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         private TextView text_view_details;
         private TextView text_create_invoice;
         private TextView text_total;
+        private TextView text_payment_type;
+        private RelativeLayout linLayoutAmountfaa;
         private RecyclerView rcl_this_customer_list;
         private View view_color;
 
@@ -331,6 +410,8 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
         public SalesMasterListiewHolder(View itemView) {
             super(itemView);
 
+            linLayoutAmountfaa = itemView.findViewById(R.id.linLayoutAmountfaa);
+            text_payment_type = itemView.findViewById(R.id.text_payment_type);
             text_name = itemView.findViewById(R.id.text_name);
             text_contact_number = itemView.findViewById(R.id.text_contact_number);
             text_invoice = itemView.findViewById(R.id.text_invoice);

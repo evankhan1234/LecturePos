@@ -155,8 +155,41 @@
                         android:textColor="#fff"
                         android:id="@+id/create"
                         android:background="@drawable/capsule_button" android:paddingTop="25px" android:paddingBottom="25px" android:layout_width="match_parent" android:layout_height="150px" android:layout_marginTop="10px" android:layout_marginBottom="25px" android:text="Scan For Books" android:fontFamily="sans-serif" android:stateListAnimator="@null" />
+                    <RadioGroup
+                        android:visibility="visible"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10px"
+
+                        android:orientation="horizontal"
+
+                        android:id="@+id/radioLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <RadioButton
+
+                            android:layout_marginRight="20px"
+                            android:tag="35"
+                            android:textSize="35px"
+                            android:id="@+id/radioIn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Stock In"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:tag="35"
+                            android:textSize="35px"
+                            android:layout_marginLeft="50px"
+                            android:id="@+id/radioOut"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Stock Out" />
+
+                    </RadioGroup>
 
                     <LinearLayout
+                        android:id="@+id/linear1"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
@@ -168,7 +201,56 @@
                         <Button
                             android:backgroundTint="@color/accept"
                             android:id="@+id/btn_scan"
-                            android:layout_width="420px"
+                            android:layout_width="440px"
+                            android:layout_height="140px"
+                            android:layout_gravity="center"
+
+                            android:layout_marginLeft="0px"
+                            android:layout_marginRight="15px"
+                            android:background="@drawable/btn_no"
+                            android:foreground="@drawable/ripple_corner"
+                            android:gravity="center"
+                            android:paddingBottom="5px"
+                            android:stateListAnimator="@null"
+                            android:tag="45"
+                            android:text="SCAN"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="45px" />
+                        <Button
+                            android:id="@+id/btn_input"
+                            android:layout_width="440px"
+                            android:layout_height="140px"
+                            android:layout_marginTop="-4px"
+                            android:background="@drawable/btn_no"
+                            android:foreground="@drawable/ripple_corner"
+                            android:paddingBottom="5px"
+                            android:stateListAnimator="@null"
+                            android:tag="45"
+                            android:text="INPUT"
+                            android:textColor="@color/white"
+
+                            android:textSize="45px"
+                            android:visibility="visible" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/linear2"
+
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10px"
+                        android:paddingBottom="13px"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:backgroundTint="@color/accept"
+                            android:id="@+id/btn_scan_out"
+                            android:layout_width="440px"
                             android:layout_height="140px"
                             android:layout_gravity="center"
 
@@ -186,9 +268,9 @@
                             android:textSize="45px" />
 
                         <Button
-                            android:id="@+id/btn_input"
 
-                            android:layout_width="420px"
+                            android:id="@+id/btn_input_out"
+                            android:layout_width="440px"
                             android:layout_height="140px"
                             android:layout_marginTop="-4px"
                             android:background="@drawable/btn_no"
@@ -201,6 +283,7 @@
 
                             android:textSize="45px"
                             android:visibility="visible" />
+
                     </LinearLayout>
                     <RelativeLayout
                         android:visibility="gone"

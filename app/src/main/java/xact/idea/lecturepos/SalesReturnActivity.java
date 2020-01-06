@@ -194,7 +194,7 @@ public class SalesReturnActivity extends AppCompatActivity {
 //
 
 
-                spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayList, "Select Book","R");
+                spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayList, "Select Book","R","");
                 spinnerDialogs.showSpinerDialog();
                 //showInfoDialog();
             }
@@ -247,7 +247,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayListAgain, "Select Book","R");
+                    spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayListAgain, "Select Book","R","");
                     spinnerDialogs.showSpinerDialog();
                 }
             }, 300);
@@ -397,7 +397,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                             salesMaster.InvoiceId = "12" + store + formatter.format(date) + totalValue;
                             salesMaster.StoreId = SharedPreferenceUtil.getUserID(SalesReturnActivity.this);
                             salesMaster.InvoiceNumber = "12" + store + formatter.format(date) + totalValue;
-                            SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss  a");
+                            SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss a");
                             Date dates1 = new Date(System.currentTimeMillis());
                             String currentTime = formatters.format(dates1);
                             salesMaster.InvoiceDates = edit_date.getText().toString() + " " + currentTime;
@@ -460,7 +460,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                             SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
                             Date date11 = new Date(System.currentTimeMillis());
                             String currentDate = formatter1.format(date11);
-                            SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss");
+                            SimpleDateFormat formatters1 = new SimpleDateFormat("hh:mm:ss a");
                             Date dates11 = new Date(System.currentTimeMillis());
                             String currentTime1 = formatters1.format(dates11);
                             SharedPreferenceUtil.saveShared(SalesReturnActivity.this, SharedPreferenceUtil.USER_TEST ,"12" + store + formatter.format(date) + totalValue);
@@ -814,7 +814,7 @@ public class SalesReturnActivity extends AppCompatActivity {
         CorrectSizeUtil.getInstance(this).correctSize(main_root);
         final SpinnerDialogFor spinnerDialogs;
 
-        spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayList, "Select Book","R");
+        spinnerDialogs = new SpinnerDialogFor(SalesReturnActivity.this, bookArrayList, "Select Book","R","");
         spinnerDialogs.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String item, int position) {

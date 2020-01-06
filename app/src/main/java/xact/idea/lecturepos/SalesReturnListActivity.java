@@ -143,7 +143,7 @@ public class SalesReturnListActivity extends AppCompatActivity {
     }
     private void displayCustomerItems(List<SalesMaster> userActivities) {
         //  showLoadingProgress(mActivity);
-        mAdapters = new InvoiceAdapter(this, userActivities,"Return");
+        mAdapters = new InvoiceAdapter(this, userActivities,"Return","");
 
         rcl_this_customer_list.setAdapter(mAdapters);
 

@@ -20,6 +20,7 @@ import xact.idea.lecturepos.Utils.Common;
 public class BarcodeAdjustmentActivity extends AppCompatActivity {
 
     TextView text;
+    String type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,7 @@ public class BarcodeAdjustmentActivity extends AppCompatActivity {
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         intentIntegrator.setPrompt("Scan Book");
         intentIntegrator.initiateScan();
-
+        type = getIntent().getStringExtra("TYPE");
     }
 
     @SuppressLint("MissingSuperCall")
@@ -54,6 +55,7 @@ public class BarcodeAdjustmentActivity extends AppCompatActivity {
                     if (bookStocks!=null){
                         Intent intent = new Intent(BarcodeAdjustmentActivity.this, ItemAdjustmentActivity.class);
                         intent.putExtra("EXTRA_SESSION", intentResult.getContents());
+                        intent.putExtra("TYPE", type);
                         startActivity(intent);
                         finish();
                     }
