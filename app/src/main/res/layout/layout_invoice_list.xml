@@ -186,6 +186,36 @@
                     android:textSize="35px"
                     android:textStyle="bold" />
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/linLayoutAmountfaa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+
+
+
+                <TextView
+                    android:id="@+id/text_payment_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10px"
+
+                    android:layout_weight="1"
+                    android:gravity="bottom|right|center_vertical|center_horizontal|center|end"
+                    android:paddingLeft="1px"
+                    android:paddingRight="1px"
+
+                    android:tag="35"
+                    android:text="zdczxv"
+                    android:textColor="@color/black"
+                    android:textSize="35px"
+                    android:textStyle="bold" />
+            </RelativeLayout>
             <LinearLayout
                 android:layout_gravity="center"
                 android:layout_centerInParent="true"

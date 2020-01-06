@@ -147,7 +147,7 @@ public class InvoiceListActivity extends AppCompatActivity {
     }
     private void displayCustomerItems(List<SalesMaster> userActivities) {
         //  showLoadingProgress(mActivity);
-        mAdapters = new InvoiceAdapter(this, userActivities,"Invoice");
+        mAdapters = new InvoiceAdapter(this, userActivities,"Invoice","");
 
         rcl_this_customer_list.setAdapter(mAdapters);
 

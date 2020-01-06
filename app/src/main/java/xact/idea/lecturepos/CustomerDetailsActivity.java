@@ -10,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -173,9 +174,9 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             }
         });
     }
-    private void displayCustomerItems(List<SalesMaster> userActivities) {
+    private void displayCustomerItems(List<SalesMaster> userActivities,String val) {
         //  showLoadingProgress(mActivity);
-        mAdapters = new InvoiceAdapter(this, userActivities,"Customer");
+        mAdapters = new InvoiceAdapter(this, userActivities,"Customer",val);
 
         rcl_this_customer_list.setAdapter(mAdapters);
 
@@ -197,7 +198,34 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         compositeDisposable.add(Common.salesMasterRepository.getDetailsActivityItemByDateByName(date1,date2,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
             public void accept(List<SalesMaster> userActivities) throws Exception {
-                displayCustomerItems(userActivities);
+                if (userActivities.size()==0){
+
+                }
+                for (SalesMaster salesMaster: userActivities)
+                {
+                    compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(salesMaster.InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+                        @Override
+                        public void accept(List<SalesDetails> units) throws Exception {
+                            Log.e("qert","ss"+new Gson().toJson(units));
+
+                            for (SalesDetails salesDetails:units){
+                                qnt=salesDetails.Quantity;
+                                if (salesMaster.TrnType.equals("S")){
+                                    val="+";
+                                }
+                                else if (salesMaster.TrnType.equals("R")){
+                                    val="-";
+                                }
+                                // value+=salesDetails.MRP;
+                                //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+                            }
+                            //tv_total.setText("Total Price: "+String.valueOf(price));
+
+                        }
+                    }));
+
+                }
+                displayCustomerItems(userActivities,val);
                 progress_bar.setVisibility(View.GONE);
 
             }
@@ -211,7 +239,8 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         onTotal();
 
     }
-
+    int qnt=0;
+    String val;
     private  void loadCustomer() {
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -228,11 +257,39 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         }
         compositeDisposable.add(Common.salesMasterRepository.getDetailsActivityItemByDateByName(date1,date1,shopName).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesMaster>>() {
             @Override
-            public void accept(List<SalesMaster> userActivities) throws Exception {
+            public void accept(List<SalesMaster> userActivities) throws Exception
+            {
                 if (userActivities.size()==0){
 
                 }
-                displayCustomerItems(userActivities);
+               for (SalesMaster salesMaster: userActivities)
+               {
+
+                   compositeDisposable.add(Common.salesDetailsRepository.getSalesDetailsItemById(salesMaster.InvoiceId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<SalesDetails>>() {
+                       @Override
+                       public void accept(List<SalesDetails> units) throws Exception {
+                           Log.e("qert","ss"+new Gson().toJson(units));
+
+                           for (SalesDetails salesDetails:units){
+                               qnt=salesDetails.Quantity;
+                               if (salesMaster.TrnType.equals("S")){
+                                   val="+";
+                               }
+                               else if (salesMaster.TrnType.equals("R")){
+                                   val="-";
+                               }
+                               // value+=salesDetails.MRP;
+                               //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
+                           }
+                           //tv_total.setText("Total Price: "+String.valueOf(price));
+
+                       }
+                   }));
+
+
+               }
+                displayCustomerItems(userActivities,qnt+val);
+
                 Log.e("fsd","dfsdf"+new Gson().toJson(userActivities));
                 // Log.e("fsd","dfsdf"+date);
 //                for (SalesMaster salesMaster:userActivities){
@@ -252,7 +309,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
     }
     int book=0;
-    private void loadSub(String invoice){
+    private void loadSub(String invoice,String TrnType){
         String startDate=edit_start_date.getText().toString();
         String endDate=edit_end_date.getText().toString();
         Date date1 = null;
@@ -272,7 +329,13 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                 for (SalesDetails salesDetails:units){
                     // value+=salesDetails.MRP;
                     //   double ss=salesDetails.MRP* (1-salesDetails.Discount/100);
-                    book+=salesDetails.Quantity;
+                    if (TrnType.equals("S")){
+                        book+=salesDetails.Quantity;
+                    }
+                    else if (TrnType.equals("R")){
+                        book-=salesDetails.Quantity;
+                    }
+
 
                     //value +=salesDetails.Quantity * salesDetails.MRP* (1-salesDetails.Discount/100);
                 }
@@ -305,21 +368,36 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                   double value = 0;
                   double cash= 0;
                   double credit= 0;
-                  for (SalesMaster salesMaster:userActivities){
+                  for (SalesMaster salesMaster:userActivities)
+                  {
 
-                      value+=salesMaster.NetValue;
-                      if (salesMaster.PayMode.equals("Cash")){
-                          Log.e("NetValue","NetValue"+salesMaster.NetValue);
-                          cash+=salesMaster.InvoiceAmount;
+                      if (salesMaster.TrnType.equals("S")){
+                          value+=salesMaster.NetValue;
+                          if (salesMaster.PayMode.equals("Cash")){
+                              Log.e("NetValue","NetValue"+salesMaster.NetValue);
+                              cash+=salesMaster.InvoiceAmount;
+                          }
+                          if (salesMaster.PayMode.equals("Credit")){
+                              credit+=salesMaster.InvoiceAmount;
+                          }
+                          loadSub(salesMaster.InvoiceId,salesMaster.TrnType);
                       }
-                      if (salesMaster.PayMode.equals("Credit")){
-                          credit+=salesMaster.InvoiceAmount;
+                      else if (salesMaster.TrnType.equals("R")){
+                          value-=salesMaster.NetValue;
+                          if (salesMaster.PayMode.equals("Cash")){
+                              Log.e("NetValue","NetValue"+salesMaster.NetValue);
+                              cash-=salesMaster.InvoiceAmount;
+                          }
+                          if (salesMaster.PayMode.equals("Credit")){
+                              credit-=salesMaster.InvoiceAmount;
+                          }
+                          loadSub(salesMaster.InvoiceId,salesMaster.TrnType);
                       }
-                      loadSub(salesMaster.InvoiceId);
+
                   }
-                  text_cash.setText(String.valueOf(Utils.getCommaValue(cash)));
-                  text_net_price.setText(String.valueOf(Utils.getCommaValue(value)));
-                  text_credit.setText(String.valueOf(credit));
+                  text_cash.setText(String.valueOf(Utils.rounded(cash,2)));
+                  text_net_price.setText(String.valueOf(Utils.rounded(value,2)));
+                  text_credit.setText(String.valueOf(Utils.rounded(credit,2)));
                   progress_bar.setVisibility(View.GONE);
               }
               else {

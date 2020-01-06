@@ -231,6 +231,7 @@
 
                 </LinearLayout>
                 <RadioGroup
+                    android:visibility="gone"
                     android:layout_gravity="center"
                     android:layout_marginTop="10px"
 

@@ -21,4 +21,6 @@ public class ItemAdjustment {
     public String BookId;
     @ColumnInfo(name = "InOut")
     public String InOut;
+    @ColumnInfo(name = "stock")
+    public int stock;
 }

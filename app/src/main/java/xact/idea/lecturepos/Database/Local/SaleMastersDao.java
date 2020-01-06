@@ -32,11 +32,11 @@ public interface SaleMastersDao {
     @Query("Select *  FROM sales_mst WHERE id=:id")
     SalesMaster invoice(int id);
 
-    @Query("SELECT * FROM sales_mst WHERE TrnType=:Trn AND InvoiceDate BETWEEN :from AND :to order By InvoiceDate Desc")
+    @Query("SELECT * FROM sales_mst WHERE TrnType=:Trn AND InvoiceDate BETWEEN :from AND :to order By InvoiceDate, id Desc")
     Flowable<List<SalesMaster>> getInvoiceActivityItemByDate(Date from, Date to,String Trn);
-    @Query("SELECT * FROM sales_mst WHERE  TrnType=:Trn AND InvoiceDate BETWEEN :from AND :to AND CustomerName=:Name order By InvoiceDate Desc")
+    @Query("SELECT * FROM sales_mst WHERE  TrnType=:Trn AND InvoiceDate BETWEEN :from AND :to AND CustomerName=:Name order By InvoiceDate, id Desc")
     Flowable<List<SalesMaster>> getInvoiceActivityItemByDateByName(Date from, Date to,String Name,String Trn);
-    @Query("SELECT * FROM sales_mst WHERE  InvoiceDate BETWEEN :from AND :to AND CustomerName=:Name order By InvoiceDate Desc")
+    @Query("SELECT * FROM sales_mst WHERE  InvoiceDate BETWEEN :from AND :to AND CustomerName=:Name order By InvoiceDate,id Desc")
     Flowable<List<SalesMaster>> getDetailsActivityItemByDateByName(Date from, Date to,String Name);
     @Query("DELETE  FROM sales_mst")
     void emptySalesDetails();

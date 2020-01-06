@@ -47,11 +47,13 @@ public class SpinnerDialogFor implements Filterable {
     ArrayAdapter adapter;
     BookListAdapter mAdapters;
     String values;
-    public SpinnerDialogFor(Activity activity, ArrayList<String> items, String dialogTitle,String value) {
+    String types;
+    public SpinnerDialogFor(Activity activity, ArrayList<String> items, String dialogTitle,String value,String type) {
         this.items = items;
         this.context = activity;
         this.dTitle = dialogTitle;
         this.values = value;
+        this.types = type;
     }
 
 
@@ -162,6 +164,7 @@ public class SpinnerDialogFor implements Filterable {
                 if (book != null) {
                     Intent intent = new Intent(context, ItemAdjustmentActivity.class);
                     intent.putExtra("EXTRA_SESSION", book.BARCODE_NUMBER);
+                    intent.putExtra("TYPE", types);
                     context.startActivity(intent);
                     context.finish();
                     //infoDialog.dismiss();

@@ -1077,7 +1077,7 @@ public class MainActivity extends AppCompatActivity {
                     String currentTime = formatters.format(dates);
                     salesMaster.UpdDate = currentDate + " " + currentTime;
                     salesMaster.Phone = sales.PhoneNumber;
-                    List<SalesModel.SalesMaster.SalesDetails> getList = getList(sales.InvoiceId);
+                    List<SalesModel.SalesMaster.SalesDetails> getList = getList(sales.InvoiceId,sales.TrnType);
 
                     salesMaster.salesDetails = getList;
                     syncs.add(salesMaster);
@@ -1307,7 +1307,7 @@ public class MainActivity extends AppCompatActivity {
         }));
     }
 
-    private List<SalesModel.SalesMaster.SalesDetails> getList(String id) {
+    private List<SalesModel.SalesMaster.SalesDetails> getList(String id,String type) {
         List<SalesModel.SalesMaster.SalesDetails> salesDetails = new ArrayList<>();
 
         Flowable<List<SalesDetails>> units = Common.salesDetailsRepository.getSalesDetailsItemById(id);
@@ -1330,7 +1330,14 @@ public class MainActivity extends AppCompatActivity {
             String currentTime = formatters.format(dates);
             details.UpdDate = currentDate + " " + currentTime;
             details.TotalAmount = String.valueOf(salesDetails1.TotalAmount);
-            details.Quantity = String.valueOf(salesDetails1.Quantity);
+            if (type.equals("A")){
+                details.Quantity = String.valueOf(salesDetails1.QTY);
+
+            }
+            else {
+                details.Quantity = String.valueOf(salesDetails1.Quantity);
+
+            }
             salesDetails.add(details);
         }
         return salesDetails;
