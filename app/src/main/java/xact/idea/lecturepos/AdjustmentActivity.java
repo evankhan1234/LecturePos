@@ -100,6 +100,7 @@ public class AdjustmentActivity extends AppCompatActivity {
     private ArrayList<String> bookArrayListOutAgain = new ArrayList<>();
     String Name;
     String sessionId;
+    String types;
     String dataId;
     SpinnerDialogCustomer spinnerDialog;
     SpinnerDialogFor spinnerDialogs;
@@ -229,12 +230,24 @@ public class AdjustmentActivity extends AppCompatActivity {
 ///        Common.bookRepository.getBookItemAdjustment();
 
         sessionId = getIntent().getStringExtra("value");
+        types = getIntent().getStringExtra("types");
+        if (types==null){
+
+        }
+        else if (types.equals("In")){
+            radioIn.setChecked(true);
+        }
+        else if (types.equals("Out")){
+            radioOut.setChecked(true);
+        }
+
         dataId = getIntent().getStringExtra("data");
         //customerListData();
 
         if (sessionId == null) {
             //   showInfoDialog();
         } else if (sessionId.equals("In")) {
+
             compositeDisposable.add(Common.bookStockRepository.getBookStockModelReturenAdjustment().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
                 @Override
                 public void accept(List<StockModel> books) throws Exception {
@@ -258,6 +271,7 @@ public class AdjustmentActivity extends AppCompatActivity {
 
         }
         else if (sessionId.equals("Out")) {
+
             compositeDisposable.add(Common.bookStockRepository.getBookStockModel().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<StockModel>>() {
                 @Override
                 public void accept(List<StockModel> books) throws Exception {

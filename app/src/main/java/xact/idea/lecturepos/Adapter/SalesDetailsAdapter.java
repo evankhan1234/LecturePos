@@ -78,6 +78,23 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
         holder.text_name.setText(book.BookNameBangla);
      //   holder.text_book_code.setText(Html.fromHtml(textId));
         holder.text_quantity.setText(String.valueOf(messageEntities.get(position).Quantity));
+        if (messageEntities.get(position).QTY==0){
+            if (messageEntities.get(position).Quantity>0){
+                holder.text_type.setText("In");
+            }
+            else {
+                holder.text_type.setText("Out");
+            }
+        }
+        else {
+            if (messageEntities.get(position).QTY>0){
+                holder.text_type.setText("In");
+            }
+            else {
+                holder.text_type.setText("Out");
+            }
+        }
+
 
     //    holder.text_total.setText(Html.fromHtml(text4));
 
@@ -92,6 +109,7 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
 
         private TextView text_name;
         private TextView text_quantity;
+        private TextView text_type;
 
      //   private TextView text_book_code;
 
@@ -103,6 +121,7 @@ public class SalesDetailsAdapter extends RecyclerView.Adapter<SalesDetailsAdapte
 
             text_name = itemView.findViewById(R.id.text_name);
             text_quantity = itemView.findViewById(R.id.text_quantity);
+            text_type = itemView.findViewById(R.id.text_type);
 
          //   text_discount = itemView.findViewById(R.id.text_discount);
 

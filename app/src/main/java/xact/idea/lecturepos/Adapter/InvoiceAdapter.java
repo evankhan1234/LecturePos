@@ -140,7 +140,23 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
                     int qnt=0;
                     String val = null;
                     for (SalesDetails salesDetails:units){
-                        qnt=salesDetails.Quantity;
+                        qnt+=salesDetails.Quantity;
+                        if (salesDetails.QTY==0){
+                            if (salesDetails.Quantity>0){
+                                val="In";
+                            }
+                            else {
+                                val="Out";
+                            }
+                        }
+                        else {
+                            if (salesDetails.QTY>0){
+                                val="In";
+                            }
+                            else {
+                                val="Out";
+                            }
+                        }
 //                        if (messageEntities.get(position).TrnType.equals("S")){
 //                            val="+";
 //                        }
@@ -152,7 +168,9 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
                     }
                     //tv_total.setText("Total Price: "+String.valueOf(price));
                     String  name = "<b><font color=#000 >Total Quantity : </font></b> <font color=#358ED3>"+qnt+"</font>";
+                    String  type = "<b><font color=#000 >Stock Type : </font></b> <font color=#358ED3>"+val+"</font>";
                     holder.text_name.setText(Html.fromHtml(name));
+                    holder.text_total.setText(Html.fromHtml(type));
                 }
             }));
         }
@@ -185,7 +203,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.SalesMas
 //        );
         if (messageEntities.get(position).TrnType.equals("A")){
             holder.text_create_invoice.setVisibility(View.GONE);
-            holder.text_total.setVisibility(View.GONE);
+            holder.text_total.setVisibility(View.VISIBLE);
             //holder.text_name.setVisibility(View.GONE);
 
             holder.text_create_invoice_adjustment.setVisibility(View.VISIBLE);

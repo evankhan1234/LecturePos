@@ -126,6 +126,8 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, login.USER_ID + "");
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, login.CUSTOMER_NAME + "");
                                 SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_ADDRESS, login.CUSTOMER_ADDRESS + "");
+                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_ADDRESS_B, login.CUSTOMER_ADDRESS_B + "");
+                                SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_NAME_B, login.CUSTOMER_NAME_B+ "");
                                 if (SharedPreferenceUtil.getSync(LoginActivity.this).equals("green")) {
                                     SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_SYNC, "green");
                                 } else {
@@ -152,6 +154,8 @@ public class LoginActivity extends AppCompatActivity {
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_ID, loginEntity.user_id + "");
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.TYPE_USER_NAME, loginEntity.data.CUSTOMER_NAME + "");
                                         SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_ADDRESS, loginEntity.data.CUSTOMER_ADDRESS + "");
+                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_ADDRESS_B, loginEntity.data.CUSTOMER_ADDRESS_B + "");
+                                        SharedPreferenceUtil.saveShared(LoginActivity.this, SharedPreferenceUtil.USER_NAME_B, loginEntity.data.CUSTOMER_NAME_B+ "");
                                         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                                         Date date = new Date(System.currentTimeMillis());
                                         String currentDate = formatter.format(date);

@@ -175,7 +175,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Stock In"
-                            android:checked="true" />
+                             />
 
                         <RadioButton
                             android:tag="35"
@@ -189,6 +189,7 @@
                     </RadioGroup>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:id="@+id/linear1"
                         android:gravity="center"
                         android:layout_gravity="center"

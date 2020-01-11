@@ -1,5 +1,7 @@
 package xact.idea.lecturepos.Model;
 
+import androidx.room.ColumnInfo;
+
 import com.google.gson.annotations.SerializedName;
 
 public class LoginEntity {
@@ -25,7 +27,10 @@ public class LoginEntity {
         public String  CUSTOMER_NAME;
         @SerializedName("CUSTOMER_ADDRESS")
         public String  CUSTOMER_ADDRESS;
-
+        @SerializedName("CUSTOMER_NAME_B")
+        public String CUSTOMER_NAME_B;
+        @SerializedName("CUSTOMER_ADDRESS_B")
+        public String CUSTOMER_ADDRESS_B;
 
 
 

@@ -472,7 +472,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                             Constant.name="";
                             Constant.rate="rate12";
                             Common.itemReturnRepository.emptyItem();
-                            Intent intent = new Intent(SalesReturnActivity.this, InvoicePrintActivity.class);
+                            Intent intent = new Intent(SalesReturnActivity.this, TemporaryActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

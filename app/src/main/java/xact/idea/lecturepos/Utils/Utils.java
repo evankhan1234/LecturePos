@@ -125,6 +125,12 @@ public  class Utils {
                 replaceString = s.replace('.', '.');
                 stringBuilderBookTotalPrice.append(replaceString);
             }
+            else if (c2 == '-') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace('.', '.');
+                stringBuilderBookTotalPrice.append(replaceString);
+            }
 
 
         }

@@ -748,7 +748,7 @@ public class MainActivity extends AppCompatActivity {
                 for (StockResponse.Data stock : challanDetailsModel.data) {
 
 
-                    BookStock bookStocks = Common.bookStockRepository.getBookStock(stock.BOOK_ID);
+                    BookStock bookStocks = Common.bookStockRepository.getBookStock(stock.BOOK_NO);
                     // int qty =Common.bookStockRepository.maxValue(stock.BOOK_ID);
                     if (bookStocks != null) {
 //                        BookStock bookStock = new BookStock();
@@ -765,14 +765,14 @@ public class MainActivity extends AppCompatActivity {
 //
 //                        Common.bookStockRepository.updateBookStock(bookStock);
                     } else {
-                        Book book = Common.bookRepository.getBookNo(stock.BOOK_ID);
+                        Book book = Common.bookRepository.getBookNo(stock.BOOK_NO);
                         if (book!=null){
                             BookStock bookStock = new BookStock();
-                            bookStock.BOOK_ID = stock.BOOK_ID;
+                            bookStock.BOOK_ID = stock.BOOK_NO;
                             bookStock.BOOK_NET_MRP = Double.parseDouble(book.BOOK_NET_PRICE);
                             bookStock.STORE_ID = SharedPreferenceUtil.getUserID(MainActivity.this);
-                            bookStock.QTY_NUMBER = Integer.parseInt(stock.QTY);
-                            bookStock.BOOK_NET_PRICES = Double.parseDouble(book.BOOK_NET_PRICE) * Integer.parseInt(stock.QTY);
+                            bookStock.QTY_NUMBER = Integer.parseInt(stock.BAL_QTY);
+                            bookStock.BOOK_NET_PRICES = Double.parseDouble(book.BOOK_NET_PRICE) * Integer.parseInt(stock.BAL_QTY);
                             // bookStock.LAST_UPDATE_DATE_APP = "";
                             // bookStock.LAST_UPDATE_DATE = bookStocks.LAST_UPDATE_DATE;
                             Common.bookStockRepository.insertToBookStock(bookStock);
@@ -805,7 +805,7 @@ public class MainActivity extends AppCompatActivity {
                 for (ChallanResponseEntity.Data books : challanResponseEntity.data) {
                     Challan challan = new Challan();
 
-                    Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(books.CHALLAN_DATE);
+                    Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(books.CHALLAN_DATE);
                     challan.CHALLAN_CODE = books.CHALLAN_CODE;
                     challan.Date = date1;
                     challan.receive_date = books.RECEIVE_DAT;
@@ -877,7 +877,7 @@ public class MainActivity extends AppCompatActivity {
                     Challan challan = new Challan();
                     Date datess = null;
                     //SimpleDateFormat formatterss = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-                    SimpleDateFormat formatterss = new SimpleDateFormat("dd-MMM-yy");
+                    SimpleDateFormat formatterss = new SimpleDateFormat("dd/MM/yyyy");
                     try {
                         datess = formatterss.parse(books.RECEIVE_DAT);
                         Log.e("currentTime", "currentTime" + datess);
@@ -889,7 +889,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Date date1 = null;
                         // SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-                        SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
+                        SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
                         try {
                             date1 = formatter1.parse(challan1.receive_date);
                             Log.e("currentTime", "currentTime" + date1);
@@ -911,7 +911,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     } else {
-                        Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(books.CHALLAN_DATE);
+                        Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(books.CHALLAN_DATE);
                         challan.CHALLAN_CODE = books.CHALLAN_CODE;
                         challan.Date = date1;
                         challan.receive_date = books.RECEIVE_DAT;
@@ -1177,7 +1177,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
                         SalesMaster salesMaster1 = new SalesMaster();
-                        Date date1 = new SimpleDateFormat("dd-MMM-yy").parse(customer.INV_DATE);
+                        Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(customer.INV_DATE);
                         final SimpleDateFormat formatterq = new SimpleDateFormat("dd-MM-yyyy");
                        // final Date dateq = new Date(System.currentTimeMillis());
                         //   String currentDate =formatterq.format(dateq);
