@@ -144,6 +144,9 @@ public class AdjustmentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 linear1.setVisibility(View.VISIBLE);
                 linear2.setVisibility(View.GONE);
+                radioOut.setVisibility(View.GONE);
+                radioIn.setVisibility(View.VISIBLE);
+
             }
         });
         radioOut.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +154,8 @@ public class AdjustmentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 linear1.setVisibility(View.GONE);
                 linear2.setVisibility(View.VISIBLE);
+                radioOut.setVisibility(View.VISIBLE);
+                radioIn.setVisibility(View.GONE);
             }
         });
 
@@ -236,9 +241,13 @@ public class AdjustmentActivity extends AppCompatActivity {
         }
         else if (types.equals("In")){
             radioIn.setChecked(true);
+            radioOut.setVisibility(View.GONE);
+            radioIn.setVisibility(View.VISIBLE);
         }
         else if (types.equals("Out")){
             radioOut.setChecked(true);
+            radioIn.setVisibility(View.GONE);
+            radioOut.setVisibility(View.VISIBLE);
         }
 
         dataId = getIntent().getStringExtra("data");
@@ -523,6 +532,15 @@ public class AdjustmentActivity extends AppCompatActivity {
         super.onResume();
         loadBookItemAdjustmentFor();
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Common.itemAdjustmentRepository.emptyItem();
+        Intent intent = new Intent(AdjustmentActivity.this,AdjustmentListActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 
