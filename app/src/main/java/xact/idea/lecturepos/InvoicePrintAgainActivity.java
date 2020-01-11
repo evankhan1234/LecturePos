@@ -2,12 +2,28 @@ package xact.idea.lecturepos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,8 +42,16 @@ import com.mazenrashed.printooth.ui.ScanningActivity;
 import com.mazenrashed.printooth.utilities.Printing;
 import com.mazenrashed.printooth.utilities.PrintingCallback;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -39,9 +63,13 @@ import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Model.SalesDetailPrintModel;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.PrintPic;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
+import xact.idea.lecturepos.Utils.UnicodeFormatter;
 
-public class InvoicePrintAgainActivity  extends AppCompatActivity {
+import static xact.idea.lecturepos.Utils.Utils.getValue;
+
+public class InvoicePrintAgainActivity  extends AppCompatActivity implements Runnable {
 
     String invoiceId;
     String customerName;
@@ -79,15 +107,26 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
     Customer customer;
     SalesMaster salesMaster;
     ImageButton btn_header_back;
+    protected static final String TAG = "TAG";
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+    boolean test=false;
+    BluetoothAdapter mBluetoothAdapter;
+    private UUID applicationUUID = UUID
+            .fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private ProgressDialog mBluetoothConnectProgressDialog;
+    private BluetoothSocket mBluetoothSocket;
+    BluetoothDevice mBluetoothDevice;
 
+ 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice_print_again);
-        if (Printooth.INSTANCE.hasPairedPrinter())
-            printing = Printooth.INSTANCE.printer();
-        //initViews();
-        initListeners();
+//        if (Printooth.INSTANCE.hasPairedPrinter())
+//            printing = Printooth.INSTANCE.printer();
+//        //initViews();
+//        initListeners();
 
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
@@ -189,13 +228,176 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
 //                        }
 //                    });
                     create_challan.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                        public void onClick(View mView) {
+                            if (test){
+                                Thread t = new Thread() {
+                                    public void run() {
+                                        try {
 
-                            if (!Printooth.INSTANCE.hasPairedPrinter())
-                                startActivityForResult(new Intent(InvoicePrintAgainActivity.this, ScanningActivity.class), ScanningActivity.SCANNING_FOR_PRINTER);
-                            else
-                                printSomePrintable();
+                                            final OutputStream os = mBluetoothSocket
+                                                    .getOutputStream();
+                                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                                            Date date = new Date(System.currentTimeMillis());
+                                            String currentDate = formatter.format(date);
+                                            SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                                            Date dates = new Date(System.currentTimeMillis());
+                                            String currentTime = formatters.format(dates);
+                                            String BILL = "";
+
+                                            String datesss=getValue(formatter.format(salesMaster.InvoiceDate));
+                                            String inv=getValue(salesMaster.InvoiceNumber);
+                                            String mobile=getValue(customer.MobileNumber);
+
+                                            BILL = "               " + SharedPreferenceUtil.getUserNameBangla(InvoicePrintAgainActivity.this) + " \n" +
+                                                    "                 " + SharedPreferenceUtil.getUserAddressBangla(InvoicePrintAgainActivity.this)  + "  \n" +
+                                                    "    (লেকচার পাবলিকেশন লিমিটেড অনুমোদিত এজেন্ট)      \n \n" +
+                                                    "ইনভয়েস নং: " + inv + "\n" +
+                                                    "      তারিখ : " + datesss + "\n" +
+
+                                                    "    গ্রন্থাগার নাম: " + customer.ShopName + " \n" +
+                                                    "    গ্রাহক নাম: " + customer.Name + " \n" +
+                                                    "   মোবাইল নং: " + mobile + "\n" +
+                                                    "\n";
+                                            BILL = BILL
+                                                    + "-----------------------------------------------------------------\n";
+
+
+                                            BILL = BILL + String.format("%-35s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
+                                            BILL = BILL + "\n";
+                                            BILL = BILL
+                                                    + "------------------------------------------------------------------";
+
+                                            for (SalesDetailPrintModel salesDetailPrintModel : printModels) {
+
+                                                String value;
+
+                                                String quantity = getValue(String.valueOf(salesDetailPrintModel.Quantity));
+                                                String rate = getValue(String.valueOf(salesDetailPrintModel.BookPrice));
+                                                double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice) * (1 - Double.parseDouble(salesDetailPrintModel.Discount) / 100);
+                                                double ww = Double.parseDouble(salesDetailPrintModel.BookPrice) * (1 - Double.parseDouble(salesDetailPrintModel.Discount) / 100);
+                                                String totalPrice = getValue(String.valueOf(price));
+                                                String wws = getValue(String.valueOf(ww));
+                                                String bookName = salesDetailPrintModel.BookNameBangla;
+                                                if (bookName.length() > 15) {
+                                                    value = bookName.substring(0, 15);
+                                                } else {
+                                                    value = salesDetailPrintModel.BookNameBangla;
+                                                }
+
+                                                BILL = BILL + "\n" + String.format("%-35s%-15s%-15s%-10s", value, quantity, wws, totalPrice);
+                                            }
+
+                                            String cc;
+                                            if (salesMaster.Return != null) {
+                                                cc = salesMaster.Return;
+
+                                            } else {
+                                                cc = "";
+                                            }
+                                            BILL = BILL
+                                                    + "------------------------------------------------------------------";
+                                            BILL = BILL + "\n";
+                                            String subTotal = getValue(salesMaster.SubTotal);
+                                            String Total = getValue(String.valueOf(salesMaster.NetValue));
+                                            String Return = getValue(String.valueOf(salesMaster.Return));
+                                            String Discount = getValue(String.valueOf(salesMaster.Discount));
+                                            BILL = BILL + "                       মোট টাকা    :" + "  " + subTotal + " (ট )" + "\n";
+                                            BILL = BILL + "                       ছাড়        :" + "  " + Discount + " %" + "\n";
+                                            BILL = BILL + "                       ফেরৎ        :" + "  " + Return + " (ট )" + "\n";
+                                            BILL = BILL + "                       নেট টাকা     :" + " " + Total + " (ট )" + "\n";
+                                            BILL = BILL + "                  পরিশোধিত     :" + " " + salesMaster.PayMode + ""+"\n";
+
+                                            BILL = BILL
+                                                    + "------------------------------------------------------------------\n";
+                                            BILL=  BILL  + "  আপনার সহযোগিতার জন্য ধন্যবাদ\n";
+                                            BILL=  BILL  + "  Developed By                               Printed At\n";
+                                            BILL=  BILL  + "  www.xactidea.com                 "+currentDate+" "+currentTime+"\n";
+                                            BILL = BILL + "\n\n";
+                                            BILL = BILL + "\n\n";
+                                            BILL = BILL + "\n\n";
+                                            BILL = BILL + "\n\n";
+                                            BILL = BILL + "\n\n";
+
+                                            Drawable d = ContextCompat.getDrawable(InvoicePrintAgainActivity.this, R.mipmap.ic_launcher);
+//
+                                            TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG
+                                                    | Paint.LINEAR_TEXT_FLAG);
+                                            textPaint.setStyle(Paint.Style.FILL);
+                                            textPaint.setTextSize(25);
+
+                                            StaticLayout mTextLayout = new StaticLayout(BILL, textPaint,
+                                                    570, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+
+                                            // Create bitmap and canvas to draw to
+                                            Bitmap b = Bitmap.createBitmap(770, mTextLayout.getHeight(), Bitmap.Config.RGB_565);
+                                            Canvas c = new Canvas(b);
+
+                                            // Draw background
+                                            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG
+                                                    | Paint.LINEAR_TEXT_FLAG);
+                                            paint.setStyle(Paint.Style.FILL);
+                                            paint.setColor(Color.WHITE);
+                                            c.drawPaint(paint);
+
+                                            // Draw text
+                                            c.save();
+                                            c.translate(0, 0);
+                                            mTextLayout.draw(c);
+                                            c.restore();
+//
+                                            PrintPic printPic = PrintPic.getInstance();
+                                            printPic.init(b);
+                                            byte[] bitmapdata = printPic.printDraw();
+                                            os.write(bitmapdata);
+
+                                            int gs = 29;
+                                            os.write(intToByteArray(gs));
+                                            int h = 104;
+                                            os.write(intToByteArray(h));
+                                            int n = 162;
+                                            os.write(intToByteArray(n));
+
+                                            // Setting Width
+                                            int gs_width = 29;
+                                            os.write(intToByteArray(gs_width));
+                                            int w = 119;
+                                            os.write(intToByteArray(w));
+                                            int n_width = 2;
+                                            os.write(intToByteArray(n_width));
+                                            oStream = new PrintWriter(mBluetoothSocket.getOutputStream());
+
+                                            oStream.write(0x1D);
+                                            oStream.write(86);
+                                            oStream.write(48);
+                                            oStream.write(0);
+
+                                        } catch (Exception e) {
+                                            Log.e("InvoicePrintAgainAivity", "Exe ", e);
+                                        }
+                                    }
+                                };
+                                t.start();
+                            }
+                            else {
+                                mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                                if (mBluetoothAdapter == null) {
+                                    Toast.makeText(InvoicePrintAgainActivity.this, "Message1", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (!mBluetoothAdapter.isEnabled()) {
+                                        Intent enableBtIntent = new Intent(
+                                                BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                        startActivityForResult(enableBtIntent,
+                                                REQUEST_ENABLE_BT);
+                                    } else {
+                                        ListPairedDevices();
+                                        Intent connectIntent = new Intent(InvoicePrintAgainActivity.this,
+                                                DeviceListActivity.class);
+                                        startActivityForResult(connectIntent,
+                                                REQUEST_CONNECT_DEVICE);
+                                    }
+                                }
+
+                            }
 
                         }
                     });
@@ -254,13 +456,10 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
     }
 
     private void printSomePrintable() {
-        Log.d("xxx", "printSomePrintable ");
-        if (printing != null)
-            printing.print(getSomePrintables());
-        //  getSomePrintables();
+        getSomePrintables();
     }
 
-    private ArrayList<Printable> getSomePrintables() {
+    private void getSomePrintables() {
 
 
         ArrayList<Printable> al = new ArrayList<>();
@@ -390,11 +589,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
         BILLS = BILLS + "\n\n\n\n\n\n\n\n";
 //
 
-        al.add((new TextPrintable.Builder())
-                .setText(BILLS)
-                .setCharacterCode(DefaultPrinter.Companion.getCHARCODE_PC1252())
-                .setNewLinesAfter(1)
-                .build());
+      
 //                .setText("Hello World : été è à €")
 //                .setCharacterCode(DefaultPrinter.Companion.getCHARCODE_PC1252())
 //                .setNewLinesAfter(1)
@@ -428,9 +623,8 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
 //                .setCustomConverter(new ArabicConverter()) // change only the converter for this one
 //                .build());
 
-        return al;
     }
-
+    PrintWriter oStream;
     private void printSomePrintableChalan() {
         Log.d("xxx", "printSomePrintable ");
         if (printing != null)
@@ -642,6 +836,8 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+
 //        compositeDisposable.clear();
         if (valueFor.equals("Adjustment")){
             Intent intent = new Intent(InvoicePrintAgainActivity.this, AdjustmentListActivity.class);
@@ -651,6 +847,13 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             startActivity(intent);
+            try {
+                if (mBluetoothSocket != null)
+                    mBluetoothSocket.close();
+            } catch (Exception e) {
+                Log.e("Tag", "Exe ", e);
+            }
+            setResult(RESULT_CANCELED);
             finish();
         }
         else  if (valueFor.equals("Customer")){
@@ -662,6 +865,13 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             startActivity(intent);
+            try {
+                if (mBluetoothSocket != null)
+                    mBluetoothSocket.close();
+            } catch (Exception e) {
+                Log.e("Tag", "Exe ", e);
+            }
+            setResult(RESULT_CANCELED);
             finish();
         }
         else  if (valueFor.equals("Invoice")){
@@ -672,6 +882,13 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             startActivity(intent);
+            try {
+                if (mBluetoothSocket != null)
+                    mBluetoothSocket.close();
+            } catch (Exception e) {
+                Log.e("Tag", "Exe ", e);
+            }
+            setResult(RESULT_CANCELED);
             finish();
         }
         else  if (valueFor.equals("Return")){
@@ -682,11 +899,106 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             startActivity(intent);
+            try {
+                if (mBluetoothSocket != null)
+                    mBluetoothSocket.close();
+            } catch (Exception e) {
+                Log.e("Tag", "Exe ", e);
+            }
+            setResult(RESULT_CANCELED);
             finish();
         }
 
 
 
      //   super.onBackPressed();
+    }
+    public void onActivityResult(int mRequestCode, int mResultCode,
+                                 Intent mDataIntent) {
+        super.onActivityResult(mRequestCode, mResultCode, mDataIntent);
+
+        switch (mRequestCode) {
+            case REQUEST_CONNECT_DEVICE:
+                if (mResultCode == Activity.RESULT_OK) {
+                    Bundle mExtra = mDataIntent.getExtras();
+                    String mDeviceAddress = mExtra.getString("DeviceAddress");
+                    Log.v(TAG, "Coming incoming address " + mDeviceAddress);
+                    mBluetoothDevice = mBluetoothAdapter
+                            .getRemoteDevice(mDeviceAddress);
+                    mBluetoothConnectProgressDialog = ProgressDialog.show(this,
+                            "Connecting...", mBluetoothDevice.getName() + " : "
+                                    + mBluetoothDevice.getAddress(), true, false);
+                    Thread mBlutoothConnectThread = new Thread(this);
+                    mBlutoothConnectThread.start();
+                    // pairToDevice(mBluetoothDevice); This method is replaced by
+                    // progress dialog with thread
+                }
+                break;
+
+            case REQUEST_ENABLE_BT:
+                if (mResultCode == Activity.RESULT_OK) {
+                    ListPairedDevices();
+                    Intent connectIntent = new Intent(InvoicePrintAgainActivity.this,
+                            DeviceListActivity.class);
+                    startActivityForResult(connectIntent, REQUEST_CONNECT_DEVICE);
+                } else {
+                    Toast.makeText(InvoicePrintAgainActivity.this, "Message", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    private void ListPairedDevices() {
+        Set<BluetoothDevice> mPairedDevices = mBluetoothAdapter
+                .getBondedDevices();
+        if (mPairedDevices.size() > 0) {
+            for (BluetoothDevice mDevice : mPairedDevices) {
+                Log.v(TAG, "PairedDevices: " + mDevice.getName() + "  "
+                        + mDevice.getAddress());
+            }
+        }
+    }
+
+    public void run() {
+        try {
+            mBluetoothSocket = mBluetoothDevice
+                    .createRfcommSocketToServiceRecord(applicationUUID);
+            mBluetoothAdapter.cancelDiscovery();
+            mBluetoothSocket.connect();
+            mHandler.sendEmptyMessage(0);
+        } catch (IOException eConnectException) {
+            Log.d(TAG, "CouldNotConnectToSocket", eConnectException);
+            closeSocket(mBluetoothSocket);
+            return;
+        }
+    }
+
+    private void closeSocket(BluetoothSocket nOpenSocket) {
+        try {
+            nOpenSocket.close();
+            Log.d(TAG, "SocketClosed");
+        } catch (IOException ex) {
+            Log.d(TAG, "CouldNotCloseSocket");
+        }
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            mBluetoothConnectProgressDialog.dismiss();
+            Toast.makeText(InvoicePrintAgainActivity.this, "DeviceConnected", Toast.LENGTH_SHORT).show();
+            test=true;
+        }
+    };
+
+    public static byte intToByteArray(int value) {
+        byte[] b = ByteBuffer.allocate(4).putInt(value).array();
+
+        for (int k = 0; k < b.length; k++) {
+            System.out.println("Selva  [" + k + "] = " + "0x"
+                    + UnicodeFormatter.byteToHex(b[k]));
+        }
+
+        return b[3];
     }
 }

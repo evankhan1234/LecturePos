@@ -483,10 +483,10 @@ public class InvoiceActivity extends AppCompatActivity {
                             Constant.name="";
                             Constant.rate="rate";
                             Common.itemRepository.emptyItem();
-                            Intent intent = new Intent(InvoiceActivity.this, InvoicePrintActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Intent intent = new Intent(InvoiceActivity.this, TemporaryActivity.class);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                             intent.putExtra("customerName", Name);
                             intent.putExtra("invoiceId", "11" + store + formatter.format(date) + totalValue);

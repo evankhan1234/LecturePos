@@ -25,4 +25,8 @@ public class Login {
     public String CUSTOMER_NAME;
     @ColumnInfo(name = "CUSTOMER_ADDRESS")
     public String CUSTOMER_ADDRESS;
+    @ColumnInfo(name = "CUSTOMER_NAME_B")
+    public String CUSTOMER_NAME_B;
+    @ColumnInfo(name = "CUSTOMER_ADDRESS_B")
+    public String CUSTOMER_ADDRESS_B;
 }

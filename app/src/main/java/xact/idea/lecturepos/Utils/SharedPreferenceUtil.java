@@ -15,6 +15,8 @@ public class SharedPreferenceUtil {
     public static final String USER_SUNC_DATE_TIME = "syncdate";
     public static final String USER_SYNC = "sync";
     public static final String USER_ADDRESS = "address";
+    public static final String USER_ADDRESS_B = "addresscc";
+    public static final String USER_NAME_B = "addresscddc";
     public static final String USER_TEST = "test";
     public static void saveShared(Context c, String type, String val) {
         SharedPreferences.Editor ed = c.getSharedPreferences(mSharedName, Context.MODE_PRIVATE).edit();
@@ -80,6 +82,14 @@ public class SharedPreferenceUtil {
     }
     public static String getUserAddress(Context c) {
         String val = getShared(c, USER_ADDRESS);
+        return val;
+    }
+    public static String getUserNameBangla(Context c) {
+        String val = getShared(c, USER_NAME_B);
+        return val;
+    }
+    public static String getUserAddressBangla(Context c) {
+        String val = getShared(c, USER_ADDRESS_B);
         return val;
     }
 }

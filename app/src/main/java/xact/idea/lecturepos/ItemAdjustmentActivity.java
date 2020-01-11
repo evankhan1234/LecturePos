@@ -354,7 +354,9 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
 
 
                             }
-                            startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
+                            Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+                            intent.putExtra("types", type);
+                            startActivity(intent);
                             finish();
 
                         } else {
@@ -463,7 +465,9 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
 
 
                         }
-                        startActivity(new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class));
+                        Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
+                        intent.putExtra("types", type);
+                        startActivity(intent);
                         finish();
 
                     } else {
@@ -513,7 +517,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                                     ItemAdjustment.id = it.id;
                                     Common.itemAdjustmentRepository.updateItem(ItemAdjustment);
                                     Intent intent = new Intent(ItemAdjustmentActivity.this, AdjustmentActivity.class);
-
+                                    intent.putExtra("types", type);
                                     if (type.equals("In")){
                                         intent.putExtra("value", "In");
                                     }
@@ -560,7 +564,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                                     else if (type.equals("Out")){
                                         intent.putExtra("value", "Out");
                                     }
-
+                                    intent.putExtra("types", type);
                                     startActivity(intent);
                                     finish();
                                 }
@@ -588,7 +592,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                                     else if (type.equals("Out")){
                                         intent.putExtra("value", "Out");
                                     }
-
+                                    intent.putExtra("types", type);
                                     startActivity(intent);
                                     finish();
                                 }
@@ -625,7 +629,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                                     else if (type.equals("Out")){
                                         intent.putExtra("value", "Out");
                                     }
-
+                                    intent.putExtra("types", type);
                                     startActivity(intent);
                                     finish();
                                 }
@@ -671,7 +675,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                                 else if (type.equals("Out")){
                                     intent.putExtra("value", "Out");
                                 }
-
+                                intent.putExtra("types", type);
                                 startActivity(intent);
                                 finish();
                             }
@@ -711,7 +715,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                                 else if (pay.equals("Out")){
                                     intent.putExtra("value", "Out");
                                 }
-
+                                intent.putExtra("types", type);
                                 startActivity(intent);
                                 finish();
                             }
@@ -766,7 +770,7 @@ public class ItemAdjustmentActivity extends AppCompatActivity {
                                 else if (pay.equals("Out")){
                                     intent.putExtra("value", "Out");
                                 }
-
+                                intent.putExtra("types", type);
                                 startActivity(intent);
                                 finish();
                             }
