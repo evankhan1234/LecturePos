@@ -243,11 +243,15 @@ public class AdjustmentActivity extends AppCompatActivity {
             radioIn.setChecked(true);
             radioOut.setVisibility(View.GONE);
             radioIn.setVisibility(View.VISIBLE);
+            linear1.setVisibility(View.VISIBLE);
+            linear2.setVisibility(View.GONE);
         }
         else if (types.equals("Out")){
             radioOut.setChecked(true);
             radioIn.setVisibility(View.GONE);
             radioOut.setVisibility(View.VISIBLE);
+            linear1.setVisibility(View.GONE);
+            linear2.setVisibility(View.VISIBLE);
         }
 
         dataId = getIntent().getStringExtra("data");
