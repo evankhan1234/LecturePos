@@ -68,6 +68,7 @@ import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 import xact.idea.lecturepos.Utils.UnicodeFormatter;
 
 import static xact.idea.lecturepos.Utils.Utils.getValue;
+import static xact.idea.lecturepos.Utils.Utils.rounded;
 
 public class InvoicePrintAgainActivity  extends AppCompatActivity implements Runnable {
 
@@ -248,8 +249,29 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             String inv=getValue(salesMaster.InvoiceNumber);
                                             String mobile=getValue(customer.MobileNumber);
 
-                                            BILL = "               " + SharedPreferenceUtil.getUserNameBangla(InvoicePrintAgainActivity.this) + " \n" +
-                                                    "                 " + SharedPreferenceUtil.getUserAddressBangla(InvoicePrintAgainActivity.this)  + "  \n" +
+                                            String strUserName=SharedPreferenceUtil.getUserNameBangla(InvoicePrintAgainActivity.this);
+                                            String strUserAddress=SharedPreferenceUtil.getUserAddressBangla(InvoicePrintAgainActivity.this);
+                                            String strUserNameEnglish;
+                                            if (strUserName==null ||strUserName.equals("")){
+
+                                                strUserName=SharedPreferenceUtil.getUserName(InvoicePrintAgainActivity.this);
+                                                if (strUserName==null ||strUserName.equals("")){
+                                                    strUserName="N/A";
+                                                }
+
+                                            }
+                                            if (strUserAddress==null ||strUserAddress.equals("")){
+
+                                                strUserAddress=SharedPreferenceUtil.getUserAddress(InvoicePrintAgainActivity.this);
+                                                if (strUserAddress==null ||strUserAddress.equals("")){
+                                                    strUserAddress="N/A";
+                                                }
+
+                                            }
+
+
+                                            BILL = "               " + strUserName + " \n" +
+                                                    "                 " + strUserAddress  + "  \n" +
                                                     "    (লেকচার পাবলিকেশন লিমিটেড অনুমোদিত এজেন্ট)      \n \n" +
                                                     "ইনভয়েস নং: " + inv + "\n" +
                                                     "      তারিখ : " + datesss + "\n" +
@@ -259,32 +281,53 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                                     "   মোবাইল নং: " + mobile + "\n" +
                                                     "\n";
                                             BILL = BILL
-                                                    + "-----------------------------------------------------------------\n";
+                                                    + "-----------------------------------------------------------------------------------\n";
 
 
-                                            BILL = BILL + String.format("%-35s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
+                                            BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
                                             BILL = BILL + "\n";
                                             BILL = BILL
-                                                    + "------------------------------------------------------------------";
+                                                    + "-----------------------------------------------------------------------------------";
 
                                             for (SalesDetailPrintModel salesDetailPrintModel : printModels) {
 
+                                                Log.e("data","datass"+salesDetailPrintModel.BookNameBangla);
                                                 String value;
 
                                                 String quantity = getValue(String.valueOf(salesDetailPrintModel.Quantity));
                                                 String rate = getValue(String.valueOf(salesDetailPrintModel.BookPrice));
                                                 double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice) * (1 - Double.parseDouble(salesDetailPrintModel.Discount) / 100);
                                                 double ww = Double.parseDouble(salesDetailPrintModel.BookPrice) * (1 - Double.parseDouble(salesDetailPrintModel.Discount) / 100);
-                                                String totalPrice = getValue(String.valueOf(price));
-                                                String wws = getValue(String.valueOf(ww));
+                                                String totalPrice = getValue(String.valueOf(rounded(price,2)));
+                                                if (totalPrice.equals("০.০")){
+                                                    totalPrice="  "+totalPrice;
+                                                }
+
+                                                String wws = getValue(String.valueOf(rounded(ww,2)));
+                                                if (wws.equals("০.০")){
+                                                    // wws="   "+wws;
+
+                                                }
+                                                else{
+                                                    if (quantity.length()<3){
+                                                        quantity="    "+quantity;
+                                                    }
+                                                    else if (quantity.length()<2){
+                                                        quantity="     "+quantity;
+                                                    }
+                                                }
                                                 String bookName = salesDetailPrintModel.BookNameBangla;
-                                                if (bookName.length() > 15) {
-                                                    value = bookName.substring(0, 15);
+                                                if (bookName.length() > 16) {
+                                                    value = bookName.substring(0, 16);
+
+                                                    Log.e("data1","datass1"+value);
+                                                    Log.e("data1","datass1"+value.length());
+
                                                 } else {
                                                     value = salesDetailPrintModel.BookNameBangla;
                                                 }
 
-                                                BILL = BILL + "\n" + String.format("%-35s%-15s%-15s%-10s", value, quantity, wws, totalPrice);
+                                                BILL = BILL+ String.format("%-30s %-15s %-15s %-10s", "   "+value, quantity, wws, totalPrice) + "\n";
                                             }
 
                                             String cc;
@@ -295,7 +338,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                                 cc = "";
                                             }
                                             BILL = BILL
-                                                    + "------------------------------------------------------------------";
+                                                    + "-----------------------------------------------------------------------------------";
                                             BILL = BILL + "\n";
                                             String subTotal = getValue(salesMaster.SubTotal);
                                             String Total = getValue(String.valueOf(salesMaster.NetValue));
@@ -308,9 +351,9 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             BILL = BILL + "                  পরিশোধিত     :" + " " + salesMaster.PayMode + ""+"\n";
 
                                             BILL = BILL
-                                                    + "------------------------------------------------------------------\n";
-                                            BILL=  BILL  + "  আপনার সহযোগিতার জন্য ধন্যবাদ\n";
-                                            BILL=  BILL  + "  Developed By                               Printed At\n";
+                                                    + "------------------------------------------------------------------------------------\n";
+                                            BILL=  BILL  + "  আপনার সহযোগিতার জন্য ধন্যবাদ\n\n";
+                                            BILL=  BILL  + " Developed By                               Printed At\n";
                                             BILL=  BILL  + "  www.xactidea.com                 "+currentDate+" "+currentTime+"\n";
                                             BILL = BILL + "\n\n";
                                             BILL = BILL + "\n\n";
