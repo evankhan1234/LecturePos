@@ -85,7 +85,8 @@ public class ItemActivity extends AppCompatActivity {
         imm.showSoftInput(quantity, InputMethodManager.SHOW_IMPLICIT);
         sessionId = getIntent().getStringExtra("EXTRA_SESSION");
         Log.e("seesion", "dsd" + sessionId);
-        if (sessionId.equals("update")) {
+        if (sessionId.equals("update"))
+        {
             btn_update.setVisibility(View.VISIBLE);
             save.setVisibility(View.GONE);
             btn_new.setVisibility(View.GONE);

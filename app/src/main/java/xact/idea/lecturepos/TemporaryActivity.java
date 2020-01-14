@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -263,7 +264,7 @@ public class TemporaryActivity extends Activity implements Runnable {
 
 
                                 BILL = "               " + strUserName + " \n" +
-                                        "                 " + strUserAddress  + "  \n" +
+                                        "       " + strUserAddress  + "  \n" +
                                         "    (লেকচার পাবলিকেশন লিমিটেড অনুমোদিত এজেন্ট)      \n \n" +
                                         "ইনভয়েস নং: " + inv + "\n" +
                                         "      তারিখ : " + datesss + "\n" +
@@ -273,13 +274,13 @@ public class TemporaryActivity extends Activity implements Runnable {
                                         "   মোবাইল নং: " + mobile + "\n" +
                                         "\n";
                                 BILL = BILL
-                                        + "-----------------------------------------------------------------------------------\n";
+                                        + "---------------------------------------------------------------------------------\n";
 
 
                                 BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
                                 BILL = BILL + "\n";
                                 BILL = BILL
-                                        + "-----------------------------------------------------------------------------------";
+                                        + "---------------------------------------------------------------------------------\n";
 
                                 for (SalesDetailPrintModel salesDetailPrintModel : printModels) {
 
@@ -309,18 +310,27 @@ public class TemporaryActivity extends Activity implements Runnable {
                                         }
                                     }
                                     String bookName = salesDetailPrintModel.BookNameBangla;
-                                    if (bookName.length() > 16) {
-                                        value = bookName.substring(0, 16);
+                                    if (bookName.length() > 12) {
+//                                        Paint   mPaint = new Paint();
+//                                        mPaint.setAntiAlias(true);
+//                                        mPaint.setStrokeWidth(5);
+//                                        mPaint.setStrokeCap(Paint.Cap.ROUND);
+//                                        mPaint.setTextSize(64);
+//                                        mPaint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
+//// ...
 
-                                        Log.e("data1","datass1"+value);
+                                        value = bookName.substring(0, 15);
+                                        //float w = mPaint.measureText(value, 0, value.length());
+                                       // Log.e("data1","datass1"+w);
                                         Log.e("data1","datass1"+value.length());
 
                                     } else {
                                         value = salesDetailPrintModel.BookNameBangla;
                                     }
 
-                                    BILL = BILL+ String.format("%-30s %-15s %-15s %-10s", "   "+value, quantity, wws, totalPrice) + "\n";
+                                    BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",value, quantity, wws, totalPrice) + "\n";
                                 }
+
 
                                 String cc;
                                 if (salesMaster.Return != null) {
@@ -330,7 +340,7 @@ public class TemporaryActivity extends Activity implements Runnable {
                                     cc = "";
                                 }
                                 BILL = BILL
-                                        + "-----------------------------------------------------------------------------------";
+                                        + "---------------------------------------------------------------------------------";
                                 BILL = BILL + "\n";
                                 String subTotal = getValue(salesMaster.SubTotal);
                                 String Total = getValue(String.valueOf(salesMaster.NetValue));
@@ -343,7 +353,7 @@ public class TemporaryActivity extends Activity implements Runnable {
                                 BILL = BILL + "                  পরিশোধিত     :" + " " + salesMaster.PayMode + ""+"\n";
 
                                 BILL = BILL
-                                        + "------------------------------------------------------------------------------------\n";
+                                        + "---------------------------------------------------------------------------------\n";
                                 BILL=  BILL  + "  আপনার সহযোগিতার জন্য ধন্যবাদ\n\n";
                                 BILL=  BILL  + " Developed By                               Printed At\n";
                                 BILL=  BILL  + "  www.xactidea.com                 "+currentDate+" "+currentTime+"\n";
@@ -364,7 +374,7 @@ public class TemporaryActivity extends Activity implements Runnable {
                                         600, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 
                                 // Create bitmap and canvas to draw to
-                                Bitmap b = Bitmap.createBitmap(770, mTextLayout.getHeight(), Bitmap.Config.RGB_565);
+                                Bitmap b = Bitmap.createBitmap(600, mTextLayout.getHeight(), Bitmap.Config.RGB_565);
                                 Canvas c = new Canvas(b);
 
                                 // Draw background
