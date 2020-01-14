@@ -37,6 +37,8 @@ public class SpalashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spalash);
+        String androidOS = Build.VERSION.RELEASE;
+        Log.e("SDfsd","Sf"+androidOS);
         Date datess = null;
         SimpleDateFormat formatterss = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
         try {
