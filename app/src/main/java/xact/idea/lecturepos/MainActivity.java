@@ -713,13 +713,27 @@ public class MainActivity extends AppCompatActivity {
                 for (ChallanDetailsModel.Data challan : challanDetailsModel.data) {
 
                     ChallanDetails challanDetails = new ChallanDetails();
+                    ChallanDetails challan1 = Common.challanDetailsRepository.getChallanDetails(challan.F_CHALLAN_NO);
+                    if (challan1!=null){
+                        challanDetails.id=challan1.id;
+                        challanDetails.BOOK_NET_PRICE = challan.BOOK_NET_PRICE;
+                        challanDetails.F_BOOK_NO = challan.F_BOOK_NO;
+                        challanDetails.CHALLAN_BOOK_QTY = challan.CHALLAN_BOOK_QTY;
+                        challanDetails.F_CHALLAN_NO = challan.F_CHALLAN_NO;
+                        Common.challanDetailsRepository.updateChallanDetails(challanDetails);
+                        Log.e("dfdf","Dfd");
+                    }
+                    else{
+                        challanDetails.BOOK_NET_PRICE = challan.BOOK_NET_PRICE;
+                        challanDetails.F_BOOK_NO = challan.F_BOOK_NO;
+                        challanDetails.CHALLAN_BOOK_QTY = challan.CHALLAN_BOOK_QTY;
+                        challanDetails.F_CHALLAN_NO = challan.F_CHALLAN_NO;
+                        Common.challanDetailsRepository.insertToChallanDetails(challanDetails);
+                        Log.e("qwertyyy","Dfd");
+                    }
 
-                    challanDetails.BOOK_NET_PRICE = challan.BOOK_NET_PRICE;
-                    challanDetails.F_BOOK_NO = challan.F_BOOK_NO;
-                    challanDetails.CHALLAN_BOOK_QTY = challan.CHALLAN_BOOK_QTY;
-                    challanDetails.F_CHALLAN_NO = challan.F_CHALLAN_NO;
 
-                    Common.challanDetailsRepository.insertToChallanDetails(challanDetails);
+
 
                 }
 
@@ -1289,7 +1303,7 @@ public class MainActivity extends AppCompatActivity {
                     salesDetails1.StoreId = storeId;
                     salesDetails1.InvoiceDate = date;
                     salesDetails1.UpdateNo = Integer.parseInt(customer.UPD_NO);
-                    salesDetails1.Discount = Double.parseDouble(customer.DISCOUNT_AMT);
+                    salesDetails1.Discount = Double.parseDouble(customer.DISCOUNT_PC);
                     salesDetails1.Quantity = Integer.parseInt(customer.QTY);
 
 
