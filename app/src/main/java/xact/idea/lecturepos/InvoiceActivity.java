@@ -260,7 +260,16 @@ public class InvoiceActivity extends AppCompatActivity {
                 }
             }, 300);
 
-        } else {
+        }
+
+        else if (sessionId.equals("valueNew")){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
+                    finish();
+                }
+            }, 300);
 
         }
         if (dataId == null) {
@@ -427,7 +436,7 @@ public class InvoiceActivity extends AppCompatActivity {
                             String s2 = text_net_amounts.getText().toString();
                             s2= s2.replace(" Tk", "");
                             salesMaster.SubTotal = s1;
-                            salesMaster.InvoiceAmount = Double.parseDouble(s2);
+                            salesMaster.InvoiceAmount = Double.parseDouble(s1);
                             Date dates = new Date(System.currentTimeMillis());
                             salesMaster.Date = dates;
                             salesMaster.Return = "0.0";

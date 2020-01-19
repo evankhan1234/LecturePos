@@ -252,8 +252,15 @@ public class SalesReturnActivity extends AppCompatActivity {
                 }
             }, 300);
 
-        } else {
+        } else if (sessionId.equals("valueNew")){
 
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(SalesReturnActivity.this, BarcodeReturnActivity.class));
+                    finish();
+                }
+            }, 300);
         }
         if (dataId == null) {
             //   showInfoDialog();
@@ -417,7 +424,7 @@ public class SalesReturnActivity extends AppCompatActivity {
                             String s2 = text_net_amounts.getText().toString();
                             s2= s2.replace(" Tk", "");
                             salesMaster.UpdateNo = 0;
-                            salesMaster.InvoiceAmount = Double.parseDouble(s2);
+                            salesMaster.InvoiceAmount = Double.parseDouble(s1);
                             Date dates = new Date(System.currentTimeMillis());
                             salesMaster.Date = dates;
                             salesMaster.Note = edit_note.getText().toString();

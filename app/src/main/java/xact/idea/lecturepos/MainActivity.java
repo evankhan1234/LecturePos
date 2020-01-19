@@ -1006,6 +1006,8 @@ public class MainActivity extends AppCompatActivity {
                     public void accept(Response loginEntity) throws Exception {
                         Log.e("number1", "number1" + loginEntity.status_code);
                         loadChalanItemsSync();
+                        loadChalanDetails();
+
                     }
                 }));
 
@@ -1317,8 +1319,9 @@ public class MainActivity extends AppCompatActivity {
             details.StoreId = salesDetails1.StoreId;
             details.InvoiceId = salesDetails1.InvoiceIdNew;
             details.MRP = String.valueOf(salesDetails1.MRP);
-            details.Discount = String.valueOf(salesDetails1.Discount);
-            details.DiscountPc = "0.0";
+            details.DiscountPc = String.valueOf(salesDetails1.Discount);
+            double val=salesDetails1.Discount/100*salesDetails1.TotalAmount;
+            details.Discount = String.valueOf(val);
             details.ReturnAmt = "0.0";
             int value = Common.syncRepository.maxValue("sales_dtl");
             details.UpdNo = String.valueOf(salesDetails1.UpdateNo);
