@@ -313,10 +313,27 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingBottom="33px"
-                    android:weightSum="2">
+                    android:weightSum="3">
 
 
+                    <Button
+                        android:id="@+id/btn_new_scan"
+                        android:layout_width="0dp"
+                        android:layout_height="140px"
+                        android:layout_marginTop="-4px"
+                        android:layout_weight="1"
+                        android:backgroundTint="#009688"
+                        android:background="@drawable/btn_no"
+                        android:foreground="@drawable/ripple_corner"
+                        android:paddingBottom="5px"
+                        android:stateListAnimator="@null"
+                        android:tag="45"
+                        android:text="Add Scan"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
 
+                        android:textSize="45px"
+                        android:visibility="visible" />
                     <Button
                         android:id="@+id/btn_new"
                         android:layout_width="0dp"
