@@ -44,7 +44,7 @@ public class SpalashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spalash);
-        ok();
+
 
         String androidOS = Build.VERSION.RELEASE;
         Log.e("SDfsd","Sf"+androidOS);
