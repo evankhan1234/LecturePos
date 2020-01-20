@@ -7,8 +7,8 @@ android {
         applicationId "xact.idea.lecturepos"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.6"
+        versionCode 8
+        versionName "1.7"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions
