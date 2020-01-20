@@ -8,11 +8,18 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 
 import com.jaredrummler.android.device.DeviceName;
@@ -37,6 +44,8 @@ public class SpalashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spalash);
+
+
         String androidOS = Build.VERSION.RELEASE;
         Log.e("SDfsd","Sf"+androidOS);
         Date datess = null;
