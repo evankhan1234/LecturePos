@@ -1117,7 +1117,7 @@ public class MainActivity extends AppCompatActivity {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                     Date date = new Date(System.currentTimeMillis());
                     String currentDate = formatter.format(date);
-                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+                    SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss a");
                     Date dates = new Date(System.currentTimeMillis());
                     String currentTime = formatters.format(dates);
                     salesMaster.UpdDate = currentDate + " " + currentTime;
@@ -1373,7 +1373,7 @@ public class MainActivity extends AppCompatActivity {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date date = new Date(System.currentTimeMillis());
             String currentDate = formatter.format(date);
-            SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+            SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss a");
             Date dates = new Date(System.currentTimeMillis());
             String currentTime = formatters.format(dates);
             details.UpdDate = currentDate + " " + currentTime;
@@ -1395,7 +1395,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         new AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to exit?")
+                .setMessage("Do you want to exit?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
