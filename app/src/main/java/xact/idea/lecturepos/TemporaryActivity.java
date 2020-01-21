@@ -270,7 +270,7 @@ public class TemporaryActivity extends Activity implements Runnable {
                                         "      তারিখ : " + datesss + "\n" +
 
                                         "    গ্রন্থাগার নাম: " + customer.ShopName + " \n" +
-                                        "    গ্রাহক নাম: " + customer.Name + " \n" +
+                                        "    গ্রাহক নাম: " + customer.Name+"("+customer.RetailerCode+")" + " \n" +
                                         "   মোবাইল নং: " + mobile + "\n" +
                                         "\n";
                                 BILL = BILL

@@ -277,7 +277,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                                     "      তারিখ : " + datesss + "\n" +
 
                                                     "    গ্রন্থাগার নাম: " + customer.ShopName + " \n" +
-                                                    "    গ্রাহক নাম: " + customer.Name + " \n" +
+                                                    "    গ্রাহক নাম: " + customer.Name+"("+customer.RetailerCode+")" + " \n" +
                                                     "   মোবাইল নং: " + mobile + "\n" +
                                                     "\n";
                                             BILL = BILL
