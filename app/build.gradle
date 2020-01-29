@@ -70,5 +70,8 @@ dependencies {
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
     implementation 'com.jaredrummler:android-device-names:1.1.9'
+    implementation 'com.karumi:dexter:5.0.0'
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.github.barteksc:pdfium-android:1.9.0'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
 }

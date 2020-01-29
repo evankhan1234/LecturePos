@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -276,13 +277,15 @@ public class TemporaryActivity extends Activity implements Runnable {
                                 BILL = BILL
                                         + "---------------------------------------------------------------------------------\n";
 
+                                BILL = BILL + getWidth("বইয়ের নাম",1)+ getWidth("সংখ্যা",2)+ getWidth("মূল্য",3)+ getWidth("মোট টাকা",4)+"\n";
 
-                                BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
+                              //  BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
                                 BILL = BILL + "\n";
                                 BILL = BILL
                                         + "---------------------------------------------------------------------------------\n";
 
-                                for (SalesDetailPrintModel salesDetailPrintModel : printModels) {
+                                for (SalesDetailPrintModel salesDetailPrintModel : printModels)
+                                {
 
                                     Log.e("data","datass"+salesDetailPrintModel.BookNameBangla);
                                     String value;
@@ -327,8 +330,9 @@ public class TemporaryActivity extends Activity implements Runnable {
                                     } else {
                                         value = salesDetailPrintModel.BookNameBangla;
                                     }
+                                    BILL = BILL + getWidth(value,1)+ getWidth(quantity+"",2)+ getWidth(wws+"",3)+ getWidth(totalPrice+"",4)+"\n";
 
-                                    BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",value, quantity, wws, totalPrice) + "\n";
+                                   // BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",getWidth(value,1), quantity, wws, totalPrice) + "\n";
                                 }
 
 
@@ -571,7 +575,190 @@ public class TemporaryActivity extends Activity implements Runnable {
 
         return b[3];
     }
+    int totalWidth=0;
+    int pos=0;
+    private  String getWidth(String text,int type)
+    {
+        Paint textPaint = new Paint();
+        String result=text;
+        //  TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.parseColor("#ff00ff"));
+        textPaint.setTextSize(20);
+        Rect bounds = new Rect();
+        int width =0;
+        int remain=0;
+        int remainder=0;
+        int toatlSpaces=0;
+        Log.e("totalWidth",pos+"  "+totalWidth);
+        pos++;
+        if(type==1)
+        {
+            if(!result.startsWith(" "))
+            {
+                result= spaces[4] +result;
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+            width = bounds.width()+25;
+            remain=250-width;
+            remainder=remain/5;
+            totalWidth=width;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=width+remainder*5;
+            }
 
 
+        }
+        else if(type==2)
+        {
+            if((250-totalWidth)>3)
+            {
+                result= spaces[3] +result;
+                toatlSpaces=4;
+            }
+            else if((totalWidth-250)>3)
+            {
+                result= spaces[1] +result;
+                toatlSpaces=2;
+
+            }
+            else
+            {
+
+                result= spaces[2] +result;
+                toatlSpaces=3;
+
+
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+            //Log.e("width->2",""+width);
+            width = bounds.width()+toatlSpaces*5;
+            totalWidth=totalWidth+width;
+            remain=350-totalWidth;
+            remainder=remain/5;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=totalWidth+remainder*5;
+
+            }
+
+
+        }
+        else if(type==3)
+        {
+
+            if((350-totalWidth)>3)
+            {
+                result= spaces[3] +result;
+                toatlSpaces=4;
+            }
+            else if((totalWidth-350)>3)
+            {
+                result= spaces[1] +result;
+                toatlSpaces=2;
+
+            }
+            else
+            {
+
+                result= spaces[2] +result;
+                toatlSpaces=3;
+
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+
+            width = bounds.width()+toatlSpaces*5;
+
+            totalWidth=totalWidth+width;
+            remain=450-totalWidth;
+            remainder=remain/5;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=totalWidth+remainder*5;
+
+            }
+
+        }
+        else
+        {
+            if((450-totalWidth)>3)
+            {
+                result= spaces[3] +result;
+                toatlSpaces=4;
+            }
+            else if((totalWidth-450)>3)
+            {
+                result= spaces[1] +result;
+                toatlSpaces=2;
+
+            }
+            else
+            {
+
+                result= spaces[2] +result;
+                toatlSpaces=3;
+
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+            width = bounds.width()+toatlSpaces*5;
+            totalWidth=totalWidth+width;
+            remain=550-totalWidth;
+
+            remainder=remain/5;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=totalWidth+width;
+            }
+
+
+
+        }
+
+
+        return  result;
+    }
+    String spaces[]={" ",
+            "  ",
+            "   ",
+            "    ",
+            "     ",
+            "      ",
+            "       ",
+            "        ",
+            "         ",
+            "          ",
+            "           ",
+            "            ",
+            "             ",
+            "              ",
+            "               ",
+            "                ",
+            "                 ",
+            "                  ",
+            "                   ",
+            "                    ",
+            "                     ",
+            "                      ",
+            "                       ",
+            "                        ",
+            "                         ",
+            "                          ",
+            "                           ",
+            "                            ",
+            "                             ",
+            "                              ",
+            "                               ",
+            "                                ",
+
+    };
 }
 

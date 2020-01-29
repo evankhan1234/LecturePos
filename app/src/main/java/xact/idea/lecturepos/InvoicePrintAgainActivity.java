@@ -1,7 +1,9 @@
 package xact.idea.lecturepos;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,14 +15,23 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+
+import android.media.ThumbnailUtils;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -33,6 +44,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mazenrashed.printooth.Printooth;
 import com.mazenrashed.printooth.data.printable.Printable;
 import com.mazenrashed.printooth.data.printable.RawPrintable;
@@ -41,13 +66,22 @@ import com.mazenrashed.printooth.data.printer.DefaultPrinter;
 import com.mazenrashed.printooth.ui.ScanningActivity;
 import com.mazenrashed.printooth.utilities.Printing;
 import com.mazenrashed.printooth.utilities.PrintingCallback;
+import com.shockwave.pdfium.PdfDocument;
+import com.shockwave.pdfium.PdfiumCore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -63,15 +97,18 @@ import xact.idea.lecturepos.Database.Model.SalesMaster;
 import xact.idea.lecturepos.Model.SalesDetailPrintModel;
 import xact.idea.lecturepos.Utils.Common;
 import xact.idea.lecturepos.Utils.CorrectSizeUtil;
+import xact.idea.lecturepos.Utils.PDFTest;
 import xact.idea.lecturepos.Utils.PrintPic;
 import xact.idea.lecturepos.Utils.SharedPreferenceUtil;
 import xact.idea.lecturepos.Utils.UnicodeFormatter;
 
+import static java.awt.font.NumericShaper.BENGALI;
 import static xact.idea.lecturepos.Utils.Utils.getValue;
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
 public class InvoicePrintAgainActivity  extends AppCompatActivity implements Runnable {
-
+    public static int REQUEST_PERMISSIONS = 1;
+    private Document mDocument;
     String invoiceId;
     String customerName;
     String sub;
@@ -128,6 +165,36 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
 //            printing = Printooth.INSTANCE.printer();
 //        //initViews();
 //        initListeners();
+//        fn_permission();
+//        Rectangle one = new Rectangle(270,270);
+//        mDocument = new Document(one, 36, 36, 36, 36);
+//        try {
+//            PdfWriter writer = PdfWriter.getInstance(mDocument,
+//                    new FileOutputStream(getFilePath()));
+//
+//            Rectangle rect = new Rectangle(30, 30, 450, 800);
+//            writer.setBoxSize("art", rect);
+//            //   HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+//            //   writer.setPageEvent(event);
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (DocumentException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        mDocument.open();
+//
+//        try {
+//            mDocument.add(new Chunk(""));
+////            final FontSet set = new FontSet();
+////            set.addFont("fonts/NotoSansTamil-Regular.ttf");
+////            mDocument.set(new FontProvider(set));
+//
+//        } catch (DocumentException e) {
+//            e.printStackTrace();
+//        }
+
 
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
@@ -229,8 +296,10 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
 //                        }
 //                    });
                     create_challan.setOnClickListener(new View.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
                         public void onClick(View mView) {
-                            if (test){
+                            if (test)
+                            {
                                 Thread t = new Thread() {
                                     public void run() {
                                         try {
@@ -283,8 +352,9 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             BILL = BILL
                                                     + "---------------------------------------------------------------------------------\n";
 
+                                            BILL = BILL + getWidth("বইয়ের নাম",1)+ getWidth("সংখ্যা",2)+ getWidth("মূল্য",3)+ getWidth("মোট টাকা",4)+"\n";
 
-                                            BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
+                                         //   BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
                                             BILL = BILL + "\n";
                                             BILL = BILL
                                                     + "---------------------------------------------------------------------------------\n";
@@ -334,8 +404,9 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                                 } else {
                                                     value = salesDetailPrintModel.BookNameBangla;
                                                 }
+                                                BILL = BILL + getWidth(value,1)+ getWidth(quantity+"",2)+ getWidth(wws+"",3)+ getWidth(totalPrice+"",4)+"\n";
 
-                                                BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",value, quantity, wws, totalPrice) + "\n";
+                                             //   BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",getWidth(value,1), quantity, wws, totalPrice) + "\n";
                                             }
 
 
@@ -398,7 +469,10 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             c.restore();
 //
                                             PrintPic printPic = PrintPic.getInstance();
-                                            printPic.init(b);
+                                            PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
+                                            Bitmap v=   pdfTest.getBitmap();
+                                            String s="";
+                                            printPic.init(v);
                                             byte[] bitmapdata = printPic.printDraw();
                                             os.write(bitmapdata);
 
@@ -430,24 +504,36 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                 };
                                 t.start();
                             }
-                            else {
-                                mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                                if (mBluetoothAdapter == null) {
-                                    Toast.makeText(InvoicePrintAgainActivity.this, "Message1", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    if (!mBluetoothAdapter.isEnabled()) {
-                                        Intent enableBtIntent = new Intent(
-                                                BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                        startActivityForResult(enableBtIntent,
-                                                REQUEST_ENABLE_BT);
-                                    } else {
-                                        ListPairedDevices();
-                                        Intent connectIntent = new Intent(InvoicePrintAgainActivity.this,
-                                                DeviceListActivity.class);
-                                        startActivityForResult(connectIntent,
-                                                REQUEST_CONNECT_DEVICE);
-                                    }
-                                }
+                            else
+                                {
+                                    PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
+                                    Bitmap v=   pdfTest.getBitmap();
+                                   // Bitmap v1=   pdfTest.getBitmapTwo();
+                                //    Bitmap dstBmp=getResizedBitmap(v1);
+
+                                    //Bitmap qwww=crop(v1);
+
+                                   // Bitmap vs=combineImages(v,v1);
+                                    String s="";
+//                                mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                                if (mBluetoothAdapter == null) {
+//                                    Toast.makeText(InvoicePrintAgainActivity.this, "Message1", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    if (!mBluetoothAdapter.isEnabled()) {
+//                                        Intent enableBtIntent = new Intent(
+//                                                BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//                                        startActivityForResult(enableBtIntent,
+//                                                REQUEST_ENABLE_BT);
+//                                    } else {
+//                                        ListPairedDevices();
+//                                        Intent connectIntent = new Intent(InvoicePrintAgainActivity.this,
+//                                                DeviceListActivity.class);
+//                                        startActivityForResult(connectIntent,
+//                                                REQUEST_CONNECT_DEVICE);
+//                                    }
+//                                }
+
+//
 
                             }
 
@@ -464,49 +550,222 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
         }
 
     }
+    public Bitmap getResizedBitmap(Bitmap originalImage) {
+        Bitmap background = Bitmap.createBitmap((int)270, (int)270, Bitmap.Config.ARGB_8888);
 
-    private void initListeners() {
-        if (printing != null && printingCallback == null) {
-            Log.d("xxx", "initListeners ");
-            printingCallback = new PrintingCallback() {
+        float originalWidth = originalImage.getWidth();
+        float originalHeight = originalImage.getHeight();
 
-                public void connectingWithPrinter() {
-                    Toast.makeText(getApplicationContext(), "Connecting with printer", Toast.LENGTH_SHORT).show();
-                    Log.d("xxx", "Connecting");
-                }
+        Canvas canvas = new Canvas(background);
 
-                public void printingOrderSentSuccessfully() {
-                    Toast.makeText(getApplicationContext(), "printingOrderSentSuccessfully", Toast.LENGTH_SHORT).show();
-                    Log.d("xxx", "printingOrderSentSuccessfully");
+        float scale = 270 / originalWidth;
 
-                    startActivity(new Intent(InvoicePrintAgainActivity.this, MainActivity.class));
-                    finish();
-                }
+        float xTranslation = 0.0f;
+        float yTranslation = (270 - originalHeight * scale) / 2.0f;
 
-                public void connectionFailed(@NonNull String error) {
-                    Toast.makeText(getApplicationContext(), "connectionFailed :" + error, Toast.LENGTH_SHORT).show();
-                    Log.e("xxx", "connectionFailed : " + error);
-                    //    startActivity(new Intent(MainActivity.this,MainActivity.class));
+        Matrix transformation = new Matrix();
+        transformation.postTranslate(xTranslation, yTranslation);
+        transformation.preScale(scale, scale);
 
+        Paint paint = new Paint();
+        paint.setFilterBitmap(true);
 
-                }
+        canvas.drawBitmap(originalImage, transformation, paint);
 
-                public void onError(@NonNull String error) {
-                    Toast.makeText(getApplicationContext(), "onError :" + error, Toast.LENGTH_SHORT).show();
-                    Log.e("xxx", "onError : " + error);
+        return background;
+    }
+    public Bitmap crop (Bitmap bitmap){
 
-                }
+        int height = bitmap.getHeight();
+        int width = bitmap.getWidth();
 
-                public void onMessage(@NonNull String message) {
-                    Toast.makeText(getApplicationContext(), "onMessage :" + message, Toast.LENGTH_SHORT).show();
-                    Log.d("xxx", "onMessage : " + message);
-                }
-            };
+        int[] empty = new int[width];
+        int[] buffer = new int[width];
+        Arrays.fill(empty,0);
 
-            Printooth.INSTANCE.printer().setPrintingCallback(printingCallback);
+        int top = 0;
+        int left = 0;
+        int botton = height;
+        int right = width;
+
+        for (int y = 0; y < height; y++) {
+            bitmap.getPixels(buffer, 0, width, 0, y, width, 1);
+            if (!Arrays.equals(empty, buffer)) {
+                top = y;
+                break;
+            }
         }
+
+        for (int y = height - 1; y > top; y--) {
+            bitmap.getPixels(buffer, 0, width, 0, y, width, 1);
+            if (!Arrays.equals(empty, buffer)) {
+                botton = y;
+                break;
+            }
+        }
+
+
+        int bufferSize = botton -top +1;
+        empty = new int[bufferSize];
+        buffer = new int[bufferSize];
+        Arrays.fill(empty,0);
+
+        for (int x = 0; x < width; x++) {
+            bitmap.getPixels(buffer, 0, 1, x, top + 1, 1, bufferSize);
+            if (!Arrays.equals(empty, buffer)) {
+                left = x;
+                break;
+            }
+        }
+
+        Arrays.fill(empty, 0);
+        for (int x = width - 1; x > left; x--) {
+            bitmap.getPixels(buffer, 0, 1, x, top + 1, 1, bufferSize);
+            if (!Arrays.equals(empty, buffer)) {
+                right = x;
+                break;
+            }
+        }
+
+        Bitmap cropedBitmap = Bitmap.createBitmap(bitmap, left, top, right-left, botton-top);
+        return cropedBitmap;
     }
 
+    public static Bitmap TrimBitmap(Bitmap bmp) {
+        int imgHeight = bmp.getHeight();
+        int imgWidth  = bmp.getWidth();
+
+
+        //TRIM WIDTH - LEFT
+        int startWidth = 0;
+        for(int x = 0; x < imgWidth; x++) {
+            if (startWidth == 0) {
+                for (int y = 0; y < imgHeight; y++) {
+                    if (bmp.getPixel(x, y) != Color.TRANSPARENT) {
+                        startWidth = x;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+
+        //TRIM WIDTH - RIGHT
+        int endWidth  = 0;
+        for(int x = imgWidth - 1; x >= 0; x--) {
+            if (endWidth == 0) {
+                for (int y = 0; y < imgHeight; y++) {
+                    if (bmp.getPixel(x, y) != Color.TRANSPARENT) {
+                        endWidth = x;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+
+
+        //TRIM HEIGHT - TOP
+        int startHeight = 0;
+        for(int y = 0; y < imgHeight; y++) {
+            if (startHeight == 0) {
+                for (int x = 0; x < imgWidth; x++) {
+                    if (bmp.getPixel(x, y) != Color.TRANSPARENT) {
+                        startHeight = y;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+
+
+        //TRIM HEIGHT - BOTTOM
+        int endHeight = 0;
+        for(int y = imgHeight - 1; y >= 0; y--) {
+            if (endHeight == 0 ) {
+                for (int x = 0; x < imgWidth; x++) {
+                    if (bmp.getPixel(x, y) != Color.TRANSPARENT) {
+                        endHeight = y;
+                        break;
+                    }
+                }
+            } else break;
+        }
+
+
+        return Bitmap.createBitmap(
+                bmp,
+                startWidth,
+                startHeight,
+                endWidth - startWidth,
+                endHeight - startHeight
+        );
+
+    }
+    private Bitmap CropBitmapTransparency(Bitmap sourceBitmap)
+    {
+        int minX = sourceBitmap.getWidth();
+        int minY = sourceBitmap.getHeight();
+        int maxX = -1;
+        int maxY = -1;
+        for(int y = 0; y < sourceBitmap.getHeight(); y++)
+        {
+            for(int x = 0; x < sourceBitmap.getWidth(); x++)
+            {
+                int alpha = (sourceBitmap.getPixel(x, y) >> 24) & 255;
+                if(alpha > 0)   // pixel is not 100% transparent
+                {
+                    if(x < minX)
+                        minX = x;
+                    if(x > maxX)
+                        maxX = x;
+                    if(y < minY)
+                        minY = y;
+                    if(y > maxY)
+                        maxY = y;
+                }
+            }
+        }
+        if((maxX < minX) || (maxY < minY))
+            return null; // Bitmap is entirely transparent
+
+        // crop bitmap to non-transparent area and return:
+        return Bitmap.createBitmap(sourceBitmap, minX, minY, (maxX - minX) + 1, (maxY - minY) + 1);
+    }
+    public Bitmap combineImages(Bitmap c, Bitmap s) { // can add a 3rd parameter 'String loc' if you want to save the new image - left some code to do that at the bottom
+        Bitmap cs = null;
+
+        int width, height = 0;
+
+        if(c.getWidth() > s.getWidth()) {
+            width = c.getWidth();
+            height = c.getHeight()+ s.getHeight();
+        } else {
+            width = s.getWidth() ;
+            height = c.getHeight()+ s.getHeight();
+        }
+
+        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas comboImage = new Canvas(cs);
+
+        comboImage.drawBitmap(c, 0f, 0f, null);
+        comboImage.drawBitmap(s, 0f,c.getHeight(), null);
+
+        // this is an extra bit I added, just incase you want to save the new image somewhere and then return the location
+    /*String tmpImg = String.valueOf(System.currentTimeMillis()) + ".png";
+
+    OutputStream os = null;
+    try {
+      os = new FileOutputStream(loc + tmpImg);
+      cs.compress(CompressFormat.PNG, 100, os);
+    } catch(IOException e) {
+      Log.e("combineImages", "problem combining images", e);
+    }*/
+
+        return cs;
+    }
     private void printSomePrintable() {
         getSomePrintables();
     }
@@ -1053,4 +1312,551 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
 
         return b[3];
     }
+    int totalWidth=0;
+    int pos=0;
+    private  String getWidth(String text,int type)
+    {
+        Paint textPaint = new Paint();
+        String result=text;
+        //  TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.parseColor("#ff00ff"));
+        textPaint.setTextSize(20);
+        Rect bounds = new Rect();
+        int width =0;
+        int remain=0;
+        int remainder=0;
+        int toatlSpaces=0;
+        Log.e("totalWidth",pos+"  "+totalWidth);
+        pos++;
+        if(type==1)
+        {
+            if(!result.startsWith(" "))
+            {
+                result= spaces[4] +result;
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+            width = bounds.width()+25;
+            remain=250-width;
+            remainder=remain/5;
+            totalWidth=width;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=width+remainder*5;
+            }
+
+
+        }
+        else if(type==2)
+        {
+            if((250-totalWidth)>3)
+            {
+                result= spaces[3] +result;
+                toatlSpaces=4;
+            }
+            else if((totalWidth-250)>3)
+            {
+                result= spaces[1] +result;
+                toatlSpaces=2;
+
+            }
+            else
+            {
+
+                result= spaces[2] +result;
+                toatlSpaces=3;
+
+
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+            //Log.e("width->2",""+width);
+            width = bounds.width()+toatlSpaces*5;
+            totalWidth=totalWidth+width;
+            remain=350-totalWidth;
+            remainder=remain/5;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=totalWidth+remainder*5;
+
+            }
+
+
+        }
+        else if(type==3)
+        {
+
+            if((350-totalWidth)>3)
+            {
+                result= spaces[3] +result;
+                toatlSpaces=4;
+            }
+            else if((totalWidth-350)>3)
+            {
+                result= spaces[1] +result;
+                toatlSpaces=2;
+
+            }
+            else
+            {
+
+                result= spaces[2] +result;
+                toatlSpaces=3;
+
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+
+            width = bounds.width()+toatlSpaces*5;
+
+            totalWidth=totalWidth+width;
+            remain=450-totalWidth;
+            remainder=remain/5;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=totalWidth+remainder*5;
+
+            }
+
+        }
+        else
+        {
+            if((450-totalWidth)>3)
+            {
+                result= spaces[3] +result;
+                toatlSpaces=4;
+            }
+            else if((totalWidth-450)>3)
+            {
+                result= spaces[1] +result;
+                toatlSpaces=2;
+
+            }
+            else
+            {
+
+                result= spaces[2] +result;
+                toatlSpaces=3;
+
+            }
+            bounds = new Rect();
+            textPaint.getTextBounds(result, 0, result.length(), bounds);
+            width = bounds.width()+toatlSpaces*5;
+            totalWidth=totalWidth+width;
+            remain=550-totalWidth;
+
+            remainder=remain/5;
+            if(remainder>0)
+            {
+                result= result+spaces[remainder-1] ;
+                totalWidth=totalWidth+width;
+            }
+
+
+
+        }
+
+
+        return  result;
+    }
+    String spaces[]={" ",
+            "  ",
+            "   ",
+            "    ",
+            "     ",
+            "      ",
+            "       ",
+            "        ",
+            "         ",
+            "          ",
+            "           ",
+            "            ",
+            "             ",
+            "              ",
+            "               ",
+            "                ",
+            "                 ",
+            "                  ",
+            "                   ",
+            "                    ",
+            "                     ",
+            "                      ",
+            "                       ",
+            "                        ",
+            "                         ",
+            "                          ",
+            "                           ",
+            "                            ",
+            "                             ",
+            "                              ",
+            "                               ",
+            "                                ",
+
+    };
+    private void generatePDF() throws DocumentException, IOException, BadElementException {
+
+        Font font = null;
+//        try {
+//            font = FontFactory.getFont(fontname, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//        }
+        PdfPTable headerTable = getEmptyTable(new float[]{1});
+        headerTable.getDefaultCell().setPadding(2);
+        headerTable.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+        headerTable.getDefaultCell().setBorderColor(BaseColor.WHITE);
+        headerTable.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+        String BILL = "";
+
+        BILL = BILL + String.format("%1$-10s %2$10s %3$13s %4$10s", "বইয়ের নাম", "পরিমাণ", "হার", "মোট",BENGALI);
+        BILL = BILL + String.format("%1$-10s %2$10s %3$13s %4$10s", "dfd", "g", "g", "মোট",BENGALI);
+
+        BILL = BILL + "\n " + String.format("%1$-10s %2$10s %3$11s %4$10s", "item-001", "5", "10", "50.00");
+        BILL = BILL + "\n " + String.format("%1$-10s %2$10s %3$11s %4$10s", "item-002", "10", "5", "50.00");
+        BILL = BILL + "\n " + String.format("%1$-10s %2$10s %3$11s %4$10s", "item-003", "20", "10", "200.00");
+        BILL = BILL + "\n " + String.format("%1$-10s %2$10s %3$11s %4$10s", "item-004", "50", "10", "500.00");
+
+        BILL = BILL
+                + "\n-----------------------------------------------";
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date(System.currentTimeMillis());
+        String currentDate = formatter.format(date);
+        SimpleDateFormat formatters = new SimpleDateFormat("hh:mm:ss");
+        Date dates = new Date(System.currentTimeMillis());
+        String currentTime = formatters.format(dates);
+        String BILLq = "";
+
+        String datesss=getValue(formatter.format(salesMaster.InvoiceDate));
+        String inv=getValue(salesMaster.InvoiceNumber);
+        String mobile=getValue(customer.MobileNumber);
+
+        String strUserName=SharedPreferenceUtil.getUserNameBangla(InvoicePrintAgainActivity.this);
+        String strUserAddress=SharedPreferenceUtil.getUserAddressBangla(InvoicePrintAgainActivity.this);
+        String strUserNameEnglish;
+        if (strUserName==null ||strUserName.equals("")){
+
+            strUserName=SharedPreferenceUtil.getUserName(InvoicePrintAgainActivity.this);
+            if (strUserName==null ||strUserName.equals("")){
+                strUserName="N/A";
+            }
+
+        }
+        if (strUserAddress==null ||strUserAddress.equals("")){
+
+            strUserAddress=SharedPreferenceUtil.getUserAddress(InvoicePrintAgainActivity.this);
+            if (strUserAddress==null ||strUserAddress.equals("")){
+                strUserAddress="N/A";
+            }
+
+        }
+
+
+        BILLq = "               " + strUserName + " \n" +
+                "       " + strUserAddress  + "  \n" +
+                "    (লেকচার পাবলিকেশন লিমিটেড অনুমোদিত এজেন্ট)      \n \n" +
+                "ইনভয়েস নং: " + inv + "\n" +
+                "      তারিখ : " + datesss + "\n" +
+
+                "    গ্রন্থাগার নাম: " + customer.ShopName + " \n" +
+                "    গ্রাহক নাম: " + customer.Name+"("+customer.RetailerCode+")" + " \n" +
+                "   মোবাইল নং: " + mobile + "\n" +
+                "\n";
+        headerTable.addCell(getParaS(strUserName,12));
+        headerTable.addCell(getParaS(strUserAddress,12));
+        headerTable.addCell(getParaS("(লেকচার পাবলিকেশন লিমিটেড অনুমোদিত এজেন্ট)",12));
+        headerTable.addCell(getParaS("ইনভয়েস নং: " + inv  ,12));
+        headerTable.addCell(getParaS("তারিখ : " + datesss  ,12));
+        headerTable.addCell(getParaS("গ্রন্থাগার নাম : " + customer.ShopName  ,12));
+        headerTable.addCell(getParaS("গ্রাহক নাম: " + customer.Name+"("+customer.RetailerCode +")"   ,12));
+        headerTable.addCell(getParaS("মোবাইল নং:" + mobile  ,12));
+        TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(getResources().getColor(R.color.black));
+        textPaint.setTextSize(50);
+
+
+
+        StaticLayout mTextLayout = new StaticLayout("বইয়ের নাম", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+        // Create bitmap and canvas to draw to
+        Bitmap image = Bitmap.createBitmap(570, mTextLayout.getHeight(), Bitmap.Config.ARGB_4444);
+        Canvas c = new Canvas(image);
+
+        // Draw background
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(getResources().getColor(R.color.white));
+        c.drawPaint(paint);
+
+        // Draw text
+        c.save();
+        c.translate(0, 0);
+        mTextLayout.draw(c);
+        c.restore();
+        Bitmap image21=image;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Bitmap bitmap = image21;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 , stream);
+        Image myImg = Image.getInstance(stream.toByteArray());
+
+        /////
+
+        StaticLayout mTextLayout2 = new StaticLayout("সংখ্যা", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+        // Create bitmap and canvas to draw to
+        Bitmap image2 = Bitmap.createBitmap(570, mTextLayout2.getHeight(), Bitmap.Config.ARGB_4444);
+        Canvas c2 = new Canvas(image2);
+
+        // Draw background
+        Paint paint2 = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        paint2.setStyle(Paint.Style.FILL);
+        paint2.setColor(getResources().getColor(R.color.white));
+        c2.drawPaint(paint2);
+
+        // Draw text
+        c2.save();
+        c2.translate(0, 0);
+        mTextLayout2.draw(c2);
+        c2.restore();
+        Bitmap image22=image2;
+        ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
+        Bitmap bitmap22 = image22;
+        bitmap22.compress(Bitmap.CompressFormat.JPEG, 100 , stream2);
+        Image myImg2 = Image.getInstance(stream2.toByteArray());
+        ///
+
+        StaticLayout mTextLayout3 = new StaticLayout("মূল্য", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+        // Create bitmap and canvas to draw to
+        Bitmap image3 = Bitmap.createBitmap(570, mTextLayout3.getHeight(), Bitmap.Config.ARGB_4444);
+        Canvas c3 = new Canvas(image3);
+
+        // Draw background
+        Paint paint3 = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        paint3.setStyle(Paint.Style.FILL);
+        paint3.setColor(getResources().getColor(R.color.white));
+        c3.drawPaint(paint3);
+
+        // Draw text
+        c3.save();
+        c3.translate(0, 0);
+        mTextLayout3.draw(c3);
+        c3.restore();
+        Bitmap image23=image3;
+        ByteArrayOutputStream stream3 = new ByteArrayOutputStream();
+        Bitmap bitmap3 = image23;
+        bitmap3.compress(Bitmap.CompressFormat.JPEG, 100 , stream3);
+        Image myImg3 = Image.getInstance(stream3.toByteArray());
+        ///
+        StaticLayout mTextLayout4 = new StaticLayout("মোট টাকা", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+        // Create bitmap and canvas to draw to
+        Bitmap image4 = Bitmap.createBitmap(570, mTextLayout4.getHeight(), Bitmap.Config.ARGB_4444);
+        Canvas c4 = new Canvas(image4);
+
+        // Draw background
+        Paint paint4 = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        paint4.setStyle(Paint.Style.FILL);
+        paint4.setColor(getResources().getColor(R.color.white));
+        c4.drawPaint(paint4);
+
+        // Draw text
+        c4.save();
+        c4.translate(0, 0);
+        mTextLayout4.draw(c4);
+        c4.restore();
+        Bitmap image24=image;
+        ByteArrayOutputStream stream4 = new ByteArrayOutputStream();
+        Bitmap bitmap4 = image24;
+        bitmap4.compress(Bitmap.CompressFormat.JPEG, 100 , stream4);
+        Image myImg4 = Image.getInstance(stream4.toByteArray());
+//
+//
+//
+        PdfPTable table = new PdfPTable(4);
+
+        table.setHeaderRows(1);
+
+
+
+        PdfPTable logoTable = getEmptyTable(new float[]{1,1,1,1});
+        logoTable.addCell(myImg);
+        logoTable.addCell(myImg2);
+        logoTable.addCell(myImg3);
+        logoTable.addCell(myImg4);
+        String[] colors = { "দা.৯.পৌরনীতি-(নোট)", "দা.৯.তথ্য ও যোগাযোগ প্রযুক্তি-(নোট)", "দা.৯.শারীরিক শিক্ষা-(নোট)" };
+        String[] colors1 = { colors[0], "50", "150" ,"544"};
+
+        for (int i=0;i<5;i++){
+            for (String data : colors1)
+            {
+                StaticLayout mText = new StaticLayout(data, textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+                // Create bitmap and canvas to draw to
+                Bitmap ip = Bitmap.createBitmap(570, mText.getHeight(), Bitmap.Config.ARGB_4444);
+                Canvas c1 = new Canvas(ip);
+
+                // Draw background
+                Paint pp = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+                pp.setStyle(Paint.Style.FILL);
+                pp.setColor(getResources().getColor(R.color.white));
+                c1.drawPaint(pp);
+
+                // Draw text
+                c1.save();
+                c1.translate(0, 0);
+                mText.draw(c1);
+                c1.restore();
+                Bitmap ie=ip;
+                ByteArrayOutputStream st = new ByteArrayOutputStream();
+                Bitmap b3 = ie;
+                b3.compress(Bitmap.CompressFormat.JPEG, 100 , st);
+                Image qwe = Image.getInstance(st.toByteArray());
+                logoTable.addCell(qwe);
+
+            }
+        }
+
+        mDocument.add(logoTable);
+        mDocument.add(headerTable);
+        mDocument.add(Chunk.NEWLINE);
+
+        mDocument.add(table);
+
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Bitmap getBitmap(){
+        int pageNum = 0;
+        PdfiumCore pdfiumCore = new PdfiumCore(this);
+        try {
+            byte[] bFile = Files.readAllBytes(Paths.get(getFilePath()));
+            PdfDocument pdfDocument = pdfiumCore.newDocument(bFile);
+            pdfiumCore.openPage(pdfDocument, pageNum);
+
+            int width = pdfiumCore.getPageWidthPoint(pdfDocument, pageNum);
+            int height = pdfiumCore.getPageHeightPoint(pdfDocument, pageNum);
+
+
+            // ARGB_8888 - best quality, high memory usage, higher possibility of OutOfMemoryError
+            // RGB_565 - little worse quality, twice less memory usage
+            Bitmap bitmap = Bitmap.createBitmap(width , height ,
+                    Bitmap.Config.RGB_565);
+            pdfiumCore.renderPageBitmap(pdfDocument, bitmap, pageNum, 0, 0,
+                    width, height);
+            //if you need to render annotations and form fields, you can use
+            //the same method above adding 'true' as last param
+
+            pdfiumCore.closeDocument(pdfDocument); // important!
+            return bitmap;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    private Paragraph getFormatReportHeading(String content) {
+        Font font = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+        Paragraph p = new Paragraph(content, font);
+        p.setAlignment(Element.ALIGN_CENTER);
+        return p;
+    }
+
+
+    private Paragraph getPara(String content) {
+        Font font = new Font(Font.FontFamily.HELVETICA, 6, Font.NORMAL);
+        Paragraph p = new Paragraph(content, font);
+
+        return p;
+    }
+
+
+    private Paragraph getReport(String content, int fontSize) {
+        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD, BaseColor.RED);
+        Paragraph p = new Paragraph(content, font);
+        p.setAlignment(Element.ALIGN_CENTER);
+        return p;
+    }
+
+
+    private Paragraph getPara(String content, int fontSize) {
+        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD);
+        Paragraph p = new Paragraph(content, font);
+        return p;
+    }
+
+    private Paragraph getParaColor(String content, int fontSize) {
+        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD, BaseColor.RED);
+        Paragraph p = new Paragraph(content, font);
+        return p;
+    }
+
+    private Paragraph getParaColorName(String content, int fontSize) {
+        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD, BaseColor.BLUE);
+        Paragraph p = new Paragraph(content, font);
+        return p;
+    }
+
+    private Paragraph getParaS(String content, int fontSize) {
+        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD);
+        Paragraph p = new Paragraph(content, font);
+        return p;
+    }
+
+    private Paragraph getParaReportFormat(String content, int fontSize) {
+        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD);
+        Paragraph p = new Paragraph(content, font);
+        p.setAlignment(Element.ALIGN_CENTER);
+        return p;
+    }
+
+
+    private PdfPTable getEmptyTable(float[] col) {
+        PdfPTable table = new PdfPTable(col);
+        table.getDefaultCell().setBorderColor(BaseColor.BLACK);
+        table.getDefaultCell().setPadding(3);
+        table.setWidthPercentage(130);
+
+        return table;
+    }
+    private Paragraph getRedColorText(String content, int fontSize) {
+        Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD, BaseColor.RED);
+        Paragraph p = new Paragraph(content, font);
+        return p;
+    }
+
+
+    private void fn_permission() {
+        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
+                (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+
+            if ((ActivityCompat.shouldShowRequestPermissionRationale((this) , android.Manifest.permission.READ_EXTERNAL_STORAGE))) {
+            } else {
+                ActivityCompat.requestPermissions((this) , new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSIONS);
+
+            }
+
+            if ((ActivityCompat.shouldShowRequestPermissionRationale((this) , android.Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
+            } else {
+                ActivityCompat.requestPermissions((this) , new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSIONS);
+
+            }
+        }
+    }
+
+    public String getFilePath() {
+
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + "Emu";
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return file.getPath() + File.separator + "sa1cd.pdf";
+    }
+
 }
