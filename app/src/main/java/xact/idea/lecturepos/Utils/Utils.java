@@ -134,7 +134,7 @@ public  class Utils {
 
 
         }
-        String prices = stringBuilderBookTotalPrice.toString()+"০";
+        String prices = stringBuilderBookTotalPrice.toString();
         return prices;
     }
 

@@ -625,7 +625,7 @@ public class PDFTest {
             String wws = getValue(String.valueOf(rounded(ww,2)));
 
             linearPDFData.add(salesDetailPrintModel.BookNameBangla);
-            linearPDFData.add(rate);
+            linearPDFData.add(quantity);
             linearPDFData.add(wws);
             linearPDFData.add(totalPrice);
 
