@@ -1,6 +1,7 @@
 package xact.idea.lecturepos.Utils;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -789,7 +790,7 @@ public class PDFTest {
 
 
     }
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public Bitmap getBitmap(){
 
         int pageNum=0;
@@ -797,7 +798,9 @@ public class PDFTest {
 
         PdfiumCore pdfiumCore = new PdfiumCore(mContext);
         try {
-            byte[] bFile = Files.readAllBytes(Paths.get(getFilePath()));
+
+            byte[] bFile = getByte(getFilePath());
+           // byte[] bFile = Files.readAllBytes(Paths.get(getFilePath()));
             PdfDocument pdfDocument = pdfiumCore.newDocument(bFile);
             pdfiumCore.openPage(pdfDocument, pageNum);
 
@@ -822,6 +825,21 @@ public class PDFTest {
 
 
         return null;
+    }
+    private byte[] getByte(String path) {
+        byte[] getBytes = {};
+        try {
+            File file = new File(path);
+            getBytes = new byte[(int) file.length()];
+            InputStream is = new FileInputStream(file);
+            is.read(getBytes);
+            is.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return getBytes;
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Bitmap getBitmapTwo(){
@@ -940,6 +958,9 @@ public class PDFTest {
         Paragraph p = new Paragraph(content, font);
         return p;
     }
+
+    private static final int REQUEST_WRITE_PERMISSION = 786;
+
 
 
     private void fn_permission() {

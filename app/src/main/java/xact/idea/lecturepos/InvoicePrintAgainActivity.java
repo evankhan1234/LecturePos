@@ -471,7 +471,6 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             PrintPic printPic = PrintPic.getInstance();
                                             PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
                                             Bitmap v=   pdfTest.getBitmap();
-                                            String s="";
                                             printPic.init(v);
                                             byte[] bitmapdata = printPic.printDraw();
                                             os.write(bitmapdata);
@@ -506,32 +505,32 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                             }
                             else
                                 {
-                                    PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
-                                    Bitmap v=   pdfTest.getBitmap();
-                                   // Bitmap v1=   pdfTest.getBitmapTwo();
-                                //    Bitmap dstBmp=getResizedBitmap(v1);
-
-                                    //Bitmap qwww=crop(v1);
-
-                                   // Bitmap vs=combineImages(v,v1);
-                                    String s="";
-//                                mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//                                if (mBluetoothAdapter == null) {
-//                                    Toast.makeText(InvoicePrintAgainActivity.this, "Message1", Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    if (!mBluetoothAdapter.isEnabled()) {
-//                                        Intent enableBtIntent = new Intent(
-//                                                BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//                                        startActivityForResult(enableBtIntent,
-//                                                REQUEST_ENABLE_BT);
-//                                    } else {
-//                                        ListPairedDevices();
-//                                        Intent connectIntent = new Intent(InvoicePrintAgainActivity.this,
-//                                                DeviceListActivity.class);
-//                                        startActivityForResult(connectIntent,
-//                                                REQUEST_CONNECT_DEVICE);
-//                                    }
-//                                }
+//                                    PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
+//                                    Bitmap v=   pdfTest.getBitmap();
+//                                   // Bitmap v1=   pdfTest.getBitmapTwo();
+//                                //    Bitmap dstBmp=getResizedBitmap(v1);
+//
+//                                    //Bitmap qwww=crop(v1);
+//
+//                                   // Bitmap vs=combineImages(v,v1);
+//                                    String s="";
+                                mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                                if (mBluetoothAdapter == null) {
+                                    Toast.makeText(InvoicePrintAgainActivity.this, "Message1", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (!mBluetoothAdapter.isEnabled()) {
+                                        Intent enableBtIntent = new Intent(
+                                                BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                        startActivityForResult(enableBtIntent,
+                                                REQUEST_ENABLE_BT);
+                                    } else {
+                                        ListPairedDevices();
+                                        Intent connectIntent = new Intent(InvoicePrintAgainActivity.this,
+                                                DeviceListActivity.class);
+                                        startActivityForResult(connectIntent,
+                                                REQUEST_CONNECT_DEVICE);
+                                    }
+                                }
 
 //
 
