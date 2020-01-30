@@ -275,7 +275,7 @@ public class TemporaryActivity extends Activity implements Runnable {
                                 BILL = BILL
                                         + "---------------------------------------------------------------------------------\n";
 
-                                BILL = BILL + getWidth("বইয়ের নাম", 1) + getWidth("সংখ্যা", 2) + getWidth("মূল্য", 3) + getWidth("মোট টাকা", 4) + "\n";
+                               // BILL = BILL + getWidth("বইয়ের নাম", 1) + getWidth("সংখ্যা", 2) + getWidth("মূল্য", 3) + getWidth("মোট টাকা", 4) + "\n";
 
                                 //  BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
                                 BILL = BILL + "\n";
@@ -285,7 +285,7 @@ public class TemporaryActivity extends Activity implements Runnable {
                                 for (SalesDetailPrintModel salesDetailPrintModel : printModels) {
 
                                     Log.e("data", "datass" + salesDetailPrintModel.BookNameBangla);
-                                    String value;
+                                    String value="";
 
                                     String quantity = getValue(String.valueOf(salesDetailPrintModel.Quantity));
                                     String rate = getValue(String.valueOf(salesDetailPrintModel.BookPrice));
@@ -317,15 +317,15 @@ public class TemporaryActivity extends Activity implements Runnable {
 //                                        mPaint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
 //// ...
 
-                                        value = bookName.substring(0, 15);
+                                     //   value = bookName.substring(0, 15);
                                         //float w = mPaint.measureText(value, 0, value.length());
                                         // Log.e("data1","datass1"+w);
-                                        Log.e("data1", "datass1" + value.length());
+                                       // Log.e("data1", "datass1" + value.length());
 
                                     } else {
                                         value = salesDetailPrintModel.BookNameBangla;
                                     }
-                                    BILL = BILL + getWidth(value, 1) + getWidth(quantity + "", 2) + getWidth(wws + "", 3) + getWidth(totalPrice + "", 4) + "\n";
+                                  //  BILL = BILL + getWidth(value, 1) + getWidth(quantity + "", 2) + getWidth(wws + "", 3) + getWidth(totalPrice + "", 4) + "\n";
 
                                     // BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",getWidth(value,1), quantity, wws, totalPrice) + "\n";
                                 }
@@ -375,7 +375,8 @@ public class TemporaryActivity extends Activity implements Runnable {
                                 // Create bitmap and canvas to draw to
                                 Bitmap b = Bitmap.createBitmap(600, mTextLayout.getHeight(), Bitmap.Config.RGB_565);
                                 Canvas c = new Canvas(b);
-
+                                PDFTest pdfTest= new PDFTest(TemporaryActivity.this,salesMaster,customer,printModels);
+                                Bitmap v=   pdfTest.getBitmap();
                                 // Draw background
                                 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG
                                         | Paint.LINEAR_TEXT_FLAG);
@@ -388,8 +389,7 @@ public class TemporaryActivity extends Activity implements Runnable {
                                 c.translate(0, 0);
                                 mTextLayout.draw(c);
                                 c.restore();
-                                PDFTest pdfTest = new PDFTest(TemporaryActivity.this, salesMaster, customer, printModels);
-                                Bitmap v = pdfTest.getBitmap();
+
                                 PrintPic printPic = PrintPic.getInstance();
                                 printPic.init(v);
                                 byte[] bitmapdata = printPic.printDraw();
