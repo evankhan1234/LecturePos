@@ -352,7 +352,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             BILL = BILL
                                                     + "---------------------------------------------------------------------------------\n";
 
-                                            BILL = BILL + getWidth("বইয়ের নাম",1)+ getWidth("সংখ্যা",2)+ getWidth("মূল্য",3)+ getWidth("মোট টাকা",4)+"\n";
+                                         //   BILL = BILL + getWidth("বইয়ের নাম",1)+ getWidth("সংখ্যা",2)+ getWidth("মূল্য",3)+ getWidth("মোট টাকা",4)+"\n";
 
                                          //   BILL = BILL + String.format("%-30s%-15s%-15s%-10s", "বইয়ের নাম", "সংখ্যা ", "মূল্য ", "মোট টাকা");
                                             BILL = BILL + "\n";
@@ -362,7 +362,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             for (SalesDetailPrintModel salesDetailPrintModel : printModels) {
 
                                                 Log.e("data","datass"+salesDetailPrintModel.BookNameBangla);
-                                                String value;
+                                                String value="";
 
                                                 String quantity = getValue(String.valueOf(salesDetailPrintModel.Quantity));
                                                 String rate = getValue(String.valueOf(salesDetailPrintModel.BookPrice));
@@ -396,7 +396,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
 //                                        mPaint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD));
 //// ...
 
-                                                    value = bookName.substring(0, 15);
+                                                   // value = bookName.substring(0, 15);
                                                     //float w = mPaint.measureText(value, 0, value.length());
                                                     // Log.e("data1","datass1"+w);
                                                     Log.e("data1","datass1"+value.length());
@@ -404,7 +404,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                                 } else {
                                                     value = salesDetailPrintModel.BookNameBangla;
                                                 }
-                                                BILL = BILL + getWidth(value,1)+ getWidth(quantity+"",2)+ getWidth(wws+"",3)+ getWidth(totalPrice+"",4)+"\n";
+                                             //   BILL = BILL + getWidth(value,1)+ getWidth(quantity+"",2)+ getWidth(wws+"",3)+ getWidth(totalPrice+"",4)+"\n";
 
                                              //   BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",getWidth(value,1), quantity, wws, totalPrice) + "\n";
                                             }
@@ -453,6 +453,10 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
 
                                             // Create bitmap and canvas to draw to
                                             Bitmap b = Bitmap.createBitmap(770, mTextLayout.getHeight(), Bitmap.Config.RGB_565);
+
+                                            PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
+                                            Bitmap v=   pdfTest.getBitmap();
+                                       //     Bitmap cs= getResizedBitmap();
                                             Canvas c = new Canvas(b);
 
                                             // Draw background
@@ -469,9 +473,10 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             c.restore();
 //
                                             PrintPic printPic = PrintPic.getInstance();
-                                            PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
-                                            Bitmap v=   pdfTest.getBitmap();
+
                                             printPic.init(v);
+
+                                          //  v.recycle();
                                             byte[] bitmapdata = printPic.printDraw();
                                             os.write(bitmapdata);
 
@@ -550,7 +555,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
 
     }
     public Bitmap getResizedBitmap(Bitmap originalImage) {
-        Bitmap background = Bitmap.createBitmap((int)270, (int)270, Bitmap.Config.ARGB_8888);
+        Bitmap background = Bitmap.createBitmap((int)770, (int)270, Bitmap.Config.ARGB_8888);
 
         float originalWidth = originalImage.getWidth();
         float originalHeight = originalImage.getHeight();
