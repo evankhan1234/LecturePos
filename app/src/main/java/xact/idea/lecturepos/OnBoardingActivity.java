@@ -1,8 +1,11 @@
 package xact.idea.lecturepos;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -56,6 +59,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     setContentView(R.layout.activity_on_boarding);
     CorrectSizeUtil.getInstance(this).correctSize();
     CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
+    fn_permission();
 //    rlt_root=findViewById(R.id.rlt_root);
 //    mService = Common.getApiXact();
 //    initDB();
@@ -86,6 +90,30 @@ public class OnBoardingActivity extends AppCompatActivity {
     Common.challanDetailsRepository = ChallanDetailsRepository.getInstance(ChallanDetailsDataSources.getInstance(Common.mainDatabase.challanDetailsDao()));
     Common.itemRepository = ItemRepository.getInstance(ItemDataSources.getInstance(Common.mainDatabase.itemDao()));
 
+  }
+  public static int REQUEST_PERMISSIONS = 2;
+  private void fn_permission() {
+    if ((ContextCompat.checkSelfPermission(OnBoardingActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
+            (ContextCompat.checkSelfPermission(OnBoardingActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+
+      if ((ActivityCompat.shouldShowRequestPermissionRationale(OnBoardingActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE))) {
+      } else {
+        ActivityCompat.requestPermissions(OnBoardingActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS);
+
+      }
+
+      if ((ActivityCompat.shouldShowRequestPermissionRationale(OnBoardingActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
+      } else {
+        ActivityCompat.requestPermissions(OnBoardingActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_PERMISSIONS);
+
+      }
+    } else {
+     // boolean_permission = true;
+
+
+    }
   }
   private void loadBookItems() {
     showLoadingProgress(OnBoardingActivity.this);

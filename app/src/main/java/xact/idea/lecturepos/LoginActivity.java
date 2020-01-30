@@ -1,8 +1,10 @@
 package xact.idea.lecturepos;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -70,8 +72,8 @@ import xact.idea.lecturepos.Utils.Utils;
 import static xact.idea.lecturepos.Utils.Utils.dismissLoadingProgress;
 import static xact.idea.lecturepos.Utils.Utils.showLoadingProgress;
 
-public class LoginActivity extends AppCompatActivity {
-
+public class LoginActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+    private static final int REQUEST_WRITE_PERMISSION = 786;
     Button sign_in;
     EditText edit_text_password;
     EditText edit_text_email;
@@ -85,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        requestPermission();
         mService = Common.getApiXact();
         CorrectSizeUtil.getInstance(this).correctSize();
         CorrectSizeUtil.getInstance(this).correctSize(findViewById(R.id.rlt_root));
@@ -271,7 +274,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
         initDB();
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+        }
+    }
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+        } else {
+
+        }
+    }
     private void initDB() {
         Common.mainDatabase = MainDatabase.getInstance(this);
         Common.customerRepository = CustomerRepository.getInstance(CustomerDataSources.getInstance(Common.mainDatabase.customerDao()));
