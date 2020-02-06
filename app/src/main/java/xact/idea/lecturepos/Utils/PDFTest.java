@@ -75,6 +75,7 @@ import static com.itextpdf.text.html.HtmlTags.FONT;
 import static java.awt.font.NumericShaper.BENGALI;
 import static java.security.AccessController.getContext;
 import static java.util.Locale.CHINESE;
+import static xact.idea.lecturepos.Utils.Utils.getOnlyCommaValue;
 import static xact.idea.lecturepos.Utils.Utils.getValue;
 import static xact.idea.lecturepos.Utils.Utils.rounded;
 
@@ -95,16 +96,16 @@ public class PDFTest {
         printModels=printModel;
         Rectangle one = null;
         if (printModels.size()<6){
-            one = new Rectangle(570,870);
+            one = new Rectangle(570,670);
         }
         else if (printModels.size()<9 && printModels.size()>6){
-            one = new Rectangle(570,1300);
+            one = new Rectangle(570,900);
         }
         else if (printModels.size()>=10){
-            one = new Rectangle(570,1700);
+            one = new Rectangle(570,1400);
         }
         else{
-            one = new Rectangle(570,1770);
+            one = new Rectangle(570,1570);
         }
 
         mDocument = new Document(one, 86, 86, 6, 0);
@@ -270,11 +271,11 @@ public class PDFTest {
         TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(mContext.getResources().getColor(R.color.black));
-        textPaint.setTextSize(95);
+        textPaint.setTextSize(99);
         TextPaint textPaint2 = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
         textPaint2.setStyle(Paint.Style.FILL);
         textPaint2.setColor(mContext.getResources().getColor(R.color.black));
-        textPaint2.setTextSize(25);
+        textPaint2.setTextSize(28);
         TextPaint textPaint1 = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
         textPaint1.setStyle(Paint.Style.FILL);
         textPaint1.setColor(mContext.getResources().getColor(R.color.black));
@@ -483,7 +484,7 @@ public class PDFTest {
 
         /////////////////////////////////////////////////
 
-        StaticLayout mTextLayout = new StaticLayout("বইয়ের নাম", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout mTextLayout = new StaticLayout("বইয়ের নাম", textPaint2, 570, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 
         // Create bitmap and canvas to draw to
         Bitmap image = Bitmap.createBitmap(570, mTextLayout.getHeight(), Bitmap.Config.ARGB_4444);
@@ -508,7 +509,7 @@ public class PDFTest {
 
         /////
 
-        StaticLayout mTextLayout2 = new StaticLayout("সংখ্যা", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout mTextLayout2 = new StaticLayout("সংখ্যা", textPaint, 570, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 
         // Create bitmap and canvas to draw to
         Bitmap image2 = Bitmap.createBitmap(570, mTextLayout2.getHeight(), Bitmap.Config.ARGB_4444);
@@ -532,7 +533,7 @@ public class PDFTest {
         Image myImg2 = Image.getInstance(stream2.toByteArray());
         ///
 
-        StaticLayout mTextLayout3 = new StaticLayout("মূল্য", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout mTextLayout3 = new StaticLayout("মূল্য", textPaint, 570, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 
         // Create bitmap and canvas to draw to
         Bitmap image3 = Bitmap.createBitmap(570, mTextLayout3.getHeight(), Bitmap.Config.ARGB_4444);
@@ -555,7 +556,7 @@ public class PDFTest {
         bitmap3.compress(Bitmap.CompressFormat.JPEG, 100 , stream3);
         Image myImg3 = Image.getInstance(stream3.toByteArray());
         ///
-        StaticLayout mTextLayout4 = new StaticLayout("মোট টাকা", textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout mTextLayout4 = new StaticLayout("মোট টাকা", textPaint, 570, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 
         // Create bitmap and canvas to draw to
         Bitmap image4 = Bitmap.createBitmap(570, mTextLayout4.getHeight(), Bitmap.Config.ARGB_4444);
@@ -600,7 +601,7 @@ public class PDFTest {
 
 
 
-        PdfPTable logoTable = getEmptyTable(new float[]{1,1,1,1});
+        PdfPTable logoTable = getEmptyTableBooks(new float[]{1,1,1,1});
         logoTable.addCell(myImg);
         logoTable.addCell(myImg2);
         logoTable.addCell(myImg3);
@@ -621,8 +622,8 @@ public class PDFTest {
             String rate = getValue(String.valueOf(salesDetailPrintModel.BookPrice));
             double price = salesDetailPrintModel.Quantity * Double.parseDouble(salesDetailPrintModel.BookPrice) * (1 - Double.parseDouble(salesDetailPrintModel.Discount) / 100);
             double ww = Double.parseDouble(salesDetailPrintModel.BookPrice) * (1 - Double.parseDouble(salesDetailPrintModel.Discount) / 100);
-            String totalPrice = getValue(String.valueOf(rounded(price,2)));
-            String wws = getValue(String.valueOf(rounded(ww,2)));
+            String totalPrice = getValue(String.valueOf(getOnlyCommaValue(price)));
+            String wws = getValue(String.valueOf(getOnlyCommaValue(ww)));
 
             linearPDFData.add(salesDetailPrintModel.BookNameBangla);
             linearPDFData.add(quantity);
@@ -633,20 +634,20 @@ public class PDFTest {
 
             // BILL = BILL+ String.format("%-20s%-18s%-15s%-10s",getWidth(value,1), quantity, wws, totalPrice) + "\n";
         }
-        String subTotal = getValue(salesMaster.SubTotal);
-        String Total = getValue(String.valueOf(salesMaster.NetValue));
-        String Return = getValue(String.valueOf(salesMaster.Return));
-        String Discount = getValue(String.valueOf(salesMaster.Discount));
-        linearPDFDataFor.add("মোট টাকা");
+        String subTotal = getValue(getOnlyCommaValue(Double.parseDouble(salesMaster.SubTotal)));
+        String Return = getValue(getOnlyCommaValue(Double.parseDouble(salesMaster.Return)));
+        String Total = getValue(getOnlyCommaValue(salesMaster.NetValue));
+        String Discount = getValue(getOnlyCommaValue(salesMaster.Discount));
+        linearPDFDataFor.add("মোট টাকা :  ");
 
         linearPDFDataFor.add(subTotal);
-        linearPDFDataFor.add("ছাড়");
+        linearPDFDataFor.add("ছাড় :  ");
         linearPDFDataFor.add(Discount);
-        linearPDFDataFor.add("ফেরৎ");
+        linearPDFDataFor.add("ফেরৎ :  ");
         linearPDFDataFor.add(Return);
-        linearPDFDataFor.add("নেট টাকা");
+        linearPDFDataFor.add("নেট টাকা :  ");
         linearPDFDataFor.add(Total);
-        linearPDFDataFor.add("পরিশোধিত");
+        linearPDFDataFor.add("পরিশোধিত :  ");
         linearPDFDataFor.add(salesMaster.PayMode);
 
 
@@ -687,32 +688,116 @@ public class PDFTest {
                 }
                 else{
 
+                    if(i==1){
+                        StaticLayout mText = new StaticLayout(data, textPaint2, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
-                    StaticLayout mText = new StaticLayout(data, textPaint, 570, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        i++;
 
-                    i++;
+                        // Create bitmap and canvas to draw to
+                        Bitmap ip = Bitmap.createBitmap(570, mText.getHeight(), Bitmap.Config.ARGB_4444);
+                        Canvas c1 = new Canvas(ip);
 
-                    // Create bitmap and canvas to draw to
-                    Bitmap ip = Bitmap.createBitmap(570, mText.getHeight(), Bitmap.Config.ARGB_4444);
-                    Canvas c1 = new Canvas(ip);
+                        // Draw background
+                        Paint pp = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+                        pp.setStyle(Paint.Style.FILL);
+                        pp.setColor(mContext.getResources().getColor(R.color.white));
+                        c1.drawPaint(pp);
 
-                    // Draw background
-                    Paint pp = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
-                    pp.setStyle(Paint.Style.FILL);
-                    pp.setColor(mContext.getResources().getColor(R.color.white));
-                    c1.drawPaint(pp);
+                        // Draw text
+                        c1.save();
+                        c1.translate(0, 0);
+                        mText.draw(c1);
+                        c1.restore();
+                        Bitmap ie=ip;
+                        ByteArrayOutputStream st = new ByteArrayOutputStream();
+                        Bitmap b3 = ie;
+                        b3.compress(Bitmap.CompressFormat.JPEG, 100 , st);
+                        Image qwe = Image.getInstance(st.toByteArray());
+                        logoTable.addCell(qwe);
+                    }
+                    else  if(i==2){
+                        StaticLayout mText = new StaticLayout(data, textPaint, 570, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 
-                    // Draw text
-                    c1.save();
-                    c1.translate(0, 0);
-                    mText.draw(c1);
-                    c1.restore();
-                    Bitmap ie=ip;
-                    ByteArrayOutputStream st = new ByteArrayOutputStream();
-                    Bitmap b3 = ie;
-                    b3.compress(Bitmap.CompressFormat.JPEG, 100 , st);
-                    Image qwe = Image.getInstance(st.toByteArray());
-                    logoTable.addCell(qwe);
+                        i++;
+
+                        // Create bitmap and canvas to draw to
+                        Bitmap ip = Bitmap.createBitmap(570, mText.getHeight(), Bitmap.Config.ARGB_4444);
+                        Canvas c1 = new Canvas(ip);
+
+                        // Draw background
+                        Paint pp = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+                        pp.setStyle(Paint.Style.FILL);
+                        pp.setColor(mContext.getResources().getColor(R.color.white));
+                        c1.drawPaint(pp);
+
+                        // Draw text
+                        c1.save();
+                        c1.translate(0, 0);
+                        mText.draw(c1);
+                        c1.restore();
+                        Bitmap ie=ip;
+                        ByteArrayOutputStream st = new ByteArrayOutputStream();
+                        Bitmap b3 = ie;
+                        b3.compress(Bitmap.CompressFormat.JPEG, 100 , st);
+                        Image qwe = Image.getInstance(st.toByteArray());
+                        logoTable.addCell(qwe);
+                    }
+                    else  if(i==3){
+                        StaticLayout mText = new StaticLayout(data, textPaint, 570, Layout.Alignment.ALIGN_OPPOSITE, 1.0f, 0.0f, false);
+
+                        i++;
+
+                        // Create bitmap and canvas to draw to
+                        Bitmap ip = Bitmap.createBitmap(570, mText.getHeight(), Bitmap.Config.ARGB_4444);
+                        Canvas c1 = new Canvas(ip);
+
+                        // Draw background
+                        Paint pp = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+                        pp.setStyle(Paint.Style.FILL);
+                        pp.setColor(mContext.getResources().getColor(R.color.white));
+                        c1.drawPaint(pp);
+
+                        // Draw text
+                        c1.save();
+                        c1.translate(0, 0);
+                        mText.draw(c1);
+                        c1.restore();
+                        Bitmap ie=ip;
+                        ByteArrayOutputStream st = new ByteArrayOutputStream();
+                        Bitmap b3 = ie;
+                        b3.compress(Bitmap.CompressFormat.JPEG, 100 , st);
+                        Image qwe = Image.getInstance(st.toByteArray());
+                        logoTable.addCell(qwe);
+                    }
+                    else {
+                        StaticLayout mText = new StaticLayout(data, textPaint, 570, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+
+                        i++;
+
+                        // Create bitmap and canvas to draw to
+                        Bitmap ip = Bitmap.createBitmap(570, mText.getHeight(), Bitmap.Config.ARGB_4444);
+                        Canvas c1 = new Canvas(ip);
+
+                        // Draw background
+                        Paint pp = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+                        pp.setStyle(Paint.Style.FILL);
+                        pp.setColor(mContext.getResources().getColor(R.color.white));
+                        c1.drawPaint(pp);
+
+                        // Draw text
+                        c1.save();
+                        c1.translate(0, 0);
+                        mText.draw(c1);
+                        c1.restore();
+                        Bitmap ie=ip;
+                        ByteArrayOutputStream st = new ByteArrayOutputStream();
+                        Bitmap b3 = ie;
+                        b3.compress(Bitmap.CompressFormat.JPEG, 100 , st);
+                        Image qwe = Image.getInstance(st.toByteArray());
+                        logoTable.addCell(qwe);
+                    }
+
+
                 }
 
 
@@ -1002,6 +1087,32 @@ public class PDFTest {
         table.getDefaultCell().setBorderColor(BaseColor.BLACK);
         table.getDefaultCell().setPadding(3);
         table.setWidthPercentage(130);
+//        try {
+//            table.setTotalWidth(new float[]{ 72, 216 });
+//        } catch (DocumentException e) {
+//            e.printStackTrace();
+//        }
+
+
+        return table;
+    }
+    private PdfPTable getEmptyTableBooks(float[] col) {
+        PdfPTable table = new PdfPTable(col);
+        table.getDefaultCell().setBorderColor(BaseColor.BLACK);
+        table.getDefaultCell().setPadding(3);
+        table.setWidthPercentage(130);
+        try {
+            table.setWidths(new float[]{ 262, 80,80,80 });
+            table.setTotalWidth(new float[]{462 });
+            table.setLockedWidth(true);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+//        try {
+//            table.setTotalWidth(new float[]{ 162, 130,130,130 });
+//        } catch (DocumentException e) {
+//            e.printStackTrace();
+//        }
 
 
         return table;

@@ -509,10 +509,11 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                 t.start();
                             }
                             else
-                                {
+                              {
 //                                    PDFTest pdfTest= new PDFTest(InvoicePrintAgainActivity.this,salesMaster,customer,printModels);
 //                                    Bitmap v=   pdfTest.getBitmap();
-//                                   // Bitmap v1=   pdfTest.getBitmapTwo();
+//                                    String s="";
+                                  //Bitmap v1=   pdfTest.getBitmapTwo();
 //                                //    Bitmap dstBmp=getResizedBitmap(v1);
 //
 //                                    //Bitmap qwww=crop(v1);

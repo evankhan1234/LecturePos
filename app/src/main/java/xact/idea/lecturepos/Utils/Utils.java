@@ -125,6 +125,12 @@ public  class Utils {
                 replaceString = s.replace('.', '.');
                 stringBuilderBookTotalPrice.append(replaceString);
             }
+            else if (c2 == ',') {
+                String s = String.valueOf(c2);
+                String replaceString;
+                replaceString = s.replace(',', ',');
+                stringBuilderBookTotalPrice.append(replaceString);
+            }
             else if (c2 == '-') {
                 String s = String.valueOf(c2);
                 String replaceString;
@@ -136,6 +142,11 @@ public  class Utils {
         }
         String prices = stringBuilderBookTotalPrice.toString();
         return prices;
+    }
+    public static String decimal(double value) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        String angleFormated = df.format(value);
+        return angleFormated;
     }
 
     public static double rounded(double value, int places) {
@@ -223,6 +234,14 @@ public  class Utils {
         df.applyPattern("#,##,##,###.00");
         String output = df.format(price);
         return output+" Tk";
+
+    }
+    public static String getOnlyCommaValue(double price){
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        DecimalFormat df = (DecimalFormat)nf;
+        df.applyPattern("#,##,##,###.00");
+        String output = df.format(price);
+        return output;
 
     }
 }
