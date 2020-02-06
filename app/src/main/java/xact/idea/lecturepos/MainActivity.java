@@ -1365,8 +1365,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 details.DiscountPc = String.valueOf(salesDetails1.Discount);
             }
-            double val = salesDetails1.Discount / 100 * salesDetails1.TotalAmount;
-            details.Discount = String.valueOf(val);
+
             details.ReturnAmt = "0.0";
             int value = Common.syncRepository.maxValue("sales_dtl");
             details.UpdNo = String.valueOf(salesDetails1.UpdateNo);
@@ -1380,9 +1379,13 @@ public class MainActivity extends AppCompatActivity {
             details.TotalAmount = String.valueOf(salesDetails1.TotalAmount);
             if (type.equals("A")) {
                 details.Quantity = String.valueOf(salesDetails1.QTY);
+                double val =  salesDetails1.QTY * salesDetails1.MRP*salesDetails1.Discount / 100;
+                details.Discount = String.valueOf(val);
 
             } else {
                 details.Quantity = String.valueOf(salesDetails1.Quantity);
+                double val =  salesDetails1.Quantity * salesDetails1.MRP*salesDetails1.Discount / 100;
+                details.Discount = String.valueOf(val);
 
             }
             salesDetails.add(details);
