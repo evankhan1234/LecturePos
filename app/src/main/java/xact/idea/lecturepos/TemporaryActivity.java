@@ -422,7 +422,9 @@ public class TemporaryActivity extends Activity implements Runnable {
                         }
                     };
                     t.start();
-                } else {
+                } else
+
+                    {
                     mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (mBluetoothAdapter == null) {
                         Toast.makeText(TemporaryActivity.this, "Message1", Toast.LENGTH_SHORT).show();
@@ -489,7 +491,8 @@ public class TemporaryActivity extends Activity implements Runnable {
                 if (mResultCode == Activity.RESULT_OK) {
                     Bundle mExtra = mDataIntent.getExtras();
                     String mDeviceAddress = mExtra.getString("DeviceAddress");
-                    Log.v(TAG, "Coming incoming address " + mDeviceAddress);
+                    Log.e(TAG, "Coming incoming address " + mDeviceAddress);
+                    mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     mBluetoothDevice = mBluetoothAdapter
                             .getRemoteDevice(mDeviceAddress);
                     mBluetoothConnectProgressDialog = ProgressDialog.show(this,

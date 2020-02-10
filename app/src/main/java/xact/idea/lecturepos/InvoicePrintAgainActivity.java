@@ -520,6 +520,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
 //
 //                                   // Bitmap vs=combineImages(v,v1);
 //                                    String s="";
+
                                 mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                                 if (mBluetoothAdapter == null) {
                                     Toast.makeText(InvoicePrintAgainActivity.this, "Message1", Toast.LENGTH_SHORT).show();
@@ -1239,6 +1240,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                     Bundle mExtra = mDataIntent.getExtras();
                     String mDeviceAddress = mExtra.getString("DeviceAddress");
                     Log.v(TAG, "Coming incoming address " + mDeviceAddress);
+                    mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     mBluetoothDevice = mBluetoothAdapter
                             .getRemoteDevice(mDeviceAddress);
                     mBluetoothConnectProgressDialog = ProgressDialog.show(this,
