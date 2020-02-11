@@ -46,7 +46,8 @@ public class SaleesMasterForModel {
         public String UPD_DATE;
         @SerializedName("TRN_TYPE")
         public String TRN_TYPE;
-
+        @SerializedName("RETURN_AMT")
+        public String RETURN_AMT;
 
     }
 

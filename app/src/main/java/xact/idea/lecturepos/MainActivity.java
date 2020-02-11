@@ -1260,6 +1260,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         salesMaster1.StoreId = customer.STORE_ID;
+                        salesMaster1.Return = customer.RETURN_AMT;
                         salesMaster1.UpdateNo = Integer.parseInt(customer.UPD_NO);
                         salesMaster1.InvoiceNumber = customer.INVOICE_NO;
                         salesMaster1.InvoiceDates = customer.INV_DATE;
