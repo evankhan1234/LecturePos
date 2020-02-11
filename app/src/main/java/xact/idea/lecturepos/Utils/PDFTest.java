@@ -657,6 +657,7 @@ public class PDFTest {
             Return = getValue(getOnlyCommaValue(Double.parseDouble(salesMaster.Return)));
         }
 
+
         String Total = getValue(getOnlyCommaValue(salesMaster.NetValue));
         String Discount = getValue(getOnlyCommaValue(salesMaster.Discount));
         linearPDFDataFor.add("মোট টাকা :  ");
