@@ -38,6 +38,8 @@ import android.text.TextPaint;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -134,7 +136,7 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
     TextView text_total_value;
     TextView text_return;
     TextView text_discount;
-    TextView create_challan;
+    Button create_challan;
     TextView text_sub_total_value;
     RecyclerView rcl_approval_in_list;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -440,7 +442,10 @@ public class InvoicePrintAgainActivity  extends AppCompatActivity implements Run
                                             BILL = BILL + "\n\n";
                                             BILL = BILL + "\n\n";
                                             BILL = BILL + "\n\n";
-
+                                            create_challan.setText("Printing");
+                                            Animation animBlink = AnimationUtils.loadAnimation(InvoicePrintAgainActivity.this,
+                                                    R.anim.blink);
+                                            create_challan.startAnimation(animBlink);
                                             Drawable d = ContextCompat.getDrawable(InvoicePrintAgainActivity.this, R.mipmap.ic_launcher);
 //
                                             TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG

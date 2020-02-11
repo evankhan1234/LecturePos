@@ -29,6 +29,8 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -361,7 +363,10 @@ public class TemporaryActivity extends Activity implements Runnable {
                                 BILL = BILL + "\n\n";
                                 BILL = BILL + "\n\n";
                                 BILL = BILL + "\n\n";
-
+                                create_challan.setText("Printing");
+                                Animation animBlink = AnimationUtils.loadAnimation(TemporaryActivity.this,
+                                        R.anim.blink);
+                                create_challan.startAnimation(animBlink);
                                 Drawable d = ContextCompat.getDrawable(TemporaryActivity.this, R.mipmap.ic_launcher);
 //
                                 TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG
